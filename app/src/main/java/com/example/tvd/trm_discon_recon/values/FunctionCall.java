@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.design.widget.TextInputEditText;
 import android.util.Log;
+import android.widget.EditText;
 
 public class FunctionCall {
     public void logStatus(String message) {
@@ -70,5 +72,10 @@ public class FunctionCall {
             }
         }
         return s5;
+    }
+    public void setEdittext_error(EditText editText, String error_msg) {
+        editText.setError(error_msg);
+        editText.requestFocus();
+        editText.setSelection(editText.getText().length());
     }
 }

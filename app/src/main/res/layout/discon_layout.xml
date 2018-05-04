@@ -111,6 +111,8 @@
         <EditText
             android:id="@+id/edit_curread"
             android:layout_weight="1"
+            android:inputType="number"
+            android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/border_style"
