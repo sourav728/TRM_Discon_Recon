@@ -175,5 +175,36 @@ public class SendingData {
         }
     }
 
+    public class Reconnection extends AsyncTask<String,String,String>
+    {
+        String response = "";
+        Handler handler;
+        GetSetValues getSetValues;
+        public Reconnection(Handler handler,GetSetValues getSetValues)
+        {
+            this.handler = handler;
+            this.getSetValues = getSetValues;
+        }
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String,String>datamap = new HashMap<>();
+            datamap.put("MRCode",params[0]);
+            datamap.put("Date",params[1]);
+            functionCall.logStatus("MRCode"+params[0] + "\n" + "Date"+params[1]);
+            try {
+                response = UrlPostConnection("http://www.bc_service.hescomtrm.com/ReadFile.asmx/ReConList",datamap);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+        }
+    }
 
 }

@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.tvd.trm_discon_recon.fragments.Discon_List">
+    tools:context="com.example.tvd.trm_discon_recon.fragments.Reconnection">
+
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/discon_recyclerview"
+        android:id="@+id/reconnection_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="8dp"
-        android:scrollbars="none">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_marginTop="8dp"
+        android:scrollbars="none"/>
 </RelativeLayout>

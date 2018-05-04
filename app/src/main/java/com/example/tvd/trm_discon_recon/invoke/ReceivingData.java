@@ -144,4 +144,6 @@ public class ReceivingData {
             handler.sendEmptyMessage(DISCON_FAILURE);
         }
     }
+
+
 }
