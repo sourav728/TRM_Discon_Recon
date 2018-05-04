@@ -20,6 +20,23 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
+        app:menu="@menu/activity_main_drawer" >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:layout_above="@+id/nav_view2"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="#BDBDBD"/>
+            <android.support.design.widget.NavigationView
+                android:id="@+id/nav_view2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                app:menu="@menu/logout">
+            </android.support.design.widget.NavigationView>
+        </RelativeLayout>
+    </android.support.design.widget.NavigationView>
 
 </android.support.v4.widget.DrawerLayout>

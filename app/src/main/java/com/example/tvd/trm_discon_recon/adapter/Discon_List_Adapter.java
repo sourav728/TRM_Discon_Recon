@@ -148,25 +148,23 @@ public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapte
                             accno.setText(getSetValues.getAcc_id());
                             arrears.setText(String.format("%s %s", context.getResources().getString(R.string.rupee), getSetValues.getArrears()));
                             prevread.setText(getSetValues.getPrev_read());
-
-
                             disconnect_button.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                         if (!TextUtils.isEmpty(curread.getText()))
-                                         {
-                                             String reading = curread.getText().toString();
-                                             if (Double.parseDouble(getSetValues.getPrev_read()) <= Double.parseDouble(reading)) {
-                                                 progressDialog = new ProgressDialog(context, R.style.MyProgressDialogstyle);
-                                                 progressDialog.setTitle("Updating Disconnection");
-                                                 progressDialog.setMessage("Please Wait..");
-                                                 progressDialog.show();
-                                                 SendingData.Disconnect_Update disconnect_update = sendingData.new Disconnect_Update(mhandler, getSetValues1);
-                                                 disconnect_update.execute(getSetValues.getAcc_id(), functionCall.convertdateview("27-04-2018", "yy", "-"), reading);
-                                             } else {
-                                                  functionCall.setEdittext_error(curread,"Current Reading should be greater than Previous Reading!!");
-                                             }
-                                         }else functionCall.setEdittext_error(curread,"Enter Current Reading!!");
+                                    if (!TextUtils.isEmpty(curread.getText())) {
+                                        String reading = curread.getText().toString();
+                                        if (Double.parseDouble(getSetValues.getPrev_read()) <= Double.parseDouble(reading)) {
+                                            progressDialog = new ProgressDialog(context, R.style.MyProgressDialogstyle);
+                                            progressDialog.setTitle("Updating Disconnection");
+                                            progressDialog.setMessage("Please Wait..");
+                                            progressDialog.show();
+                                            SendingData.Disconnect_Update disconnect_update = sendingData.new Disconnect_Update(mhandler, getSetValues1);
+                                            disconnect_update.execute(getSetValues.getAcc_id(), functionCall.convertdateview("27-04-2018", "yy", "-"), reading);
+                                        } else {
+                                            functionCall.setEdittext_error(curread, "Current Reading should be greater than Previous Reading!!");
+                                        }
+                                    } else
+                                        functionCall.setEdittext_error(curread, "Enter Current Reading!!");
 
                                 }
                             });

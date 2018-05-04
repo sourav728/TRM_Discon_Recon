@@ -1,5 +1,6 @@
 package com.example.tvd.trm_discon_recon;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        replaceFragment(R.id.nav_camera);
+        replaceFragment(R.id.nav_disconnect);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,6 +54,9 @@ public class MainActivity extends AppCompatActivity
         mrcode = (TextView) view.findViewById(R.id.nav_mrcode);
         mrname.setText(Mrname);
         mrcode.setText(Mrcode);
+
+        NavigationView logout_view = (NavigationView) findViewById(R.id.nav_view2);
+        logout_view.setNavigationItemSelectedListener(this);
     }
 
     @Override
@@ -94,8 +98,13 @@ public class MainActivity extends AppCompatActivity
     private void replaceFragment(int id)
     {
         Fragment fragment = null;
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_disconnect) {
             fragment = new Discon_List();
+        }else if (id == R.id.nav_logout)
+        {
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
         }
         if (fragment != null) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

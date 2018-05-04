@@ -5,7 +5,13 @@
         android:id="@+id/first"
         android:checkableBehavior="none">
         <item
-            android:id="@+id/nav_camera"
+            android:id="@+id/nav_disconnect"
             android:title="Disconnect" />
+    </group>
+    <group
+        android:id="@+id/second"
+        android:checkableBehavior="none">
+        <item android:id="@+id/nav_connect"
+            android:title="Reconnect"/>
     </group>
 </menu>
