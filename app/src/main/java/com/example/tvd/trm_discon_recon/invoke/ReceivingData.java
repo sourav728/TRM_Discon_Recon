@@ -18,8 +18,10 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_LIST_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_LIST_SUCCESS;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.LOGIN_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.LOGIN_SUCCESS;
 
@@ -126,6 +128,20 @@ public class ReceivingData {
             e.printStackTrace();
             functionCall.logStatus("JSON Exception Failure!!");
             handler.sendEmptyMessage(DISCON_LIST_FAILURE);
+        }
+    }
+
+    public void getDisconnection_update_status(String result, Handler handler) {
+        result = parseServerXML(result);
+        functionCall.logStatus("Disconnection Update: "+result);
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            if (StringUtils.startsWithIgnoreCase(jsonObject.getString("message"), "Success"))
+                handler.sendEmptyMessage(DISCON_SUCCESS);
+            else handler.sendEmptyMessage(DISCON_FAILURE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            handler.sendEmptyMessage(DISCON_FAILURE);
         }
     }
 }

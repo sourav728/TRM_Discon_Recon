@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -42,7 +43,7 @@ public class Discon_List extends Fragment {
                         break;
                     case DISCON_LIST_FAILURE:
                             progressDialog.dismiss();
-                            Toast.makeText(getActivity(), "Failure!!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Disconnection Data is not available for you!!", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 super.handleMessage(msg);

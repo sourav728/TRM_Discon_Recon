@@ -5,4 +5,6 @@ public class ConstantValues {
     public static final int LOGIN_FAILURE = 2;
     public static final int DISCON_LIST_SUCCESS = 3;
     public static final int DISCON_LIST_FAILURE = 4;
+    public static final int DISCON_SUCCESS = 5;
+    public static final int DISCON_FAILURE = 6;
 }

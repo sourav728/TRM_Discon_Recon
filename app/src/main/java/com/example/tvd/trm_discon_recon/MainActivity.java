@@ -96,16 +96,6 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment = null;
         if (id == R.id.nav_camera) {
             fragment = new Discon_List();
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
         }
         if (fragment != null) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();

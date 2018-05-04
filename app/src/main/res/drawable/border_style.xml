@@ -5,15 +5,13 @@
     android:layout_height="wrap_content"
     android:layout_width="match_parent">
 
-    <stroke android:width="2dp"
+    <stroke android:width="0.1dp"
         android:color="@color/black"/>
 
-    <corners android:radius="10dp"
+    <corners android:radius="5dp"
         />
-
     <padding android:left="10dp"
         android:top="10dp"
         android:right="10dp"
         android:bottom="10dp"/>
-
 </shape>

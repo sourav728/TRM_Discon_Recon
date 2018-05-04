@@ -1,5 +1,6 @@
 package com.example.tvd.trm_discon_recon.invoke;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Handler;
 
@@ -105,7 +106,7 @@ public class SendingData {
             receivingData.getMR_Details(result, handler, getSetValues);
         }
     }
-
+    //Disconnection List
     public class Discon_List extends AsyncTask<String,String,String>
     {
         String response = "";
@@ -141,5 +142,38 @@ public class SendingData {
             receivingData.getDiscon_List(result, handler,getSetValues,arrayList,discon_list_adapter);
         }
     }
+    //Disconnection Update
+    @SuppressLint("StaticFieldLeak")
+    public class Disconnect_Update extends AsyncTask<String, String, String> {
+        String response="";
+        Handler handler;
+        GetSetValues getSetValues;
+        public Disconnect_Update(Handler handler,GetSetValues getSetValues) {
+            this.handler = handler;
+            this.getSetValues = getSetValues;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String, String> datamap = new HashMap<>();
+            datamap.put("Acc_id", params[0]);
+            datamap.put("Dis_Date", params[1]);
+            datamap.put("CURREAD", params[2]);
+            functionCall.logStatus("Acc_id: "+params[0] + "\n" + "Dis_Date: "+params[1] + "\n" + "CURREAD: "+params[2]);
+            try {
+                response = UrlPostConnection("http://www.bc_service.hescomtrm.com/ReadFile.asmx/DisConUpdate", datamap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            receivingData.getDisconnection_update_status(result, handler);
+        }
+    }
+
 
 }
