@@ -2,44 +2,29 @@ package com.example.tvd.trm_discon_recon.adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Color;
-import android.os.Handler;
-import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.tvd.trm_discon_recon.R;
+import com.example.tvd.trm_discon_recon.fragments.Discon_List;
 import com.example.tvd.trm_discon_recon.invoke.SendingData;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
 import java.util.ArrayList;
 
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_FAILURE;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_SUCCESS;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCONNECTION_DIALOG;
 
 public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapter.Discon_Holder> {
     ProgressDialog progressDialog;
     private SendingData sendingData = new SendingData();
     private GetSetValues getSetValues1 = new GetSetValues();
     private FunctionCall functionCall = new FunctionCall();
-    private final Handler mhandler;
-
+    /*private final Handler mhandler;
     {
         mhandler = new Handler() {
             @Override
@@ -57,17 +42,18 @@ public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapte
                 super.handleMessage(msg);
             }
         };
-    }
+    }*/
 
     private ArrayList<GetSetValues> arraylist = new ArrayList<>();
     private Context context;
     private GetSetValues getSetValues;
     private Discon_List_Adapter discon_list_adapter;
-
-    public Discon_List_Adapter(Context context, ArrayList<GetSetValues> arrayList, GetSetValues getSetValues) {
+    private Discon_List discon_list;
+    public Discon_List_Adapter(Context context, ArrayList<GetSetValues> arrayList, GetSetValues getSetValues, Discon_List discon_list) {
         this.context = context;
         this.arraylist = arrayList;
         this.getSetValues = getSetValues;
+        this.discon_list = discon_list;
     }
 
     @Override
@@ -106,8 +92,9 @@ public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapte
 
         @Override
         public void onClick(View v) {
-            int pos = getAdapterPosition();
-            final GetSetValues getSetValues = arraylist.get(pos);
+            int position = getAdapterPosition();
+            discon_list.show_disconnection_dialog(DISCONNECTION_DIALOG, position, arraylist);
+            /*final GetSetValues getSetValues = arraylist.get(position);
             switch (v.getId()) {
                 case R.id.lin_layout:
                     AlertDialog.Builder dialog = new AlertDialog.Builder(context);
@@ -165,7 +152,6 @@ public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapte
                                         }
                                     } else
                                         functionCall.setEdittext_error(curread, "Enter Current Reading!!");
-
                                 }
                             });
 
@@ -179,7 +165,7 @@ public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapte
                     });
                     discon_dialog.show();
                     break;
-            }
+            }*/
         }
     }
 

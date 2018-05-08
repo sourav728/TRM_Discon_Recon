@@ -24,6 +24,7 @@ import com.example.tvd.trm_discon_recon.invoke.SendingData;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.CONNECTION_TIME_OUT;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.LOGIN_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.LOGIN_SUCCESS;
 
@@ -89,6 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                         password.setText("");
                         mrcode.requestFocus();
                         break;
+
                 }
                 super.handleMessage(msg);
             }

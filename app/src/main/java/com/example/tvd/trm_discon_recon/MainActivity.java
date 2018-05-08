@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -17,6 +18,9 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.tvd.trm_discon_recon.fragments.Discon_List;
+import com.example.tvd.trm_discon_recon.values.GetSetValues;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -115,4 +119,5 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
+
 }
