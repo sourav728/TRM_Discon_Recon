@@ -1,7 +1,7 @@
 package com.example.tvd.trm_discon_recon.values;
 
 public class GetSetValues {
-    private String mrcode="",mrname="",subdivcode="",acc_id="",arrears="",dis_date="",prev_read="";
+    private String mrcode="",mrname="",subdivcode="",acc_id="",arrears="",dis_date="",prev_read="",server_date="", login_date="";
 
     public String getMrcode() {
         return mrcode;
@@ -19,6 +19,14 @@ public class GetSetValues {
         this.mrname = mrname;
     }
 
+    public String getLogin_date() {
+        return login_date;
+    }
+
+    public void setLogin_date(String login_date) {
+        this.login_date = login_date;
+    }
+
     public String getAcc_id() {
         return acc_id;
     }
@@ -29,6 +37,14 @@ public class GetSetValues {
 
     public String getArrears() {
         return arrears;
+    }
+
+    public String getServer_date() {
+        return server_date;
+    }
+
+    public void setServer_date(String server_date) {
+        this.server_date = server_date;
     }
 
     public void setArrears(String arrears) {

@@ -24,10 +24,13 @@ import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_LIST
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.LOGIN_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.LOGIN_SUCCESS;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_FAILURE;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_SUCCESS;
 
 
 public class ReceivingData {
     private FunctionCall functionCall = new FunctionCall();
+
     private String parseServerXML(String result) {
         String value = "";
         XmlPullParserFactory pullParserFactory;
@@ -64,48 +67,39 @@ public class ReceivingData {
         }
         return value;
     }
+
     //FOR getting result based on MR LOGIN
-    public void getMR_Details(String result, Handler handler, GetSetValues getSetValues)
-    {
+    public void getMR_Details(String result, Handler handler, GetSetValues getSetValues) {
         result = parseServerXML(result);
-        functionCall.logStatus("MR_Login"+ result);
+        functionCall.logStatus("MR_Login" + result);
         JSONArray jsonArray;
-        try
-        {
+        try {
             jsonArray = new JSONArray(result);
-            for (int i=0;i<jsonArray.length();i++)
-            {
+            for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String message = jsonObject.getString("message");
-                if (StringUtils.startsWithIgnoreCase(message,"Success!"))
-                {
+                if (StringUtils.startsWithIgnoreCase(message, "Success!")) {
                     getSetValues.setMrcode(jsonObject.getString("MRCODE"));
                     getSetValues.setMrname(jsonObject.getString("MRNAME"));
                     getSetValues.setSubdivcode(jsonObject.getString("SUBDIVCODE"));
                     handler.sendEmptyMessage(LOGIN_SUCCESS);
-                }
-                else handler.sendEmptyMessage(LOGIN_FAILURE);
+                } else handler.sendEmptyMessage(LOGIN_FAILURE);
             }
-        }
-        catch (JSONException e)
-        {
+        } catch (JSONException e) {
             e.printStackTrace();
             functionCall.logStatus("JSON Exception Failure!!");
             handler.sendEmptyMessage(LOGIN_FAILURE);
         }
     }
 
-    public void getDiscon_List(String result, Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues>arrayList, Discon_List_Adapter discon_list_adapter)
-    {
+    public void getDiscon_List(String result, Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues> arrayList, Discon_List_Adapter discon_list_adapter) {
         result = parseServerXML(result);
-        functionCall.logStatus("DISCON_LIST"+result);
+        functionCall.logStatus("DISCON_LIST" + result);
         JSONArray jsonArray;
         try {
             jsonArray = new JSONArray(result);
-            if (jsonArray.length()>0)
-            {
-                for (int i=0; i<jsonArray.length(); i++)
-                {
+            if (jsonArray.length() > 0) {
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     getSetValues = new GetSetValues();
                     String ACCT_ID = jsonObject.getString("ACCT_ID");
@@ -120,11 +114,8 @@ public class ReceivingData {
                     discon_list_adapter.notifyDataSetChanged();
                 }
                 handler.sendEmptyMessage(DISCON_LIST_SUCCESS);
-            }
-            else handler.sendEmptyMessage(DISCON_LIST_FAILURE);
-        }
-        catch (JSONException e)
-        {
+            } else handler.sendEmptyMessage(DISCON_LIST_FAILURE);
+        } catch (JSONException e) {
             e.printStackTrace();
             functionCall.logStatus("JSON Exception Failure!!");
             handler.sendEmptyMessage(DISCON_LIST_FAILURE);
@@ -133,7 +124,7 @@ public class ReceivingData {
 
     public void getDisconnection_update_status(String result, Handler handler) {
         result = parseServerXML(result);
-        functionCall.logStatus("Disconnection Update: "+result);
+        functionCall.logStatus("Disconnection Update: " + result);
         try {
             JSONObject jsonObject = new JSONObject(result);
             if (StringUtils.startsWithIgnoreCase(jsonObject.getString("message"), "Success"))
@@ -145,5 +136,22 @@ public class ReceivingData {
         }
     }
 
+    public void get_Server_Date_status(String result, Handler handler, GetSetValues getSetValues) {
+        result = parseServerXML(result);
+        functionCall.logStatus("Server Date Status:" + result);
+        try {
+            JSONArray jsonArray = new JSONArray(result);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                if (jsonObject != null) {
+                    String serverdate = jsonObject.getString("message");
+                    getSetValues.setServer_date(serverdate.substring(1, serverdate.length() - 1));
+                    handler.sendEmptyMessage(SERVER_DATE_SUCCESS);
+                }else handler.sendEmptyMessage(SERVER_DATE_FAILURE);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
+    }
 }

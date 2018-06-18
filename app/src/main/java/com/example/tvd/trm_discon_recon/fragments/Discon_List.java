@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ public class Discon_List extends Fragment {
     FunctionCall functionCall;
     private Discon_List_Adapter discon_list_adapter;
     AlertDialog discon_dialog;
+    String get_Discon_date="";
     private final Handler mhandler;
     {
         mhandler = new Handler(){
@@ -83,6 +85,12 @@ public class Discon_List extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_discon__list, container, false);
+        Bundle bundle = getArguments();
+        if (bundle!=null)
+        {
+            get_Discon_date = bundle.getString("Discon_Date");
+            Log.d("Debug","Discon_Date"+get_Discon_date);
+        }
         sendingData = new SendingData();
         functionCall = new FunctionCall();
         getsetvalues = new GetSetValues();
@@ -99,9 +107,13 @@ public class Discon_List extends Fragment {
         progressDialog.setTitle("Connecting To Server");
         progressDialog.setMessage("Please Wait..");
         progressDialog.show();
+
+         /*Code: 54003717
+                   Date: 2018/06/13*/
+
         SendingData.Discon_List discon_list = sendingData.new Discon_List(mhandler, getsetvalues,arraylist,discon_list_adapter);
         /********Below Mrcode and date is hardcoaded********/
-        discon_list.execute("14000521","2018-04-27");
+        discon_list.execute("54003717",get_Discon_date);
 
         return view;
     }
@@ -132,7 +144,7 @@ public class Discon_List extends Fragment {
                         curread.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                                if (s.toString().trim().length() == 0) {
+                                if (s.toString().trim().length() <1) {
                                     disconnect_button.setEnabled(false);
                                 } else {
                                     disconnect_button.setEnabled(true);

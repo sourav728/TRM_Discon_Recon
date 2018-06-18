@@ -5,8 +5,8 @@
         android:id="@+id/first"
         android:checkableBehavior="none">
         <item
-            android:id="@+id/nav_disconnect"
-            android:title="Disconnect" />
+            android:id="@+id/nav_home"
+            android:title="Home" />
     </group>
     <group
         android:id="@+id/second"

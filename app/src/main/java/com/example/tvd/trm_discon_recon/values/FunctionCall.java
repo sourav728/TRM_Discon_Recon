@@ -8,6 +8,11 @@ import android.support.design.widget.TextInputEditText;
 import android.util.Log;
 import android.widget.EditText;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class FunctionCall {
     public void logStatus(String message) {
         Log.d("debug", message);
@@ -78,4 +83,31 @@ public class FunctionCall {
         editText.requestFocus();
         editText.setSelection(editText.getText().length());
     }
+    public String Parse_Date2(String time) {
+        String input = "yyyy-MM-d";
+        String output = "yyyy/MM/dd";
+        SimpleDateFormat inputFormat = new SimpleDateFormat(input);
+        SimpleDateFormat outputFormat = new SimpleDateFormat(output);
+
+        Date date = null;
+        String str = null;
+        try {
+            date = inputFormat.parse(time);
+            str = outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
+    public Date selectiondate(String date) {
+        Date date1 = null;
+        try {
+            date1 = new SimpleDateFormat("dd/MM/yyyy", Locale.US).parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date1;
+    }
+
 }

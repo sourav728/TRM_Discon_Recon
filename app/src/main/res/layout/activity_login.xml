@@ -71,17 +71,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <EditText
+                android:id="@+id/txt_selected_date"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:clickable="false"
+                android:enabled="false"
                 android:hint="Select Date"
                 android:singleLine="true"
                 android:textColor="#ffffff"
                 android:textColorHint="#ffffff" />
             <ImageView
+                android:id="@+id/img_date"
                 android:layout_weight="1.5"
                 android:layout_width="100dp"
                 android:layout_height="50dp"
