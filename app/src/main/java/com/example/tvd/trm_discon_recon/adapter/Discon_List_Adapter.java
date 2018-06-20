@@ -16,6 +16,8 @@ import com.example.tvd.trm_discon_recon.invoke.SendingData;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCONNECTION_DIALOG;
@@ -52,6 +54,9 @@ public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapte
         Log.d("Holder","Arrears"+getSetValues.getDiscon_arrears());
         holder.prevraed.setText(getSetValues.getDiscon_prevread());
         Log.d("Holder","PrevRead"+getSetValues.getDiscon_prevread());
+        if (StringUtils.startsWithIgnoreCase(getSetValues.getDiscon_flag(),"Y"))
+            holder.disconnected.setVisibility(View.VISIBLE);
+        else holder.disconnected.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -60,7 +65,7 @@ public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapte
     }
 
     public class Discon_Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView accountid, arrears, prevraed;
+        TextView accountid, arrears, prevraed, disconnected;
         LinearLayout lin;
 
         public Discon_Holder(View itemView) {
@@ -69,6 +74,7 @@ public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapte
             accountid = (TextView) itemView.findViewById(R.id.txt_account_id);
             arrears = (TextView) itemView.findViewById(R.id.txt_arrears);
             prevraed = (TextView) itemView.findViewById(R.id.txt_prevread);
+            disconnected = (TextView)itemView.findViewById(R.id.txt_disconnected);
             lin = (LinearLayout) itemView.findViewById(R.id.lin_layout);
             lin.setOnClickListener(this);
         }

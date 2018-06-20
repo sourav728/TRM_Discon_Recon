@@ -151,7 +151,7 @@ public class ReceivingData {
         }
     }
 
-    public void getDisconnection_update_status(String result, Handler handler) {
+    public void getDisconnection_update_status(String result, Handler handler, GetSetValues getSetValues) {
         result = parseServerXML(result);
         functionCall.logStatus("Disconnection Update: " + result);
         try {

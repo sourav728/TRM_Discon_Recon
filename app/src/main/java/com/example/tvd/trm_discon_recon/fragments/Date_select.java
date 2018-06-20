@@ -2,6 +2,7 @@ package com.example.tvd.trm_discon_recon.fragments;
 
 
 import android.app.DatePickerDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import android.widget.TextView;
 
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -55,6 +58,7 @@ public class Date_select extends Fragment {
                 Discon_List discon_list = new Discon_List();
                 Bundle bundle = new Bundle();
                 bundle.putString("Discon_Date",date1);
+                SavePreferences("DISCON_DATE",date1);
                 discon_list.setArguments(bundle);
                 android.support.v4.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                 fragmentTransaction.replace(R.id.content_frame, discon_list).addToBackStack(null).commit();
@@ -78,6 +82,11 @@ public class Date_select extends Fragment {
         dpdialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         dpdialog.show();
     }
-
+    private void SavePreferences(String key, String value) {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.commit();
+    }
 
 }

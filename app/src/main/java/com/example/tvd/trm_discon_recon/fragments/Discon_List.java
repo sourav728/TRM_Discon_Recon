@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,14 +22,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tvd.trm_discon_recon.MainActivity;
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.adapter.Discon_List_Adapter;
+import com.example.tvd.trm_discon_recon.adapter.RoleAdapter;
 import com.example.tvd.trm_discon_recon.database.Database;
 import com.example.tvd.trm_discon_recon.invoke.SendingData;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
@@ -36,6 +40,7 @@ import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
 import java.util.ArrayList;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCONNECTION_DIALOG;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_LIST_FAILURE;
@@ -48,6 +53,7 @@ public class Discon_List extends Fragment {
     RecyclerView recyclerview;
     ArrayList<GetSetValues> arraylist;
     ArrayList<GetSetValues> arrayList1;
+    ArrayList<GetSetValues>arrayList3;
     SendingData sendingData;
     FunctionCall functionCall;
     private Discon_List_Adapter discon_list_adapter;
@@ -55,7 +61,10 @@ public class Discon_List extends Fragment {
     String get_Discon_date = "";
     ProgressDialog pdialog;
     Database database;
-    Cursor c1, c2;
+    Cursor c1, c2, c3;
+    RoleAdapter roleAdapter1;
+    String selected_role="", disconnection_date="", reading="";
+    int dialog_position;
     private final Handler mhandler;
 
     {
@@ -74,14 +83,14 @@ public class Discon_List extends Fragment {
                         break;
                     case DISCON_SUCCESS:
                         progressDialog.dismiss();
-                        Toast.makeText(getActivity(), "Account Disconnected..", Toast.LENGTH_SHORT).show();
-                        Discon_List discon_list = new Discon_List();
-                        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.content_frame, discon_list).addToBackStack(null).commit();
+                        Toast.makeText(getActivity(), getsetvalues.getDiscon_acc_id() + "Account Disconnected Successfully..", Toast.LENGTH_SHORT).show();
+                        update_db_values();
+                        discon_dialog.dismiss();
                         break;
                     case DISCON_FAILURE:
                         progressDialog.dismiss();
                         Toast.makeText(getActivity(), "Disconnection Failure!!", Toast.LENGTH_SHORT).show();
+                        discon_dialog.dismiss();
                         break;
                 }
                 super.handleMessage(msg);
@@ -99,6 +108,9 @@ public class Discon_List extends Fragment {
         //database = ((MainActivity) getActivity()).get_discon_Database();
         database = new Database(getActivity());
         database.open();
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+        disconnection_date = sharedPreferences.getString("DISCON_DATE", "");
+
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -144,7 +156,7 @@ public class Discon_List extends Fragment {
         return view;
     }
 
-    public void show_disconnection_dialog(int id, int position, ArrayList<GetSetValues> arrayList) {
+    public void show_disconnection_dialog(int id, final int position, ArrayList<GetSetValues> arrayList) {
         final AlertDialog alertDialog;
         final GetSetValues getSetValues = arrayList.get(position);
         switch (id) {
@@ -158,18 +170,53 @@ public class Discon_List extends Fragment {
                 final TextView accno = (TextView) view.findViewById(R.id.txt_account_no);
                 final TextView arrears = (TextView) view.findViewById(R.id.txt_arrears);
                 final TextView prevread = (TextView) view.findViewById(R.id.txt_prevread);
+                final TextView name = (TextView) view.findViewById(R.id.txt_name);
+                final TextView address = (TextView) view.findViewById(R.id.txt_address);
+                final TextView discon_date = (TextView) view.findViewById(R.id.txt_discon_date);
+
                 final EditText curread = (EditText) view.findViewById(R.id.edit_curread);
                 final Button cancel_button = (Button) view.findViewById(R.id.dialog_negative_btn);
                 final Button disconnect_button = (Button) view.findViewById(R.id.dialog_positive_btn);
+
+                final Spinner remark= (Spinner) view.findViewById(R.id.spiner_remark);
+                arrayList3 = new ArrayList<>();
+                roleAdapter1 = new RoleAdapter(arrayList3, getActivity());
+                remark.setAdapter(roleAdapter1);
+
                 discon_dialog = dialog.create();
                 discon_dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface dialog) {
+                        dialog_position = position+1;
+                        //Setting status spinner
+                        for (int i = 0; i < getResources().getStringArray(R.array.remark).length; i++) {
+                            GetSetValues getSetValues = new GetSetValues();
+                            getSetValues.setRemark(getResources().getStringArray(R.array.remark)[i]);
+                            arrayList3.add(getSetValues);
+                            roleAdapter1.notifyDataSetChanged();
+                        }
+                        remark.setSelection(0);
+
+                        remark.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                TextView role = (TextView) view.findViewById(R.id.spinner_txt);
+                                role.setBackgroundDrawable(null);
+                                selected_role = role.getText().toString();
+                                Toast.makeText(getActivity(), "Selected Role"+ selected_role, Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+
+                            }
+                        });
+
                         //This method is used to check about if user enter any input then only disconnect button will be enabled
                         curread.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                                if (s.toString().trim().length() < 1) {
+                                if (s.toString().trim().length() < 0) {
                                     disconnect_button.setEnabled(false);
                                 } else {
                                     disconnect_button.setEnabled(true);
@@ -178,27 +225,40 @@ public class Discon_List extends Fragment {
 
                             @Override
                             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                if (s.toString().trim().length() < 0) {
+                                    disconnect_button.setEnabled(false);
+                                } else {
+                                    disconnect_button.setEnabled(true);
+                                }
                             }
 
                             @Override
                             public void afterTextChanged(Editable s) {
+                                if (s.toString().trim().length() < 0) {
+                                    disconnect_button.setEnabled(false);
+                                } else {
+                                    disconnect_button.setEnabled(true);
+                                }
                             }
                         });
-                        accno.setText(getSetValues.getAcc_id());
-                        arrears.setText(String.format("%s %s", getActivity().getResources().getString(R.string.rupee), getSetValues.getArrears()));
-                        prevread.setText(getSetValues.getPrev_read());
+                        accno.setText(getSetValues.getDiscon_acc_id());
+                        arrears.setText(String.format("%s %s", getActivity().getResources().getString(R.string.rupee), getSetValues.getDiscon_arrears()));
+                        prevread.setText(getSetValues.getDiscon_prevread());
+                        name.setText(getSetValues.getDiscon_date());
+                        address.setText(getSetValues.getDiscon_add1());
+                        discon_date.setText(getSetValues.getDiscon_date());
                         disconnect_button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 if (!TextUtils.isEmpty(curread.getText())) {
-                                    String reading = curread.getText().toString();
-                                    if (Double.parseDouble(getSetValues.getPrev_read()) <= Double.parseDouble(reading)) {
+                                     reading = curread.getText().toString();
+                                    if (Double.parseDouble(getSetValues.getDiscon_prevread()) <= Double.parseDouble(reading)) {
                                         progressDialog = new ProgressDialog(getActivity(), R.style.MyProgressDialogstyle);
                                         progressDialog.setTitle("Updating Disconnection");
                                         progressDialog.setMessage("Please Wait..");
                                         progressDialog.show();
                                         SendingData.Disconnect_Update disconnect_update = sendingData.new Disconnect_Update(mhandler, getSetValues);
-                                        disconnect_update.execute(getSetValues.getAcc_id(), functionCall.convertdateview("27-04-2018", "yy", "-"), reading);
+                                        disconnect_update.execute(getSetValues.getDiscon_acc_id(), disconnection_date, reading,selected_role);
                                     } else {
                                         functionCall.setEdittext_error(curread, "Current Reading should be greater than Previous Reading!!");
                                     }
@@ -245,6 +305,8 @@ public class Discon_List extends Fragment {
                     cv.put("LON", getsetvalues.getLongi());
                     cv.put("MTR_READ", getsetvalues.getMtr_read());
                     cv.put("FLAG", "N");
+                    cv.put("MTR_READING","Null");
+                    cv.put("REMARK","Null");
                     database.insert_discon_data(cv);
                 }
                 //Once value is inserted into database then show() will be called to display values in recycler view
@@ -294,6 +356,14 @@ public class Discon_List extends Fragment {
                 discon_list_adapter.notifyDataSetChanged();
             }
         }
+    }
+
+    public void update_db_values()
+    {
+        database.update_Discon_Data(dialog_position, reading, selected_role).moveToNext();
+        Discon_List discon_list = new Discon_List();
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.content_frame, discon_list).addToBackStack(null).commit();
     }
 
 }

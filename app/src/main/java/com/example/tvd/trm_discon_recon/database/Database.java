@@ -25,7 +25,7 @@ public class Database {
             databasefile = fcall.filestorepath(databasefolder, database_name);
             fcall.logStatus("Discon Database does not exists!!");
             databasepath = fcall.filepath(databasefolder) + File.separator + database_name;
-            mh = new MyHelper(context, databasepath, null, 1);
+            mh = new MyHelper(context, databasepath, null, 2);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,7 +47,7 @@ public class Database {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL("Create table DISCON_RECON(_id integer primary key, ACC_ID TEXT,ARREARS TEXT,DIS_DATE TEXT,PREVREAD TEXT, " +
-                   "CONSUMER_NAME TEXT, ADD1 TEXT, LAT TEXT, LON TEXT, MTR_READ TEXT, FLAG TEXT);");
+                   "CONSUMER_NAME TEXT, ADD1 TEXT, LAT TEXT, LON TEXT, MTR_READ TEXT, FLAG TEXT, MTR_READING, REMARK);");
         }
 
         @Override
@@ -73,5 +73,9 @@ public class Database {
         Cursor c2 = null;
         c2 = sdb.rawQuery("SELECT * FROM DISCON_RECON",null);
         return c2;
+    }
+
+    public Cursor update_Discon_Data(int id, String mtr_reading, String remark) {
+        return sdb.rawQuery("UPDATE DISCON_RECON set MTR_READING = '" + mtr_reading + "' , REMARK = '" + remark + "' , FLAG = 'Y' where _id = '" + id + "'", null);
     }
 }

@@ -192,9 +192,10 @@ public class SendingData {
             datamap.put("Acc_id", params[0]);
             datamap.put("Dis_Date", params[1]);
             datamap.put("CURREAD", params[2]);
-            functionCall.logStatus("Acc_id: "+params[0] + "\n" + "Dis_Date: "+params[1] + "\n" + "CURREAD: "+params[2]);
+            datamap.put("Remarks",params[3]);
+            functionCall.logStatus("Acc_id: "+params[0] + "\n" + "Dis_Date: "+params[1] + "\n" + "CURREAD: "+params[2] + "\n" + "Remarks:"+ params[3]);
             try {
-                response = UrlPostConnection("http://www.bc_service.hescomtrm.com/ReadFile.asmx/DisConUpdate", datamap);
+                response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/DisConUpdate", datamap);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -204,7 +205,7 @@ public class SendingData {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            receivingData.getDisconnection_update_status(result, handler);
+            receivingData.getDisconnection_update_status(result, handler, getSetValues);
         }
     }
 

@@ -4,7 +4,7 @@ public class GetSetValues {
     private String mrcode="",mrname="",subdivcode="",acc_id="",arrears="",dis_date="",prev_read="",server_date="", login_date="",
                    consumer_name="",add1="",lati="",longi="",mtr_read="" ;
     private String discon_id="",discon_acc_id="",discon_arrears="",discon_date="",discon_prevread="",discon_consumer_name="",
-                   discon_add1="",discon_lat="",discon_lon="",discon_mtr_read="",discon_flag="";
+                   discon_add1="",discon_lat="",discon_lon="",discon_mtr_read="",discon_flag="",remark="";
 
     public String getMrcode() {
         return mrcode;
@@ -16,6 +16,14 @@ public class GetSetValues {
 
     public void setDiscon_id(String discon_id) {
         this.discon_id = discon_id;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getDiscon_acc_id() {
