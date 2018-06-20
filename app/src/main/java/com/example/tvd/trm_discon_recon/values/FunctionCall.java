@@ -8,6 +8,7 @@ import android.support.design.widget.TextInputEditText;
 import android.util.Log;
 import android.widget.EditText;
 
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -85,6 +86,22 @@ public class FunctionCall {
     }
     public String Parse_Date2(String time) {
         String input = "yyyy-MM-d";
+        String output = "dd/MM/yyyy";
+        SimpleDateFormat inputFormat = new SimpleDateFormat(input);
+        SimpleDateFormat outputFormat = new SimpleDateFormat(output);
+
+        Date date = null;
+        String str = null;
+        try {
+            date = inputFormat.parse(time);
+            str = outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+    public String Parse_Date3(String time) {
+        String input = "yyyy-MM-d";
         String output = "yyyy/MM/dd";
         SimpleDateFormat inputFormat = new SimpleDateFormat(input);
         SimpleDateFormat outputFormat = new SimpleDateFormat(output);
@@ -99,7 +116,6 @@ public class FunctionCall {
         }
         return str;
     }
-
     public Date selectiondate(String date) {
         Date date1 = null;
         try {
@@ -109,5 +125,23 @@ public class FunctionCall {
         }
         return date1;
     }
-
+    public File filestorepath(String value, String file) {
+        File dir = new File(android.os.Environment.getExternalStorageDirectory(), Appfoldername()
+                + File.separator + value);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        return new File(dir, File.separator + file);
+    }
+    private String Appfoldername() {
+        return "Discon_Recon";
+    }
+    public String filepath(String value) {
+        File dir = new File(android.os.Environment.getExternalStorageDirectory(), Appfoldername()
+                + File.separator + value);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        return dir.toString();
+    }
 }

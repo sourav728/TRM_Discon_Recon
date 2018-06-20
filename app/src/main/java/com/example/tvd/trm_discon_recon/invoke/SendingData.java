@@ -148,13 +148,11 @@ public class SendingData {
         Handler handler;
         GetSetValues getSetValues;
         ArrayList<GetSetValues>arrayList;
-        Discon_List_Adapter discon_list_adapter;
-        public Discon_List(Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues>arrayList, Discon_List_Adapter discon_list_adapter)
+        public Discon_List(Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues>arrayList)
         {
             this.handler = handler;
             this.getSetValues = getSetValues;
             this.arrayList = arrayList;
-            this.discon_list_adapter = discon_list_adapter;
         }
         @Override
         protected String doInBackground(String... params) {
@@ -174,7 +172,7 @@ public class SendingData {
 
         @Override
         protected void onPostExecute(String result) {
-            receivingData.getDiscon_List(result, handler,getSetValues,arrayList,discon_list_adapter);
+            receivingData.getDiscon_List(result, handler,getSetValues,arrayList);
         }
     }
     //Disconnection Update

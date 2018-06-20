@@ -3,6 +3,7 @@ package com.example.tvd.trm_discon_recon.adapter;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,35 +25,14 @@ public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapte
     private SendingData sendingData = new SendingData();
     private GetSetValues getSetValues1 = new GetSetValues();
     private FunctionCall functionCall = new FunctionCall();
-    /*private final Handler mhandler;
-    {
-        mhandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case DISCON_SUCCESS:
-                        progressDialog.dismiss();
-                        Toast.makeText(context, "Account Disconnected..", Toast.LENGTH_SHORT).show();
-                        break;
-                    case DISCON_FAILURE:
-                        progressDialog.dismiss();
-                        Toast.makeText(context, "Disconnection Failure!!", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-                super.handleMessage(msg);
-            }
-        };
-    }*/
-
     private ArrayList<GetSetValues> arraylist = new ArrayList<>();
     private Context context;
     private GetSetValues getSetValues;
     private Discon_List_Adapter discon_list_adapter;
     private Discon_List discon_list;
-    public Discon_List_Adapter(Context context, ArrayList<GetSetValues> arrayList, GetSetValues getSetValues, Discon_List discon_list) {
+    public Discon_List_Adapter(Context context, ArrayList<GetSetValues> arrayList,Discon_List discon_list) {
         this.context = context;
         this.arraylist = arrayList;
-        this.getSetValues = getSetValues;
         this.discon_list = discon_list;
     }
 
@@ -65,10 +45,13 @@ public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapte
     @Override
     public void onBindViewHolder(Discon_List_Adapter.Discon_Holder holder, int position) {
         GetSetValues getSetValues = arraylist.get(position);
-        holder.accountid.setText(getSetValues.getAcc_id());
+        holder.accountid.setText(getSetValues.getDiscon_acc_id());
+        Log.d("Holder","Acc id"+getSetValues.getDiscon_acc_id());
         //here %s%s meaning first string will set on first then space and then second string
-        holder.arrears.setText(String.format("%s %s", context.getResources().getString(R.string.rupee), getSetValues.getArrears()));
-        holder.prevraed.setText(getSetValues.getPrev_read());
+        holder.arrears.setText(String.format("%s %s", context.getResources().getString(R.string.rupee), getSetValues.getDiscon_arrears()));
+        Log.d("Holder","Arrears"+getSetValues.getDiscon_arrears());
+        holder.prevraed.setText(getSetValues.getDiscon_prevread());
+        Log.d("Holder","PrevRead"+getSetValues.getDiscon_prevread());
     }
 
     @Override
@@ -93,6 +76,7 @@ public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapte
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
+            /*****Comment should be removed from here************/
             discon_list.show_disconnection_dialog(DISCONNECTION_DIALOG, position, arraylist);
         }
     }

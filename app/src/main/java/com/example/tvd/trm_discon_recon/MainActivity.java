@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tvd.trm_discon_recon.database.Database;
 import com.example.tvd.trm_discon_recon.fragments.Discon_List;
 import com.example.tvd.trm_discon_recon.fragments.HomeFragment;
 import com.example.tvd.trm_discon_recon.invoke.SendingData;
@@ -44,6 +45,7 @@ public class MainActivity extends AppCompatActivity
     FunctionCall fcall;
     GetSetValues getSetValues;
     SendingData sendingData;
+    Database database;
     private final Handler mhandler;
     {
         mhandler = new Handler(){
@@ -54,11 +56,15 @@ public class MainActivity extends AppCompatActivity
                     case SERVER_DATE_SUCCESS:
                         Date server_date = fcall.selectiondate(fcall.convertdateview(getSetValues.getServer_date(),"dd","/"));
                         Log.d("Debug","Server_date"+server_date);
-                        Date selected_date = fcall.selectiondate(selected_date2);
-                        Log.d("Debug","Got_Selected_date"+selected_date2);
+                        Date selected_date = fcall.selectiondate(fcall.convertdateview(selected_date2, "dd", "/"));
+                        Log.d("Debug","Got_Selected_date"+selected_date);
                         if (server_date.equals(selected_date))
                             Log.d("Debug","Date Matching..");
-                        else Log.d("Debug","Date Not Matching..");
+                        else
+                        {
+                            Log.d("Debug","Date Not Matching..");
+                            database.delete_table();
+                        }
                         break;
 
                 }
@@ -70,6 +76,8 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        database = new Database(this);
+        database.open();
 
         replaceFragment(R.id.nav_home);
         fcall = new FunctionCall();
@@ -165,6 +173,10 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.commit();
         }
 
+    }
+    public Database get_discon_Database()
+    {
+        return this.database;
     }
 
 }

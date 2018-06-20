@@ -92,7 +92,7 @@ public class ReceivingData {
         }
     }
 
-    public void getDiscon_List(String result, Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues> arrayList, Discon_List_Adapter discon_list_adapter) {
+    public void getDiscon_List(String result, Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues> arrayList) {
         result = parseServerXML(result);
         functionCall.logStatus("DISCON_LIST" + result);
         JSONArray jsonArray;
@@ -106,12 +106,41 @@ public class ReceivingData {
                     String ARREARS = jsonObject.getString("ARREARS");
                     String DIS_DATE = jsonObject.getString("DIS_DATE");
                     String PREVREAD = jsonObject.getString("PREVREAD");
-                    getSetValues.setAcc_id(ACCT_ID);
-                    getSetValues.setArrears(ARREARS);
+                    String CONSUMER_NAME = jsonObject.getString("CONSUMER_NAME");
+                    String ADD1 = jsonObject.getString("ADD1");
+                    String LAT = jsonObject.getString("LAT");
+                    String LON = jsonObject.getString("LON");
+                    String MTR_READ = jsonObject.getString("MTR_READ");
+
+                    if (!ACCT_ID.equals(""))
+                        getSetValues.setAcc_id(ACCT_ID);
+                    else getSetValues.setAcc_id("NA");
+                    if (!ARREARS.equals(""))
+                        getSetValues.setArrears(ARREARS);
+                    else getSetValues.setArrears("NA");
+                    if (!DIS_DATE.equals(""))
                     getSetValues.setDis_date(DIS_DATE);
+                    else getSetValues.setDis_date("NA");
+                    if (!PREVREAD.equals(""))
                     getSetValues.setPrev_read(PREVREAD);
+                    else getSetValues.setPrev_read("NA");
+                    if (!CONSUMER_NAME.equals(""))
+                    getSetValues.setConsumer_name(CONSUMER_NAME);
+                    else getSetValues.setConsumer_name("NA");
+                    if (!ADD1.equals(""))
+                    getSetValues.setAdd1(ADD1);
+                    else getSetValues.setAdd1("NA");
+                    if (!LAT.equals(""))
+                    getSetValues.setLati(LAT);
+                    else getSetValues.setLati("NA");
+                    if (!LON.equals(""))
+                    getSetValues.setLongi(LON);
+                    else getSetValues.setLongi("NA");
+                    if (!MTR_READ.equals(""))
+                    getSetValues.setMtr_read(MTR_READ);
+                    else getSetValues.setMtr_read("NA");
                     arrayList.add(getSetValues);
-                    discon_list_adapter.notifyDataSetChanged();
+                    //discon_list_adapter.notifyDataSetChanged();
                 }
                 handler.sendEmptyMessage(DISCON_LIST_SUCCESS);
             } else handler.sendEmptyMessage(DISCON_LIST_FAILURE);

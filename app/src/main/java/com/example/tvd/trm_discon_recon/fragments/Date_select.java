@@ -69,7 +69,7 @@ public class Date_select extends Fragment {
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
                 dd = (year + "-" + (month + 1) + "-" + dayOfMonth);
-                date1 = fcall.Parse_Date2(dd);
+                date1 = fcall.Parse_Date3(dd);
                 show_date.setText(date1);
             }
         };
