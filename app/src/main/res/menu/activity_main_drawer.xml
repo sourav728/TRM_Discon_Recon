@@ -14,4 +14,5 @@
         <item android:id="@+id/nav_connect"
             android:title="Reconnect"/>
     </group>
+
 </menu>

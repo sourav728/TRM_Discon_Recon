@@ -32,6 +32,7 @@ public class FunctionCall {
         }
         return false;
     }
+
     @SuppressLint("DefaultLocale")
     public String convertdateview(String date, String format, String separation) {
         String s1, s2, s3, s4, s5="";
@@ -84,13 +85,14 @@ public class FunctionCall {
         editText.requestFocus();
         editText.setSelection(editText.getText().length());
     }
-    public String Parse_Date2(String time) {
-        String input = "yyyy-MM-d";
-        String output = "dd/MM/yyyy";
-        SimpleDateFormat inputFormat = new SimpleDateFormat(input);
-        SimpleDateFormat outputFormat = new SimpleDateFormat(output);
 
-        Date date = null;
+    public String Parse_Date2(String time) {
+        String input = "yyyy/MM/dd";
+        String output = "dd/MM/yyyy";
+        SimpleDateFormat inputFormat = new SimpleDateFormat(input, Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat(output, Locale.getDefault());
+
+        Date date;
         String str = null;
         try {
             date = inputFormat.parse(time);
@@ -100,6 +102,7 @@ public class FunctionCall {
         }
         return str;
     }
+
     public String Parse_Date3(String time) {
         String input = "yyyy-MM-d";
         String output = "yyyy/MM/dd";

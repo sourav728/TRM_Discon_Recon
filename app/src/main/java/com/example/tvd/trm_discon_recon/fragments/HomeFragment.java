@@ -20,7 +20,7 @@ import com.example.tvd.trm_discon_recon.database.Database;
 
 
 public class HomeFragment extends Fragment {
-    Button disconnect;
+    Button disconnect,reconnect;
     Database database;
     public HomeFragment() {
 
@@ -34,6 +34,7 @@ public class HomeFragment extends Fragment {
         database = ((MainActivity) getActivity()).get_discon_Database();
 
         disconnect = (Button) view.findViewById(R.id.btn_discon);
+        reconnect = (Button) view.findViewById(R.id.btn_recon);
         disconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,7 +43,14 @@ public class HomeFragment extends Fragment {
                 fragmentTransaction.replace(R.id.content_frame, date_select).addToBackStack(null).commit();
             }
         });
-
+        reconnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DateSelect2 date_select2 = new DateSelect2();
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.content_frame, date_select2).addToBackStack(null).commit();
+            }
+        });
 
         return view;
     }

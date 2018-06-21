@@ -65,7 +65,7 @@
                 android:textColorHint="#ffffff"
                 />
         </android.support.design.widget.TextInputLayout>
-        <LinearLayout
+       <!-- <LinearLayout
             android:id="@+id/lin_date"
             android:layout_below="@+id/password_text_input_layout"
             android:layout_width="match_parent"
@@ -90,9 +90,10 @@
                 android:layout_height="50dp"
                 android:layout_marginRight="20dp"
                 android:src="@drawable/calender"/>
-        </LinearLayout>
+        </LinearLayout>-->
         <LinearLayout
-            android:layout_below="@+id/lin_date"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/password_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
@@ -112,14 +113,15 @@
                 android:layout_weight="7.2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-        </LinearLayout>
 
+        </LinearLayout>
 
         <TextView
             android:layout_marginBottom="5dp"
             android:id="@+id/company_details_txt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="@string/company_details"
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="12sp"

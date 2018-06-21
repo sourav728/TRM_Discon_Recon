@@ -175,6 +175,7 @@ public class SendingData {
             receivingData.getDiscon_List(result, handler,getSetValues,arrayList);
         }
     }
+
     //Disconnection Update
     @SuppressLint("StaticFieldLeak")
     public class Disconnect_Update extends AsyncTask<String, String, String> {
@@ -209,35 +210,72 @@ public class SendingData {
         }
     }
 
-    public class Reconnection extends AsyncTask<String,String,String>
+    //Reconnection List
+    public class Recon_List extends AsyncTask<String,String,String>
     {
         String response = "";
         Handler handler;
         GetSetValues getSetValues;
-        public Reconnection(Handler handler,GetSetValues getSetValues)
+        ArrayList<GetSetValues>arrayList;
+        public Recon_List(Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues>arrayList)
         {
             this.handler = handler;
             this.getSetValues = getSetValues;
+            this.arrayList = arrayList;
         }
         @Override
         protected String doInBackground(String... params) {
             HashMap<String,String>datamap = new HashMap<>();
             datamap.put("MRCode",params[0]);
             datamap.put("Date",params[1]);
-            functionCall.logStatus("MRCode"+params[0] + "\n" + "Date"+params[1]);
+            functionCall.logStatus("Recon_MrCode"+params[0]+"\n"+"Recon_Date"+params[1]);
             try {
-                response = UrlPostConnection("http://www.bc_service.hescomtrm.com/ReadFile.asmx/ReConList",datamap);
+                response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/ReConList",datamap);
             }
             catch (IOException e)
             {
                 e.printStackTrace();
             }
-            return null;
+            return response;
         }
 
         @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
+        protected void onPostExecute(String result) {
+            receivingData.getReconcon_List(result, handler,getSetValues,arrayList);
+        }
+    }
+
+    //Reconnection Update
+    @SuppressLint("StaticFieldLeak")
+    public class Reconnect_Update extends AsyncTask<String, String, String> {
+        String response="";
+        Handler handler;
+        GetSetValues getSetValues;
+        public Reconnect_Update(Handler handler,GetSetValues getSetValues) {
+            this.handler = handler;
+            this.getSetValues = getSetValues;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String, String> datamap = new HashMap<>();
+            datamap.put("Acc_id", params[0]);
+            datamap.put("Dis_Date", params[1]);
+            datamap.put("CURREAD", params[2]);
+            datamap.put("Remarks",params[3]);
+            functionCall.logStatus("Acc_id: "+params[0] + "\n" + "Dis_Date: "+params[1] + "\n" + "CURREAD: "+params[2] + "\n" + "Remarks:"+ params[3]);
+            try {
+                response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/ReConUpdate", datamap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            receivingData.getReconnectionUpdateStatus(result, handler, getSetValues);
         }
     }
     //Checking Server Date

@@ -5,7 +5,9 @@ public class GetSetValues {
                    consumer_name="",add1="",lati="",longi="",mtr_read="" ;
     private String discon_id="",discon_acc_id="",discon_arrears="",discon_date="",discon_prevread="",discon_consumer_name="",
                    discon_add1="",discon_lat="",discon_lon="",discon_mtr_read="",discon_flag="",remark="";
-
+    private String recon_id="",recon_acc_id="",recon_arrears="",recon_date="",recon_prevread="",recon_consumer_name="",
+            recon_add1="",recon_lat="",recon_lon="",recon_mtr_read="",recon_flag="",recon_remark="",re_date="";
+    private String selected_discon_date="";
     public String getMrcode() {
         return mrcode;
     }
@@ -16,6 +18,118 @@ public class GetSetValues {
 
     public void setDiscon_id(String discon_id) {
         this.discon_id = discon_id;
+    }
+
+    public String getSelected_discon_date() {
+        return selected_discon_date;
+    }
+
+    public void setSelected_discon_date(String selected_discon_date) {
+        this.selected_discon_date = selected_discon_date;
+    }
+
+    public String getRe_date() {
+        return re_date;
+    }
+
+    public void setRe_date(String re_date) {
+        this.re_date = re_date;
+    }
+
+    public String getRecon_id() {
+        return recon_id;
+    }
+
+    public String getRecon_prevread() {
+        return recon_prevread;
+    }
+
+    public void setRecon_prevread(String recon_prevread) {
+        this.recon_prevread = recon_prevread;
+    }
+
+    public void setRecon_id(String recon_id) {
+        this.recon_id = recon_id;
+    }
+
+    public String getRecon_acc_id() {
+        return recon_acc_id;
+    }
+
+    public void setRecon_acc_id(String recon_acc_id) {
+        this.recon_acc_id = recon_acc_id;
+    }
+
+    public String getRecon_arrears() {
+        return recon_arrears;
+    }
+
+    public void setRecon_arrears(String recon_arrears) {
+        this.recon_arrears = recon_arrears;
+    }
+
+    public String getRecon_date() {
+        return recon_date;
+    }
+
+    public void setRecon_date(String recon_date) {
+        this.recon_date = recon_date;
+    }
+
+    public String getRecon_consumer_name() {
+        return recon_consumer_name;
+    }
+
+    public void setRecon_consumer_name(String recon_consumer_name) {
+        this.recon_consumer_name = recon_consumer_name;
+    }
+
+    public String getRecon_add1() {
+        return recon_add1;
+    }
+
+    public void setRecon_add1(String recon_add1) {
+        this.recon_add1 = recon_add1;
+    }
+
+    public String getRecon_lat() {
+        return recon_lat;
+    }
+
+    public void setRecon_lat(String recon_lat) {
+        this.recon_lat = recon_lat;
+    }
+
+    public String getRecon_lon() {
+        return recon_lon;
+    }
+
+    public void setRecon_lon(String recon_lon) {
+        this.recon_lon = recon_lon;
+    }
+
+    public String getRecon_mtr_read() {
+        return recon_mtr_read;
+    }
+
+    public void setRecon_mtr_read(String recon_mtr_read) {
+        this.recon_mtr_read = recon_mtr_read;
+    }
+
+    public String getRecon_flag() {
+        return recon_flag;
+    }
+
+    public void setRecon_flag(String recon_flag) {
+        this.recon_flag = recon_flag;
+    }
+
+    public String getRecon_remark() {
+        return recon_remark;
+    }
+
+    public void setRecon_remark(String recon_remark) {
+        this.recon_remark = recon_remark;
     }
 
     public String getRemark() {

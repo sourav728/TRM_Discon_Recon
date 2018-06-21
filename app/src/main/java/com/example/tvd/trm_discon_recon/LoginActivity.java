@@ -129,10 +129,9 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (fcall.isInternetOn(LoginActivity.this))
                 {
+                    /*SavePreferences("Selected_Date",date1);
+                    Log.d("Debug","Selected Date"+selected_date.getText().toString());*/
 
-                    //getsetvalues.setLogin_date(selected_date.getText().toString());
-                    SavePreferences("Selected_Date",date1);
-                    Log.d("Debug","Selected Date"+selected_date.getText().toString());
                     getMrcode = mrcode.getText().toString();
                     String DeviceID ="352514083077473";
                    /*Code: 54003892
@@ -157,12 +156,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        select_date.setOnClickListener(new View.OnClickListener() {
+      /*  select_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DateDialog1();
             }
-        });
+        })*/;
     }
     public void initialize()
     {
@@ -172,8 +171,8 @@ public class LoginActivity extends AppCompatActivity {
         fcall = new FunctionCall();
         mrcode = (EditText) findViewById(R.id.edit_mrcode);
         password = (EditText) findViewById(R.id.edit_password);
-        select_date = (ImageView) findViewById(R.id.img_date);
-        selected_date = (EditText) findViewById(R.id.txt_selected_date);
+       /* select_date = (ImageView) findViewById(R.id.img_date);
+        selected_date = (EditText) findViewById(R.id.txt_selected_date);*/
     }
     private void SavePreferences(String key, String value) {
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.fragments.Discon_List;
@@ -32,6 +33,7 @@ public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapte
     private GetSetValues getSetValues;
     private Discon_List_Adapter discon_list_adapter;
     private Discon_List discon_list;
+
     public Discon_List_Adapter(Context context, ArrayList<GetSetValues> arrayList,Discon_List discon_list) {
         this.context = context;
         this.arraylist = arrayList;
@@ -83,7 +85,10 @@ public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapte
         public void onClick(View v) {
             int position = getAdapterPosition();
             /*****Comment should be removed from here************/
-            discon_list.show_disconnection_dialog(DISCONNECTION_DIALOG, position, arraylist);
+            GetSetValues getSetValues = arraylist.get(position);
+            if (StringUtils.startsWithIgnoreCase(getSetValues.getDiscon_flag(),"Y"))
+                Toast.makeText(context, "Account ID already Disconnected!!", Toast.LENGTH_SHORT).show();
+            else discon_list.show_disconnection_dialog(DISCONNECTION_DIALOG, position, arraylist);
         }
     }
 

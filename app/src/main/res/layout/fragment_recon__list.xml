@@ -3,26 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.tvd.trm_discon_recon.fragments.Discon_List">
-
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    </android.support.design.widget.AppBarLayout>
-
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recon_recyclerview"
         android:layout_above="@+id/frame_layout"
-        android:id="@+id/discon_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="10dp"
-        android:scrollbars="none"></android.support.v7.widget.RecyclerView>
-
+        android:scrollbars="none">
+    </android.support.v7.widget.RecyclerView>
     <FrameLayout
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true">
-        <include layout="@layout/account_id_count_layout" />
+        <include layout="@layout/account_id_count_layout2" />
     </FrameLayout>
 </RelativeLayout>

@@ -11,4 +11,10 @@ public class ConstantValues {
     public static final int DISCONNECTION_DIALOG = 8;
     public static final int SERVER_DATE_SUCCESS =9;
     public static final int SERVER_DATE_FAILURE = 10;
+
+    public static final int RECON_LIST_SUCCESS = 11;
+    public static final int RECON_LIST_FAILURE = 12;
+    public static final int RECON_SUCCESS = 13;
+    public static final int RECON_FAILURE = 14;
+    public static final int RECONNECTION_DIALOG = 15;
 }

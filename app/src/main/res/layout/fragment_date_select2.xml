@@ -16,7 +16,7 @@
             android:id="@+id/txt_dis_te"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="DISCONNECT"
+            android:text="RECONNECT"
             android:textSize="20sp"
             android:textStyle="bold"
             android:gravity="center"/>
@@ -42,7 +42,7 @@
                 android:src="@drawable/calender"/>
         </LinearLayout>
         <Button
-            android:id="@+id/btn_disconnect"
+            android:id="@+id/btn_Reconnect"
             android:layout_width="220dp"
             android:layout_height="40dp"
             android:layout_gravity="center"

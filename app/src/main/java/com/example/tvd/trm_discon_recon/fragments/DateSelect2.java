@@ -4,10 +4,7 @@ package com.example.tvd.trm_discon_recon.fragments;
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,80 +14,49 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tvd.trm_discon_recon.R;
-import com.example.tvd.trm_discon_recon.database.Database;
-import com.example.tvd.trm_discon_recon.invoke.SendingData;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
-import com.example.tvd.trm_discon_recon.values.GetSetValues;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.Date;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_FAILURE;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_SUCCESS;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class Date_select extends Fragment {
+public class DateSelect2 extends Fragment {
+
     ImageView date;
     String dd, date1, date2;
     FunctionCall fcall;
     TextView show_date;
     private int day, month, year;
-    Button disconnect;
-    GetSetValues getSetValues;
-    SendingData sendingData;
-    Database database;
-    String date_selected="";
+    Button reconnect;
 
-    public Date_select() {
-        // Required empty public constructor
+    public DateSelect2() {
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_date_select, container, false);
-
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
-        date_selected = sharedPreferences.getString("SELECTED_DATE","");
-
-        database = new Database(getActivity());
-        database.open();
-
-        fcall = new FunctionCall();
-        getSetValues = new GetSetValues();
-        sendingData = new SendingData();
-
-
+        View view = inflater.inflate(R.layout.fragment_date_select2, container, false);
         show_date = (TextView) view.findViewById(R.id.txt_date);
         fcall = new FunctionCall();
-        disconnect = (Button) view.findViewById(R.id.btn_disconnect);
+        reconnect = (Button) view.findViewById(R.id.btn_Reconnect);
 
 
         date = (ImageView) view.findViewById(R.id.img_fromdate);
-
-
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DateDialog1();
             }
         });
-
-        disconnect.setOnClickListener(new View.OnClickListener() {
+        reconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SavePreferences("DISCONNECTION_DATE", date1);
-                Discon_List discon_list = new Discon_List();
+                Recon_List recon_list = new Recon_List();
+                SavePreferences("RECONNECTION_DATE", date1);
                 android.support.v4.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                fragmentTransaction.replace(R.id.content_frame, discon_list).addToBackStack(null).commit();
+                fragmentTransaction.replace(R.id.content_frame, recon_list).addToBackStack(null).commit();
             }
         });
+
         return view;
     }
 
@@ -101,9 +67,6 @@ public class Date_select extends Fragment {
 
                 dd = (year + "-" + (month + 1) + "-" + dayOfMonth);
                 date1 = fcall.Parse_Date3(dd);
-                getSetValues.setSelected_discon_date(date1);
-                //Log.d("Debug","SelectedDate"+getSetValues.setSelected_discon_date(date1));
-                //SavePreferences("SELECTED_DATE",date1);
                 show_date.setText(date1);
             }
         };

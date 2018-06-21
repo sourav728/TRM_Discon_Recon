@@ -21,6 +21,25 @@
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" >
+       <!-- <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:layout_above="@+id/txt_logout"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/black2"/>
+            <TextView
+                android:id="@+id/txt_logout"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="7dp"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="5dp"
+                android:text="LogOut"/>
+        </RelativeLayout>-->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

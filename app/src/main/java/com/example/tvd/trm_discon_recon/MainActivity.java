@@ -40,13 +40,13 @@ import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    TextView mrname,mrcode;
+    TextView mrname,mrcode,logout;
     String Mrname="", Mrcode="",selected_date2="";
     FunctionCall fcall;
     GetSetValues getSetValues;
     SendingData sendingData;
     Database database;
-    private final Handler mhandler;
+    /*private final Handler mhandler;
     {
         mhandler = new Handler(){
             @Override
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity
                 super.handleMessage(msg);
             }
         };
-    }
+    }*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,15 +84,15 @@ public class MainActivity extends AppCompatActivity
         getSetValues = new GetSetValues();
         sendingData = new SendingData();
 
-        SendingData.Get_server_date get_server_date = sendingData.new Get_server_date(mhandler, getSetValues);
-        get_server_date.execute();
+       /* SendingData.Get_server_date get_server_date = sendingData.new Get_server_date(mhandler, getSetValues);
+        get_server_date.execute();*/
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF",MODE_PRIVATE);
         Mrname = sharedPreferences.getString("MRNAME","");
         Mrcode = sharedPreferences.getString("MRCODE","");
-        selected_date2 = sharedPreferences.getString("Selected_Date","");
+       // selected_date2 = sharedPreferences.getString("Selected_Date","");
         /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +115,6 @@ public class MainActivity extends AppCompatActivity
         mrcode = (TextView) view.findViewById(R.id.nav_mrcode);
         mrname.setText(Mrname);
         mrcode.setText(Mrcode);
-
         NavigationView logout_view = (NavigationView) findViewById(R.id.nav_view2);
         logout_view.setNavigationItemSelectedListener(this);
     }
@@ -163,7 +162,13 @@ public class MainActivity extends AppCompatActivity
             fragment = new HomeFragment();
         }else if (id == R.id.nav_logout)
         {
+            SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.commit();
+
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+            intent.setFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
         }
