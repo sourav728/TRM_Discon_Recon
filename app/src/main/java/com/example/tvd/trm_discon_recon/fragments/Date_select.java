@@ -24,6 +24,7 @@ import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -35,25 +36,22 @@ import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE
  */
 public class Date_select extends Fragment {
     ImageView date;
-    String dd, date1, date2;
+    String dd, date1;
     FunctionCall fcall;
     TextView show_date;
     private int day, month, year;
     Button disconnect;
     GetSetValues getSetValues;
-    SendingData sendingData;
     Database database;
     String date_selected="";
-
+    private Calendar mcalender;
     public Date_select() {
-        // Required empty public constructor
     }
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_date_select, container, false);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
@@ -64,8 +62,12 @@ public class Date_select extends Fragment {
 
         fcall = new FunctionCall();
         getSetValues = new GetSetValues();
-        sendingData = new SendingData();
 
+
+        mcalender = Calendar.getInstance();
+        day = mcalender.get(Calendar.DAY_OF_MONTH);
+        year = mcalender.get(Calendar.YEAR);
+        month = mcalender.get(Calendar.MONTH);
 
         show_date = (TextView) view.findViewById(R.id.txt_date);
         fcall = new FunctionCall();

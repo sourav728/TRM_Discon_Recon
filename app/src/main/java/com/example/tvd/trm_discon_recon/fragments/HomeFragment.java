@@ -1,12 +1,8 @@
 package com.example.tvd.trm_discon_recon.fragments;
 
 
-import android.app.ProgressDialog;
-import android.content.ContentValues;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
-import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 
 import android.view.LayoutInflater;

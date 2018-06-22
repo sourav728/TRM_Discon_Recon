@@ -25,6 +25,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tvd.trm_discon_recon.database.Database;
+import com.example.tvd.trm_discon_recon.fragments.DateSelect2;
+import com.example.tvd.trm_discon_recon.fragments.Date_select;
 import com.example.tvd.trm_discon_recon.fragments.Discon_List;
 import com.example.tvd.trm_discon_recon.fragments.HomeFragment;
 import com.example.tvd.trm_discon_recon.invoke.SendingData;
@@ -171,7 +173,10 @@ public class MainActivity extends AppCompatActivity
             intent.setFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
-        }
+        }else if (id == R.id.nav_disconnect)
+            fragment = new Date_select();
+        else if (id == R.id.nav_reconnect)
+            fragment = new DateSelect2();
         if (fragment != null) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.content_frame, fragment);

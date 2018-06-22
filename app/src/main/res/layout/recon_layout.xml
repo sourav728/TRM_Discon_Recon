@@ -221,7 +221,38 @@
                 android:textColor="@color/black"
                 android:textSize="17sp" />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Comments"
+                android:textColor="@color/black2"
+                android:textSize="17sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.7"
+                android:text=":"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edit_comments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/border_style"
+                android:inputType="number"
+                android:singleLine="true"
+                android:maxLines="5"
+                android:textColor="@color/black"
+                android:textSize="17sp" />
+        </LinearLayout>
         <include layout="@layout/dialog_button_layout2" />
     </LinearLayout>
 </RelativeLayout>

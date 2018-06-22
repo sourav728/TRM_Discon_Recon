@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     tools:context="com.example.tvd.trm_discon_recon.LoginActivity">
     <RelativeLayout
@@ -54,11 +55,14 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:textColorHint="#ffffff">
+            android:textColorHint="#ffffff"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/yellow">
             <EditText
                 android:id="@+id/edit_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textPassword"
                 android:hint="Password"
                 android:singleLine="true"
                 android:textColor="#ffffff"

@@ -28,6 +28,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.adapter.Discon_List_Adapter;
@@ -72,9 +73,10 @@ public class Recon_List extends Fragment {
     Database database;
     Cursor c1, c2, c3;
     RoleAdapter roleAdapter1;
-    String selected_role = "", reconnection_date = "", reading = "", count="";
+    String selected_role = "", reconnection_date = "", reading = "", count = "";
     int dialog_position;
     TextView total_count, recon_count, remaining;
+
     private final Handler mhandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -86,17 +88,17 @@ public class Recon_List extends Fragment {
                     break;
                 case RECON_LIST_FAILURE:
                     progressDialog.dismiss();
-                    Toast.makeText(getActivity(), "Reconnection Data is not available for you!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Reconnection Data is not available for you!!", Toast.LENGTH_SHORT).show();
                     break;
                 case RECON_SUCCESS:
                     progressDialog.dismiss();
-                    Toast.makeText(getActivity(), getsetvalues.getDiscon_acc_id() + "Account Reconnected Successfully..", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getsetvalues.getDiscon_acc_id() + "Account Reconnected Successfully..", Toast.LENGTH_SHORT).show();
                     update_db_values();
                     discon_dialog.dismiss();
                     break;
                 case RECON_FAILURE:
                     progressDialog.dismiss();
-                    Toast.makeText(getActivity(), "Reconnection Failure!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Reconnection Failure!!", Toast.LENGTH_SHORT).show();
                     discon_dialog.dismiss();
                     break;
 
@@ -110,28 +112,23 @@ public class Recon_List extends Fragment {
                     /**************************************************/
                     /*************************************************/
 
-                    Date selected_date1 = functionCall.selectiondate(functionCall.convertdateview(functionCall.Parse_Date2("2018/06/21"), "dd", "/"));
+                    Date selected_date1 = functionCall.selectiondate(functionCall.convertdateview(functionCall.Parse_Date2("2018/06/22"), "dd", "/"));
                     Log.d("Debug", "Hardcoaded" + selected_date1);
 
                     if (server_date.equals(selected_date1)) {
                         Log.d("Debug", "Date Matching..");
-                        int count1 = Integer.parseInt(count);
-                        if (count1 > 0) {
-                            Log.d("Debug", " Recon Database is not empty so skipping service call..");
-                            //If database values exists then skipping service call and directly displaying values into recyclerview from local database
-                            show();
-                        } else {
-                            progressDialog = new ProgressDialog(getActivity(), R.style.MyProgressDialogstyle);
-                            progressDialog.setTitle("Connecting To Server");
-                            progressDialog.setMessage("Please Wait..");
-                            progressDialog.show();
-                            SendingData.Recon_List recon_list = sendingData.new Recon_List(mhandler, getsetvalues, arraylist);
-                            /*******Below Mrcode and date is hardcoaded*******/
-                            recon_list.execute("54003714", reconnection_date);
-                        }
+
+                        progressDialog = new ProgressDialog(getActivity(), R.style.MyProgressDialogstyle);
+                        progressDialog.setTitle("Connecting To Server");
+                        progressDialog.setMessage("Please Wait..");
+                        progressDialog.show();
+                        SendingData.Recon_List recon_list = sendingData.new Recon_List(mhandler, getsetvalues, arraylist);
+                        /*******Below Mrcode and date is hardcoaded*******/
+                        recon_list.execute("54003714", reconnection_date);
                     } else {
                         Log.d("Debug", "Date Not Matching..");
-                        database.delete_table();
+                        /*****************Database should be cleared if user enter 30 days more than the system date**************/
+                        //database.delete_table();
                     }
                     break;
                 case SERVER_DATE_FAILURE:
@@ -152,7 +149,7 @@ public class Recon_List extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_recon__list, container, false);
-
+        getActivity().setTitle("Reconnection List");
         database = new Database(getActivity());
         database.open();
 
@@ -162,11 +159,6 @@ public class Recon_List extends Fragment {
         total_count = (TextView) view.findViewById(R.id.txt_total_recon_count);
         recon_count = (TextView) view.findViewById(R.id.txt_recon_count);
         remaining = (TextView) view.findViewById(R.id.txt_remaining);
-        /*Bundle bundle = getArguments();
-        if (bundle != null) {
-            get_Discon_date = bundle.getString("Discon_Date");
-            Log.d("Debug", "Discon_Date" + get_Discon_date);
-        }*/
 
         pdialog = new ProgressDialog(getActivity());
         sendingData = new SendingData();
@@ -182,25 +174,6 @@ public class Recon_List extends Fragment {
         SendingData.Get_server_date get_server_date = sendingData.new Get_server_date(mhandler, getsetvalues);
         get_server_date.execute();
 
-        c2 = database.count_details2();
-        c2.moveToNext();
-        count = c2.getString(c2.getColumnIndex("_id"));
-
-       /* int count1 = Integer.parseInt(count);
-        if (count1 > 0) {
-            Log.d("Debug", "Database is not empty so skipping service call..");
-            //If database values exists then skipping service call and directly displaying values into recyclerview from local database
-            show();
-        } else {
-            progressDialog = new ProgressDialog(getActivity(), R.style.MyProgressDialogstyle);
-            progressDialog.setTitle("Connecting To Server");
-            progressDialog.setMessage("Please Wait..");
-            progressDialog.show();
-            SendingData.Recon_List recon_list = sendingData.new Recon_List(mhandler, getsetvalues, arraylist);
-           *//******Below Mrcode and date is hardcoaded******//*
-            recon_list.execute("54003714", "2018/06/13");
-        }
-*/
         return view;
     }
 
@@ -222,6 +195,7 @@ public class Recon_List extends Fragment {
                 final TextView discon_date = (TextView) view.findViewById(R.id.txt_discon_date);
 
                 final EditText curread = (EditText) view.findViewById(R.id.edit_curread);
+                final EditText comments = (EditText) view.findViewById(R.id.edit_comments);
                 final Button cancel_button = (Button) view.findViewById(R.id.dialog_negative_btn);
                 final Button disconnect_button = (Button) view.findViewById(R.id.dialog_positive_btn);
 
@@ -263,29 +237,17 @@ public class Recon_List extends Fragment {
                         curread.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                                if (s.toString().trim().length() < 0) {
-                                    disconnect_button.setEnabled(false);
-                                } else {
-                                    disconnect_button.setEnabled(true);
-                                }
+                                disconnect_button.setEnabled(!TextUtils.isEmpty(s.toString().trim()));
                             }
 
                             @Override
                             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                if (s.toString().trim().length() < 0) {
-                                    disconnect_button.setEnabled(false);
-                                } else {
-                                    disconnect_button.setEnabled(true);
-                                }
+                                disconnect_button.setEnabled(!TextUtils.isEmpty(s.toString().trim()));
                             }
 
                             @Override
                             public void afterTextChanged(Editable s) {
-                                if (s.toString().trim().length() < 0) {
-                                    disconnect_button.setEnabled(false);
-                                } else {
-                                    disconnect_button.setEnabled(true);
-                                }
+                                disconnect_button.setEnabled(!TextUtils.isEmpty(s.toString().trim()));
                             }
                         });
                         accno.setText(getSetValues.getRecon_acc_id());
@@ -328,40 +290,32 @@ public class Recon_List extends Fragment {
     }
 
     public void insertReconData() {
-        Log.d("Debug", "Arraylist" + arraylist.size());
-        c1 = database.count_details();
-        c1.moveToNext();
-        String count = c1.getString(c1.getColumnIndex("_id"));
-        int count1 = Integer.parseInt(count);
-        if (count1 > 0) {
-            Log.d("Debug", "Database is not empty");
-        } else {
-            ContentValues cv = new ContentValues();
-            try {
-                for (int i = 0; i < arraylist.size(); i++) {
-                    getsetvalues = arraylist.get(i);
-                    cv.put("ACC_ID", getsetvalues.getAcc_id());
-                    Log.d("Debug", "ACC_ID" + getsetvalues.getAcc_id());
-                    cv.put("REDATE", getsetvalues.getRe_date());
-                    cv.put("PREVREAD", getsetvalues.getPrev_read());
-                    cv.put("CONSUMER_NAME", getsetvalues.getConsumer_name());
-                    cv.put("ADD1", getsetvalues.getAdd1());
-                    cv.put("LAT", getsetvalues.getLati());
-                    cv.put("LON", getsetvalues.getLongi());
-                    cv.put("MTR_READ", getsetvalues.getMtr_read());
-                    cv.put("FLAG", "N");
-                    cv.put("MTR_READING", "Null");
-                    cv.put("REMARK", "Null");
-                    database.insert_recon_data(cv);
-                }
-                //Once value is inserted into database then show() will be called to display values in recycler view
-                //It will be called once for first time downloading data
-                show();
-            } catch (Exception e) {
-                e.printStackTrace();
+
+        ContentValues cv = new ContentValues();
+        try {
+            for (int i = 0; i < arraylist.size(); i++) {
+                getsetvalues = arraylist.get(i);
+
+                cv.put("ACC_ID", getsetvalues.getAcc_id());
+                Log.d("Debug", "ACC_ID" + getsetvalues.getAcc_id());
+                cv.put("REDATE", getsetvalues.getRe_date());
+                cv.put("PREVREAD", getsetvalues.getPrev_read());
+                cv.put("CONSUMER_NAME", getsetvalues.getConsumer_name());
+                cv.put("ADD1", getsetvalues.getAdd1());
+                cv.put("LAT", getsetvalues.getLati());
+                cv.put("LON", getsetvalues.getLongi());
+                cv.put("MTR_READ", getsetvalues.getMtr_read());
+                cv.put("FLAG", "N");
+                cv.put("MTR_READING", "Null");
+                cv.put("REMARK", "Null");
+                database.insert_recon_data(cv);
+
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
+        show();
     }
 
     public void show() {
@@ -399,15 +353,18 @@ public class Recon_List extends Fragment {
                 recon_list_adapter.notifyDataSetChanged();
             }
         }
+        c2 = database.count_details2();
+        c2.moveToNext();
+        count = c2.getString(c2.getColumnIndex("_id"));
 
         c3 = database.get_Total_Recon_Count();
         c3.moveToNext();
         String reconnection_count = c3.getString(c3.getColumnIndex("COUNT"));
-        Log.d("Debug","Recon_count"+reconnection_count);
+        Log.d("Debug", "Recon_count" + reconnection_count);
         recon_count.setText(reconnection_count);
         total_count.setText(count);
-        int remaining_count = Integer.parseInt(count)-Integer.parseInt(reconnection_count);
-        remaining.setText(remaining_count+"");
+        int remaining_count = Integer.parseInt(count) - Integer.parseInt(reconnection_count);
+        remaining.setText(remaining_count + "");
     }
 
     public void update_db_values() {

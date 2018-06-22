@@ -1,17 +1,19 @@
 package com.example.tvd.trm_discon_recon.fragments;
 
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,7 +31,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tvd.trm_discon_recon.MainActivity;
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.adapter.Discon_List_Adapter;
 import com.example.tvd.trm_discon_recon.adapter.RoleAdapter;
@@ -76,7 +77,7 @@ public class Discon_List extends Fragment {
                 case DISCON_LIST_SUCCESS:
                     progressDialog.dismiss();
                     insertDiscondata();
-                    Toast.makeText(getActivity(), "Success", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Success", Toast.LENGTH_SHORT).show();
                     break;
                 case DISCON_LIST_FAILURE:
                     progressDialog.dismiss();
@@ -85,13 +86,13 @@ public class Discon_List extends Fragment {
                     break;
                 case DISCON_SUCCESS:
                     progressDialog.dismiss();
-                    Toast.makeText(getActivity(), getsetvalues.getDiscon_acc_id() + "Account Disconnected Successfully..", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getsetvalues.getDiscon_acc_id() + "Account Disconnected Successfully..", Toast.LENGTH_SHORT).show();
                     update_db_values();
                     discon_dialog.dismiss();
                     break;
                 case DISCON_FAILURE:
                     progressDialog.dismiss();
-                    Toast.makeText(getActivity(), "Disconnection Failure!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Disconnection Failure!!", Toast.LENGTH_SHORT).show();
                     discon_dialog.dismiss();
                     break;
                 case SERVER_DATE_SUCCESS:
@@ -104,28 +105,21 @@ public class Discon_List extends Fragment {
                     /**************************************************/
                     /*************************************************/
 
-                    Date selected_date1 = functionCall.selectiondate(functionCall.convertdateview(functionCall.Parse_Date2("2018/06/21"), "dd", "/"));
+                    Date selected_date1 = functionCall.selectiondate(functionCall.convertdateview(functionCall.Parse_Date2("2018/06/22"), "dd", "/"));
                     Log.d("Debug", "Hardcoaded" + selected_date1);
 
                     if (server_date.equals(selected_date1)) {
                         Log.d("Debug", "Date Matching..");
-                        int count1 = Integer.parseInt(count);
-                        if (count1 > 0) {
-                            Log.d("Debug", "Database is not empty so skipping service call..");
-                            //Getting disconnection count from database
-                            //If database values exists then skipping service call and directly displaying values into recyclerview from local database
-                            show();
-                        } else {
-                            progressDialog = new ProgressDialog(getActivity(), R.style.MyProgressDialogstyle);
-                            progressDialog.setTitle("Connecting To Server");
-                            progressDialog.setMessage("Please Wait..");
-                            progressDialog.show();
-                            SendingData.Discon_List discon_list = sendingData.new Discon_List(mhandler, getsetvalues, arraylist);
-                            discon_list.execute("54003714", disconnection_date);
-                        }
+                        progressDialog = new ProgressDialog(getActivity(), R.style.MyProgressDialogstyle);
+                        progressDialog.setTitle("Connecting To Server");
+                        progressDialog.setMessage("Please Wait..");
+                        progressDialog.show();
+                        SendingData.Discon_List discon_list = sendingData.new Discon_List(mhandler, getsetvalues, arraylist);
+                        discon_list.execute("54003714", disconnection_date);
                     } else {
                         Log.d("Debug", "Date Not Matching..");
-                        database.delete_table();
+                        /***************Datbase should be cleared if user enter more than 30 days than the system date***************/
+                        //database.delete_table();
                     }
                     break;
                 case SERVER_DATE_FAILURE:
@@ -139,11 +133,13 @@ public class Discon_List extends Fragment {
     public Discon_List() {
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_discon__list, container, false);
         //database = ((MainActivity) getActivity()).get_discon_Database();
+        getActivity().setTitle("Disconnection List");
         database = new Database(getActivity());
         database.open();
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
@@ -174,34 +170,6 @@ public class Discon_List extends Fragment {
         SendingData.Get_server_date get_server_date = sendingData.new Get_server_date(mhandler, getsetvalues);
         get_server_date.execute();
 
-        c2 = database.count_details();
-        c2.moveToNext();
-        count = c2.getString(c2.getColumnIndex("_id"));
-        Log.d("Debug", "Total Count" + count);
-
-       /* c3 = database.get_Total_Discon_Count();
-        c3.moveToNext();
-        String disconection_count = c3.getString(c3.getColumnIndex("COUNT"));
-        Log.d("Debug","Discon_count"+disconection_count);*/
-
-        // discon_count.setText(disconection_count);
-
-       /* int count1 = Integer.parseInt(count);
-        if (count1 > 0) {
-            Log.d("Debug", "Database is not empty so skipping service call..");
-            //Getting disconnection count from database
-            //If database values exists then skipping service call and directly displaying values into recyclerview from local database
-            show();
-        } else {
-            progressDialog = new ProgressDialog(getActivity(), R.style.MyProgressDialogstyle);
-            progressDialog.setTitle("Connecting To Server");
-            progressDialog.setMessage("Please Wait..");
-            progressDialog.show();
-            SendingData.Discon_List discon_list = sendingData.new Discon_List(mhandler, getsetvalues, arraylist);
-            *//********Below Mrcode and date is hardcoaded********//*
-            discon_list.execute("54003714", disconnection_date);
-        }*/
-
         return view;
     }
 
@@ -224,6 +192,8 @@ public class Discon_List extends Fragment {
                 final TextView discon_date = (TextView) view.findViewById(R.id.txt_discon_date);
 
                 final EditText curread = (EditText) view.findViewById(R.id.edit_curread);
+                final EditText comments = (EditText) view.findViewById(R.id.edit_comment);
+
                 final Button cancel_button = (Button) view.findViewById(R.id.dialog_negative_btn);
                 final Button disconnect_button = (Button) view.findViewById(R.id.dialog_positive_btn);
 
@@ -238,9 +208,9 @@ public class Discon_List extends Fragment {
                     public void onShow(DialogInterface dialog) {
                         dialog_position = position + 1;
                         //Setting status spinner
-                        for (int i = 0; i < getResources().getStringArray(R.array.remark).length; i++) {
+                        for (int i = 0; i < getResources().getStringArray(R.array.remark2).length; i++) {
                             GetSetValues getSetValues = new GetSetValues();
-                            getSetValues.setRemark(getResources().getStringArray(R.array.remark)[i]);
+                            getSetValues.setRemark(getResources().getStringArray(R.array.remark2)[i]);
                             arrayList3.add(getSetValues);
                             roleAdapter1.notifyDataSetChanged();
                         }
@@ -265,29 +235,17 @@ public class Discon_List extends Fragment {
                         curread.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                                if (s.toString().trim().length() < 0) {
-                                    disconnect_button.setEnabled(false);
-                                } else {
-                                    disconnect_button.setEnabled(true);
-                                }
+                                disconnect_button.setEnabled(!TextUtils.isEmpty(s.toString().trim()));
                             }
 
                             @Override
                             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                if (s.toString().trim().length() < 0) {
-                                    disconnect_button.setEnabled(false);
-                                } else {
-                                    disconnect_button.setEnabled(true);
-                                }
+                                disconnect_button.setEnabled(!TextUtils.isEmpty(s.toString().trim()));
                             }
 
                             @Override
                             public void afterTextChanged(Editable s) {
-                                if (s.toString().trim().length() < 0) {
-                                    disconnect_button.setEnabled(false);
-                                } else {
-                                    disconnect_button.setEnabled(true);
-                                }
+                                disconnect_button.setEnabled(!TextUtils.isEmpty(s.toString().trim()));
                             }
                         });
                         accno.setText(getSetValues.getDiscon_acc_id());
@@ -330,42 +288,35 @@ public class Discon_List extends Fragment {
     }
 
     public void insertDiscondata() {
-        Log.d("Debug", "Arraylist" + arraylist.size());
-        c1 = database.count_details();
-        c1.moveToNext();
-        String count = c1.getString(c1.getColumnIndex("_id"));
-        int count1 = Integer.parseInt(count);
-        if (count1 > 0) {
-            Log.d("Debug", "Database is not empty");
-        } else {
-            ContentValues cv = new ContentValues();
-            try {
-                for (int i = 0; i < arraylist.size(); i++) {
-                    getsetvalues = arraylist.get(i);
-                    cv.put("ACC_ID", getsetvalues.getAcc_id());
-                    Log.d("Debug", "ACC_ID" + getsetvalues.getAcc_id());
-                    cv.put("ARREARS", getsetvalues.getArrears());
-                    Log.d("Debug", "ARREARS" + getsetvalues.getArrears());
-                    cv.put("DIS_DATE", getsetvalues.getDis_date());
-                    cv.put("PREVREAD", getsetvalues.getPrev_read());
-                    cv.put("CONSUMER_NAME", getsetvalues.getConsumer_name());
-                    cv.put("ADD1", getsetvalues.getAdd1());
-                    cv.put("LAT", getsetvalues.getLati());
-                    cv.put("LON", getsetvalues.getLongi());
-                    cv.put("MTR_READ", getsetvalues.getMtr_read());
-                    cv.put("FLAG", "N");
-                    cv.put("MTR_READING", "Null");
-                    cv.put("REMARK", "Null");
-                    database.insert_discon_data(cv);
-                }
-                //Once value is inserted into database then show() will be called to display values in recycler view
-                //It will be called once for first time downloading data
-                show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
 
+        /*************************End**********************/
+
+        ContentValues cv = new ContentValues();
+        try {
+            for (int i = 0; i < arraylist.size(); i++) {
+                getsetvalues = arraylist.get(i);
+                cv.put("ACC_ID", getsetvalues.getAcc_id());
+                Log.d("Debug", "ACC_ID" + getsetvalues.getAcc_id());
+                cv.put("ARREARS", getsetvalues.getArrears());
+                Log.d("Debug", "ARREARS" + getsetvalues.getArrears());
+                cv.put("DIS_DATE", getsetvalues.getDis_date());
+                cv.put("PREVREAD", getsetvalues.getPrev_read());
+                cv.put("CONSUMER_NAME", getsetvalues.getConsumer_name());
+                cv.put("ADD1", getsetvalues.getAdd1());
+                cv.put("LAT", getsetvalues.getLati());
+                cv.put("LON", getsetvalues.getLongi());
+                cv.put("MTR_READ", getsetvalues.getMtr_read());
+                cv.put("FLAG", "N");
+                cv.put("MTR_READING", "Null");
+                cv.put("REMARK", "Null");
+                database.insert_discon_data(cv);
+            }
+            //Once value is inserted into database then show() will be called to display values in recycler view
+            //It will be called once for first time downloading data
+            show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void show() {
@@ -405,14 +356,19 @@ public class Discon_List extends Fragment {
                 discon_list_adapter.notifyDataSetChanged();
             }
         }
+        c2 = database.count_details();
+        c2.moveToNext();
+        count = c2.getString(c2.getColumnIndex("_id"));
+        Log.d("Debug", "Total Count" + count);
+
         c3 = database.get_Total_Discon_Count();
         c3.moveToNext();
         String disconection_count = c3.getString(c3.getColumnIndex("COUNT"));
-        Log.d("Debug","Discon_count"+disconection_count);
+        Log.d("Debug", "Discon_count" + disconection_count);
         discon_count.setText(disconection_count);
         total_count.setText(count);
-        int remaining_count = Integer.parseInt(count)-Integer.parseInt(disconection_count);
-        remaining.setText(remaining_count+"");
+        int remaining_count = Integer.parseInt(count) - Integer.parseInt(disconection_count);
+        remaining.setText(remaining_count + "");
     }
 
     public void update_db_values() {

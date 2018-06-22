@@ -11,7 +11,13 @@
     <group
         android:id="@+id/second"
         android:checkableBehavior="none">
-        <item android:id="@+id/nav_connect"
+        <item android:id="@+id/nav_disconnect"
+            android:title="Disconnect"/>
+    </group>
+    <group
+        android:id="@+id/third"
+        android:checkableBehavior="none">
+        <item android:id="@+id/nav_reconnect"
             android:title="Reconnect"/>
     </group>
 

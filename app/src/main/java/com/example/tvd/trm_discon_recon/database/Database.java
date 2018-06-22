@@ -25,7 +25,7 @@ public class Database {
             databasefile = fcall.filestorepath(databasefolder, database_name);
             fcall.logStatus("Discon Database does not exists!!");
             databasepath = fcall.filepath(databasefolder) + File.separator + database_name;
-            mh = new MyHelper(context, databasepath, null, 4);
+            mh = new MyHelper(context, databasepath, null, 5);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,10 +46,14 @@ public class Database {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            db.execSQL("Create table DISCON(_id integer primary key, ACC_ID TEXT,ARREARS TEXT,DIS_DATE TEXT,PREVREAD TEXT, " +
+            /*db.execSQL("Create table DISCON(_id integer primary key, ACC_ID TEXT ,ARREARS TEXT,DIS_DATE TEXT,PREVREAD TEXT, " +
                    "CONSUMER_NAME TEXT, ADD1 TEXT, LAT TEXT, LON TEXT, MTR_READ TEXT, FLAG TEXT, MTR_READING, REMARK);");
-            db.execSQL("Create table RECON(_id integer primary key, ACC_ID TEXT,REDATE TEXT,PREVREAD TEXT, " +
-                    "CONSUMER_NAME TEXT, ADD1 TEXT, LAT TEXT, LON TEXT, MTR_READ TEXT, FLAG TEXT, MTR_READING, REMARK);");
+            db.execSQL("Create table RECON(_id integer primary key, ACC_ID TEXT ,REDATE TEXT,PREVREAD TEXT, " +
+                    "CONSUMER_NAME TEXT, ADD1 TEXT, LAT TEXT, LON TEXT, MTR_READ TEXT, FLAG TEXT, MTR_READING, REMARK);");*/
+            db.execSQL("Create table DISCON(_id integer primary key, ACC_ID TEXT ,ARREARS TEXT,DIS_DATE TEXT,PREVREAD TEXT, " +
+                    "CONSUMER_NAME TEXT, ADD1 TEXT, LAT TEXT, LON TEXT, MTR_READ TEXT, FLAG TEXT, MTR_READING, REMARK, UNIQUE(ACC_ID,DIS_DATE));");
+            db.execSQL("Create table RECON(_id integer primary key, ACC_ID TEXT ,REDATE TEXT,PREVREAD TEXT, " +
+                    "CONSUMER_NAME TEXT, ADD1 TEXT, LAT TEXT, LON TEXT, MTR_READ TEXT, FLAG TEXT, MTR_READING, REMARK, UNIQUE(ACC_ID,REDATE));");
         }
 
         @Override
@@ -75,6 +79,7 @@ public class Database {
         c1 = sdb.rawQuery("select count(_id)_id from DISCON ", null);
         return c1;
     }
+
     public Cursor count_details2()
     {
         Cursor c5 = null;
@@ -102,6 +107,18 @@ public class Database {
         Cursor c4 = null;
         c4 = sdb.rawQuery("SELECT COUNT(ACC_ID)COUNT FROM RECON WHERE FLAG = 'Y'",null);
         return c4;
+    }
+    public Cursor check_discon_accid()
+    {
+        Cursor c6 = null;
+        c6 = sdb.rawQuery("SELECT * FROM DISCON",null);
+        return c6;
+    }
+    public Cursor check_recon_accid()
+    {
+        Cursor c7 = null;
+        c7 = sdb.rawQuery("SELECT * FROM RECON", null);
+        return c7;
     }
     public Cursor update_Discon_Data(int id, String mtr_reading, String remark) {
         return sdb.rawQuery("UPDATE DISCON set MTR_READING = '" + mtr_reading + "' , REMARK = '" + remark + "' , FLAG = 'Y' where _id = '" + id + "'", null);

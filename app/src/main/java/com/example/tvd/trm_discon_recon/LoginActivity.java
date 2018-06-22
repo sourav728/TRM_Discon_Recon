@@ -133,6 +133,9 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("Debug","Selected Date"+selected_date.getText().toString());*/
 
                     getMrcode = mrcode.getText().toString();
+                    /*************DEVICE ID IS HARDCOADED***************/
+                    /**************************************************/
+
                     String DeviceID ="352514083077473";
                    /*Code: 54003892
                    Date: 2018/06/13

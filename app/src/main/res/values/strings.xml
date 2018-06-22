@@ -8,6 +8,12 @@
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="rupee">\u20B9</string>
+    <string-array name="remark2">
+        <item>--SELECT--</item>
+        <item>By Fuse</item>
+        <item>By Pole</item>
+        <item>Amount Paid</item>
+    </string-array>
     <string-array name="remark">
         <item>--SELECT--</item>
         <item>By Fuse</item>

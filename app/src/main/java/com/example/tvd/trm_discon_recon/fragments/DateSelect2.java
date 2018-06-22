@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 
+import java.util.Calendar;
+
 import static android.content.Context.MODE_PRIVATE;
 
 public class DateSelect2 extends Fragment {
@@ -26,7 +28,7 @@ public class DateSelect2 extends Fragment {
     TextView show_date;
     private int day, month, year;
     Button reconnect;
-
+    private Calendar mcalender;
     public DateSelect2() {
     }
 
@@ -39,6 +41,10 @@ public class DateSelect2 extends Fragment {
         fcall = new FunctionCall();
         reconnect = (Button) view.findViewById(R.id.btn_Reconnect);
 
+        mcalender = Calendar.getInstance();
+        day = mcalender.get(Calendar.DAY_OF_MONTH);
+        year = mcalender.get(Calendar.YEAR);
+        month = mcalender.get(Calendar.MONTH);
 
         date = (ImageView) view.findViewById(R.id.img_fromdate);
         date.setOnClickListener(new View.OnClickListener() {
