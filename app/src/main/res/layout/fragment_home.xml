@@ -12,21 +12,47 @@
         android:orientation="vertical">
         <Button
             android:id="@+id/btn_discon"
-            android:layout_width="200dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
+            android:textColor="@color/black2"
             android:background="@drawable/mybuton"
+            android:drawableLeft="@drawable/disconnection"
             android:text="Disconnection" />
 
         <Button
             android:id="@+id/btn_recon"
-            android:layout_width="200dp"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
+            android:textColor="@color/black2"
+            android:drawableLeft="@drawable/reconnection"
             android:background="@drawable/mybuton"
             android:text="Reconnection" />
+
+        <Button
+            android:id="@+id/btn_discon_report"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black2"
+            android:drawableLeft="@drawable/discon_report"
+            android:background="@drawable/mybuton"
+            android:text="Discon Report" />
+
+        <Button
+            android:id="@+id/btn_recon_report"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/black2"
+            android:drawableLeft="@drawable/recon"
+            android:background="@drawable/mybuton"
+            android:text="Recon Report" />
     </LinearLayout>
 
 </RelativeLayout>

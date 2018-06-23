@@ -127,4 +127,14 @@ public class Database {
         return sdb.rawQuery("UPDATE RECON set MTR_READING = '" + mtr_reading + "' , REMARK = '" + remark + "' , FLAG = 'Y' where _id = '" + id + "'", null);
     }
 
+    public Cursor get_report()
+    {
+        Cursor c8 = null;
+        c8 = sdb.rawQuery("select t1.DisDate1,t1.tot_cnt,t1.tot_amt,t2.Dis_cnt,t2.Dis_Amt from\n" +
+                "(Select count(ACC_ID) as tot_cnt,Sum(ARREARS) as tot_amt,DIS_DATE as DisDate1 from DISCON where DIS_DATE between \"13-06-2018\" and \"20-06-2018\" group by DIS_DATE )t1\n" +
+                "Left join\n" +
+                "(select count(ACC_ID) as Dis_cnt,sum(ARREARS) as Dis_Amt,DIS_DATE  as DisDate2 from DISCON where FLAG ='Y' and DIS_DATE between \"13-06-2018\" and \"20-06-2018\" group by DIS_DATE)t2\n" +
+                "on t1.DisDate1=t2.DisDate2",null);
+        return c8;
+    }
 }

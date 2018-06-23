@@ -16,7 +16,7 @@ import com.example.tvd.trm_discon_recon.database.Database;
 
 
 public class HomeFragment extends Fragment {
-    Button disconnect,reconnect;
+    Button disconnect,reconnect, discon_report, recon_report;
     Database database;
     public HomeFragment() {
 
@@ -31,6 +31,9 @@ public class HomeFragment extends Fragment {
 
         disconnect = (Button) view.findViewById(R.id.btn_discon);
         reconnect = (Button) view.findViewById(R.id.btn_recon);
+        discon_report = (Button) view.findViewById(R.id.btn_discon_report);
+        recon_report = (Button) view.findViewById(R.id.btn_recon_report);
+
         disconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,6 +51,14 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        discon_report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DisconnectionReport disconnectionReport = new DisconnectionReport();
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.replace(R.id.content_frame, disconnectionReport).addToBackStack(null).commit();
+            }
+        });
         return view;
     }
 
