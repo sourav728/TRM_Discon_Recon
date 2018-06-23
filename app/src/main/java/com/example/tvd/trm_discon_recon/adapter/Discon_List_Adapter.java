@@ -1,20 +1,20 @@
 package com.example.tvd.trm_discon_recon.adapter;
 
-import android.app.ProgressDialog;
+
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.fragments.Discon_List;
-import com.example.tvd.trm_discon_recon.invoke.SendingData;
-import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
 import org.apache.commons.lang3.StringUtils;
@@ -23,21 +23,17 @@ import java.util.ArrayList;
 
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCONNECTION_DIALOG;
 
-public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapter.Discon_Holder> {
-    ProgressDialog progressDialog;
-    private SendingData sendingData = new SendingData();
-    private GetSetValues getSetValues1 = new GetSetValues();
-    private FunctionCall functionCall = new FunctionCall();
-    private ArrayList<GetSetValues> arraylist = new ArrayList<>();
+public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapter.Discon_Holder> implements Filterable{
+    private ArrayList<GetSetValues> arraylist ;
+    private ArrayList<GetSetValues>filteredList;
     private Context context;
-    private GetSetValues getSetValues;
-    private Discon_List_Adapter discon_list_adapter;
     private Discon_List discon_list;
 
     public Discon_List_Adapter(Context context, ArrayList<GetSetValues> arrayList,Discon_List discon_list) {
         this.context = context;
         this.arraylist = arrayList;
         this.discon_list = discon_list;
+        this.filteredList = arrayList;
     }
 
     @Override
@@ -64,6 +60,37 @@ public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapte
     @Override
     public int getItemCount() {
         return arraylist.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String search=constraint.toString();
+                if (search.isEmpty())
+                    arraylist = filteredList;
+                else {
+                    ArrayList<GetSetValues> filterlist = new ArrayList<>();
+                    for (int i = 0; i < filteredList.size(); i++) {
+                        GetSetValues getSetValues = filteredList.get(i);
+                        if (getSetValues.getDiscon_acc_id().contains(search)) {
+                            filterlist.add(getSetValues);
+                        }
+                    }
+                    arraylist = filterlist;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = arraylist;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                arraylist = (ArrayList<GetSetValues>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class Discon_Holder extends RecyclerView.ViewHolder implements View.OnClickListener {

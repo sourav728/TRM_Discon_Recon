@@ -1,20 +1,20 @@
 package com.example.tvd.trm_discon_recon.adapter;
 
-import android.app.ProgressDialog;
+
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.fragments.Recon_List;
-import com.example.tvd.trm_discon_recon.invoke.SendingData;
-import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
 
@@ -24,9 +24,10 @@ import java.util.ArrayList;
 
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECONNECTION_DIALOG;
 
-public class Recon_List_Adapter extends RecyclerView.Adapter<Recon_List_Adapter.Recon_Holder> {
+public class Recon_List_Adapter extends RecyclerView.Adapter<Recon_List_Adapter.Recon_Holder> implements Filterable{
 
     private ArrayList<GetSetValues> arraylist;
+    private ArrayList<GetSetValues>filteredList;
     private Context context;
     private Recon_List recon_list;
 
@@ -35,6 +36,7 @@ public class Recon_List_Adapter extends RecyclerView.Adapter<Recon_List_Adapter.
         this.context = context;
         this.arraylist = arraylist;
         this.recon_list = recon_list;
+        this.filteredList = arraylist;
     }
     @Override
     public Recon_List_Adapter.Recon_Holder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -58,6 +60,37 @@ public class Recon_List_Adapter extends RecyclerView.Adapter<Recon_List_Adapter.
     @Override
     public int getItemCount() {
         return arraylist.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String search=constraint.toString();
+                if (search.isEmpty())
+                    arraylist = filteredList;
+                else {
+                    ArrayList<GetSetValues> filterlist = new ArrayList<>();
+                    for (int i = 0; i < filteredList.size(); i++) {
+                        GetSetValues getSetValues = filteredList.get(i);
+                        if (getSetValues.getRecon_acc_id().contains(search)) {
+                            filterlist.add(getSetValues);
+                        }
+                    }
+                    arraylist = filterlist;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = arraylist;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                arraylist = (ArrayList<GetSetValues>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class Recon_Holder extends RecyclerView.ViewHolder implements View.OnClickListener{

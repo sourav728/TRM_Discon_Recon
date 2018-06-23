@@ -1,5 +1,10 @@
 apply plugin: 'com.android.application'
 
+def versionMajor = 1
+def versionMinor = 0
+def versionPatch = 0
+def code = 0
+
 android {
     compileSdkVersion 25
     buildToolsVersion '27.0.3'
@@ -15,8 +20,16 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def formattedDate = new Date().format('ddMMMyyyy_HHmm')
+                    def newName = output.outputFile.name
+                    newName = newName.replace("-release", "_${versionMajor}.${versionMinor}.${versionPatch}_" + formattedDate)
+                }
+            }
         }
     }
+    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/fonts'] } }
 }
 
 dependencies {

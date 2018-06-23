@@ -104,14 +104,15 @@ public class Date_select extends Fragment {
                 dd = (year + "-" + (month + 1) + "-" + dayOfMonth);
                 date1 = fcall.Parse_Date3(dd);
                 getSetValues.setSelected_discon_date(date1);
-                //Log.d("Debug","SelectedDate"+getSetValues.setSelected_discon_date(date1));
-                //SavePreferences("SELECTED_DATE",date1);
                 show_date.setText(date1);
             }
         };
         DatePickerDialog dpdialog = new DatePickerDialog(getActivity(), listener, year, month, day);
         //it will show dates upto current date
         dpdialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        //below code will set calender min date to 30 days before from system date
+        mcalender.add(Calendar.DATE, -30);
+        dpdialog.getDatePicker().setMinDate(mcalender.getTimeInMillis());
         dpdialog.show();
     }
 

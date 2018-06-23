@@ -2,7 +2,9 @@ package com.example.tvd.trm_discon_recon;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,33 +17,48 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
-import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_PHONE_STATE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class splash_screen extends Activity {
     public static final int RequestPermissionCode = 1;
     Typewriter load;
-
+    TextView version,splash_text;
+    String current_version="";
+    Typeface typeface;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        typeface = Typeface.createFromAsset(getAssets(), "CALIBRIB.TTF");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow(); // in Activity's onCreate() for instance
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
+        version = (TextView) findViewById(R.id.txt_version_code);
+        splash_text = (TextView) findViewById(R.id.txt_splash_text);
+        splash_text.setTypeface(typeface);
+        PackageInfo packageInfo;
+        try
+        {
+            packageInfo = getPackageManager().getPackageInfo(getPackageName(),0);
+            current_version = packageInfo.versionName;
+            version.setText(current_version);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
         load = (Typewriter) findViewById(R.id.txt_load);
         load.setCharacterDelay(250);
         load.animateText("Loading...");
+
 
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 checkPermissions();
             }
-        }, 2500);
+        }, 2900);
 
     }
 

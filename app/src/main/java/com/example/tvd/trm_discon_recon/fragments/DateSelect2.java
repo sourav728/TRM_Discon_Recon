@@ -79,6 +79,9 @@ public class DateSelect2 extends Fragment {
         DatePickerDialog dpdialog = new DatePickerDialog(getActivity(), listener, year, month, day);
         //it will show dates upto current date
         dpdialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        //below code will set calender min date to 30 days before from system date
+        mcalender.add(Calendar.DATE, -30);
+        dpdialog.getDatePicker().setMinDate(mcalender.getTimeInMillis());
         dpdialog.show();
     }
 

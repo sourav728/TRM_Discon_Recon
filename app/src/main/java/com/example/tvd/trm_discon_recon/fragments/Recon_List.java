@@ -12,14 +12,20 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -28,10 +34,10 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
+
 
 import com.example.tvd.trm_discon_recon.R;
-import com.example.tvd.trm_discon_recon.adapter.Discon_List_Adapter;
+
 import com.example.tvd.trm_discon_recon.adapter.Recon_List_Adapter;
 import com.example.tvd.trm_discon_recon.adapter.RoleAdapter;
 import com.example.tvd.trm_discon_recon.database.Database;
@@ -43,11 +49,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static android.content.Context.MODE_PRIVATE;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCONNECTION_DIALOG;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_FAILURE;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_LIST_FAILURE;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_LIST_SUCCESS;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_SUCCESS;
+
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECONNECTION_DIALOG;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_LIST_FAILURE;
@@ -112,7 +114,7 @@ public class Recon_List extends Fragment {
                     /**************************************************/
                     /*************************************************/
 
-                    Date selected_date1 = functionCall.selectiondate(functionCall.convertdateview(functionCall.Parse_Date2("2018/06/22"), "dd", "/"));
+                    Date selected_date1 = functionCall.selectiondate(functionCall.convertdateview(functionCall.Parse_Date2("2018/06/23"), "dd", "/"));
                     Log.d("Debug", "Hardcoaded" + selected_date1);
 
                     if (server_date.equals(selected_date1)) {
@@ -150,6 +152,7 @@ public class Recon_List extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_recon__list, container, false);
         getActivity().setTitle("Reconnection List");
+        setHasOptionsMenu(true);
         database = new Database(getActivity());
         database.open();
 
@@ -224,7 +227,7 @@ public class Recon_List extends Fragment {
                                 TextView role = (TextView) view.findViewById(R.id.spinner_txt);
                                 role.setBackgroundDrawable(null);
                                 selected_role = role.getText().toString();
-                                Toast.makeText(getActivity(), "Selected Role" + selected_role, Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getActivity(), "Selected Role" + selected_role, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -259,18 +262,22 @@ public class Recon_List extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 if (!TextUtils.isEmpty(curread.getText())) {
-                                    reading = curread.getText().toString();
-                                    if (Double.parseDouble(getSetValues.getRecon_prevread()) <= Double.parseDouble(reading)) {
-                                        progressDialog = new ProgressDialog(getActivity(), R.style.MyProgressDialogstyle);
-                                        progressDialog.setTitle("Updating Reconnection");
-                                        progressDialog.setMessage("Please Wait..");
-                                        progressDialog.show();
-                                        SendingData.Reconnect_Update reconnect_update = sendingData.new Reconnect_Update(mhandler, getSetValues);
-                                        reconnect_update.execute(getSetValues.getRecon_acc_id(), reconnection_date, reading, selected_role);
+                                    if (!selected_role.equals("--SELECT--")) {
+                                        reading = curread.getText().toString();
+                                        if (Double.parseDouble(getSetValues.getRecon_prevread()) <= Double.parseDouble(reading)) {
+                                            progressDialog = new ProgressDialog(getActivity(), R.style.MyProgressDialogstyle);
+                                            progressDialog.setTitle("Updating Reconnection");
+                                            progressDialog.setMessage("Please Wait..");
+                                            progressDialog.show();
+                                            SendingData.Reconnect_Update reconnect_update = sendingData.new Reconnect_Update(mhandler, getSetValues);
+                                            reconnect_update.execute(getSetValues.getRecon_acc_id(), reconnection_date, reading, selected_role);
 
-                                    } else {
-                                        functionCall.setEdittext_error(curread, "Current Reading should be greater than Previous Reading!!");
-                                    }
+                                        } else {
+                                            functionCall.setEdittext_error(curread, "Current Reading should be greater than Previous Reading!!");
+                                        }
+                                    } else
+                                        Toast.makeText(getActivity(), "Please Select Remark!!", Toast.LENGTH_SHORT).show();
+
                                 } else
                                     functionCall.setEdittext_error(curread, "Enter Current Reading!!");
                             }
@@ -374,4 +381,30 @@ public class Recon_List extends Fragment {
         fragmentTransaction.replace(R.id.content_frame, recon_list).addToBackStack(null).commit();
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        MenuInflater mi = getActivity().getMenuInflater();
+        mi.inflate(R.menu.search, menu);
+        MenuItem search = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
+        //below line is for searchview hint and hint color
+        searchView.setQueryHint(Html.fromHtml("<font color = #212121>" + "Search by Account ID.." + "</font>"));
+        search(searchView);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    private void search(SearchView searchView) {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                recon_list_adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+    }
 }
