@@ -75,7 +75,7 @@ public class Recon_List extends Fragment {
     Database database;
     Cursor c1, c2, c3;
     RoleAdapter roleAdapter1;
-    String selected_role = "", reconnection_date = "", reading = "", count = "";
+    String selected_role = "", reconnection_date = "", reading = "", count = "",login_mr_code="";
     int dialog_position;
     TextView total_count, recon_count, remaining;
 
@@ -129,7 +129,7 @@ public class Recon_List extends Fragment {
                         progressDialog.show();
                         SendingData.Recon_List recon_list = sendingData.new Recon_List(mhandler, getsetvalues, arraylist);
                         /*******Below Mrcode and date is hardcoaded*******/
-                        recon_list.execute("54003714", reconnection_date);
+                        recon_list.execute(login_mr_code, reconnection_date);
                     } else {
                         Log.d("Debug", "Date Not Matching..");
                         /*****************Database should be cleared if user enter 30 days more than the system date**************/
@@ -161,6 +161,7 @@ public class Recon_List extends Fragment {
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         reconnection_date = sharedPreferences.getString("RECONNECTION_DATE", "");
+        login_mr_code = sharedPreferences.getString("GET_LOGIN_MRCODE","");
 
         total_count = (TextView) view.findViewById(R.id.txt_total_recon_count);
         recon_count = (TextView) view.findViewById(R.id.txt_recon_count);
@@ -186,7 +187,7 @@ public class Recon_List extends Fragment {
         progressDialog.show();
         SendingData.Recon_List recon_list = sendingData.new Recon_List(mhandler, getsetvalues, arraylist);
         /*******Below Mrcode and date is hardcoaded*******/
-        recon_list.execute("54003714", reconnection_date);
+        recon_list.execute(login_mr_code, reconnection_date);
 
         return view;
     }
@@ -266,9 +267,9 @@ public class Recon_List extends Fragment {
                         });
                         accno.setText(getSetValues.getRecon_acc_id());
                         prevread.setText(getSetValues.getRecon_prevread());
-                        name.setText(getSetValues.getRecon_date());
+                        name.setText(getSetValues.getRecon_consumer_name());
                         address.setText(getSetValues.getRecon_add1());
-                        discon_date.setText(getSetValues.getRecon_date());
+                        discon_date.setText(functionCall.Parse_Date4(getSetValues.getRecon_date()));
                         disconnect_button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {

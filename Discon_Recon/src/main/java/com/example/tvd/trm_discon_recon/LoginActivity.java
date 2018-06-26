@@ -1,16 +1,21 @@
 package com.example.tvd.trm_discon_recon;
 
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -41,8 +46,8 @@ import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE
 public class LoginActivity extends AppCompatActivity {
     Button login;
     FunctionCall fcall;
-    String getMrcode="",getpassword="";
-    EditText mrcode,password;
+    String getMrcode = "", getpassword = "";
+    EditText mrcode, password;
     LayoutInflater inflater;
     View layout;
     ProgressDialog progressdialog;
@@ -54,16 +59,16 @@ public class LoginActivity extends AppCompatActivity {
     private int day, month, year;
     EditText selected_date;
     private final Handler mhandler;
+
     {
-        mhandler = new Handler(){
+        mhandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                switch (msg.what)
-                {
+                switch (msg.what) {
                     case LOGIN_SUCCESS:
-                        SavePreferences("MRCODE",getsetvalues.getMrcode());
-                        SavePreferences("MRNAME",getsetvalues.getMrname());
-                        SavePreferences("SUBDIVCODE",getsetvalues.getSubdivcode());
+                        SavePreferences("MRCODE", getsetvalues.getMrcode());
+                        SavePreferences("MRNAME", getsetvalues.getMrname());
+                        SavePreferences("SUBDIVCODE", getsetvalues.getSubdivcode());
                         progressdialog.dismiss();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
@@ -84,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                         toast.show();
                         //end of custom toast coding
                         break;
-                    case  LOGIN_FAILURE:
+                    case LOGIN_FAILURE:
                         progressdialog.dismiss();
                         //below code is for custom toast
                         inflater = getLayoutInflater();
@@ -127,35 +132,46 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (fcall.isInternetOn(LoginActivity.this))
-                {
+                if (fcall.isInternetOn(LoginActivity.this)) {
                     /*SavePreferences("Selected_Date",date1);
                     Log.d("Debug","Selected Date"+selected_date.getText().toString());*/
 
                     getMrcode = mrcode.getText().toString();
-                    /*************DEVICE ID IS HARDCOADED***************/
-                    /**************************************************/
+                    SavePreferences("GET_LOGIN_MRCODE", getMrcode);
 
-                    String DeviceID ="352514083077473";
+                    //String DeviceID ="352514083077473";
                    /*Code: 54003892
                    Date: 2018/06/13
                    Password: 123123*/
+                    TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                    if (ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    String DeviceID = telephonyManager.getDeviceId();
+                    Log.d("Debug", "Device ID" + DeviceID);
+
                     getpassword = password.getText().toString();
-                    if (mrcode.getText().length()<=0)
-                    {
+                    if (mrcode.getText().length() <= 0) {
                         mrcode.setError("Please Enter MR code!!");
-                    }else if (password.getText().length()<=0)
-                    {
+                    } else if (password.getText().length() <= 0) {
                         password.setError("Please Enter password!!");
-                    }else {
+                    } else {
                         progressdialog = new ProgressDialog(LoginActivity.this, R.style.MyProgressDialogstyle);
                         progressdialog.setTitle("Connecting To Server");
                         progressdialog.setMessage("Please Wait..");
                         progressdialog.show();
-                        SendingData.Login login = sendingdata.new Login(mhandler,getsetvalues);
-                        login.execute(getMrcode,DeviceID,getpassword);
+                        SendingData.Login login = sendingdata.new Login(mhandler, getsetvalues);
+                        login.execute(getMrcode, DeviceID, getpassword);
                     }
-                }else Toast.makeText(LoginActivity.this, "Please Connect to Internet!!", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(LoginActivity.this, "Please Connect to Internet!!", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -164,10 +180,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 DateDialog1();
             }
-        })*/;
+        })*/
+        ;
     }
-    public void initialize()
-    {
+
+    public void initialize() {
         getsetvalues = new GetSetValues();
         sendingdata = new SendingData();
         login = (Button) findViewById(R.id.login_btn);
@@ -177,12 +194,14 @@ public class LoginActivity extends AppCompatActivity {
        /* select_date = (ImageView) findViewById(R.id.img_date);
         selected_date = (EditText) findViewById(R.id.txt_selected_date);*/
     }
+
     private void SavePreferences(String key, String value) {
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key, value);
         editor.commit();
     }
+
     public void DateDialog1() {
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override

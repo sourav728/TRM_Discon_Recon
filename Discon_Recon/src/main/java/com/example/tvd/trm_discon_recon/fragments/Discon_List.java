@@ -1,6 +1,6 @@
 package com.example.tvd.trm_discon_recon.fragments;
 
-import android.app.FragmentManager;
+
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,11 +10,11 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.ActionBarActivity;
+
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -73,7 +73,7 @@ public class Discon_List extends Fragment {
     Database database;
     Cursor c1, c2, c3;
     RoleAdapter roleAdapter1;
-    String selected_role = "", disconnection_date = "", reading = "", count = "";
+    String selected_role = "", disconnection_date = "", reading = "", count = "",login_mr_code="";
     int dialog_position;
     TextView total_count, discon_count, remaining;
     private final Handler mhandler = new Handler(new Handler.Callback() {
@@ -123,7 +123,7 @@ public class Discon_List extends Fragment {
                         progressDialog.setMessage("Please Wait..");
                         progressDialog.show();
                         SendingData.Discon_List discon_list = sendingData.new Discon_List(mhandler, getsetvalues, arraylist);
-                        discon_list.execute("54003714", disconnection_date);
+                        discon_list.execute(login_mr_code, disconnection_date);
                     } else {
                         Log.d("Debug", "Date Not Matching..");
                         /***************Datbase should be cleared if user enter more than 30 days than the system date***************/
@@ -152,6 +152,7 @@ public class Discon_List extends Fragment {
         database.open();
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         disconnection_date = sharedPreferences.getString("DISCONNECTION_DATE", "");
+        login_mr_code = sharedPreferences.getString("GET_LOGIN_MRCODE","");
         Log.d("Debug", "Got Disconnection Date" + disconnection_date);
 
 
@@ -183,7 +184,7 @@ public class Discon_List extends Fragment {
         progressDialog.setMessage("Please Wait..");
         progressDialog.show();
         SendingData.Discon_List discon_list = sendingData.new Discon_List(mhandler, getsetvalues, arraylist);
-        discon_list.execute("54003714", disconnection_date);
+        discon_list.execute(login_mr_code, disconnection_date);
 
         return view;
     }
@@ -266,9 +267,9 @@ public class Discon_List extends Fragment {
                         accno.setText(getSetValues.getDiscon_acc_id());
                         arrears.setText(String.format("%s %s", getActivity().getResources().getString(R.string.rupee), getSetValues.getDiscon_arrears()));
                         prevread.setText(getSetValues.getDiscon_prevread());
-                        name.setText(getSetValues.getDiscon_date());
+                        name.setText(getSetValues.getDiscon_consumer_name());
                         address.setText(getSetValues.getDiscon_add1());
-                        discon_date.setText(getSetValues.getDiscon_date());
+                        discon_date.setText(functionCall.Parse_Date4(getSetValues.getDiscon_date()));
                         disconnect_button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
