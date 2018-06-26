@@ -1,0 +1,308 @@
+package com.example.tvd.trm_discon_recon.invoke;
+
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
+import android.os.Handler;
+import android.util.Log;
+import android.widget.Toast;
+
+import com.example.tvd.trm_discon_recon.adapter.Discon_List_Adapter;
+import com.example.tvd.trm_discon_recon.values.FunctionCall;
+import com.example.tvd.trm_discon_recon.values.GetSetValues;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.CONNECTION_TIME_OUT;
+
+public class SendingData {
+    private ReceivingData receivingData = new ReceivingData();
+    private FunctionCall functionCall = new FunctionCall();
+    private Handler handler;
+    private String UrlPostConnection(String Post_Url, HashMap<String, String> datamap) throws IOException {
+        try
+        {
+            String response = "";
+            URL url = new URL(Post_Url);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(60000);
+            conn.setConnectTimeout(60000);
+            conn.setRequestMethod("POST");
+            conn.setDoInput(true);
+            conn.setDoOutput(true);
+            OutputStream os = conn.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+            writer.write(getPostDataString(datamap));
+            writer.flush();
+            writer.close();
+            os.close();
+            int responseCode = conn.getResponseCode();
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                String line;
+                BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                while ((line = br.readLine()) != null) {
+                    response += line;
+                }
+            } else {
+                response = "";
+            }
+            return response;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            Log.d("Debug","SERVER TIME OUT");
+
+        }
+       return null;
+    }
+
+    private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            if (first)
+                first = false;
+            else
+                result.append("&");
+
+            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+            result.append("=");
+            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+        }
+
+        return result.toString();
+    }
+
+    private String UrlGetConnection(String Get_Url) throws IOException {
+        String response;
+        URL url = new URL(Get_Url);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setReadTimeout(60000);
+        conn.setConnectTimeout(60000);
+        int responseCode=conn.getResponseCode();
+        if (responseCode == HttpsURLConnection.HTTP_OK) {
+            String line;
+            BufferedReader br=new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            StringBuilder responseBuilder = new StringBuilder();
+            while ((line=br.readLine()) != null) {
+                responseBuilder.append(line);
+            }
+            response = responseBuilder.toString();
+        }
+        else response="";
+        return response;
+    }
+    //For MR Login
+    public class Login extends AsyncTask<String,String,String>
+    {
+        String response="";
+        Handler handler;
+        GetSetValues getSetValues;
+        public Login(Handler handler,GetSetValues getSetValues)
+        {
+            this.handler = handler;
+            this.getSetValues = getSetValues;
+        }
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String,String>datamap = new HashMap();
+            datamap.put("MRCode",params[0]);
+            datamap.put("DeviceId",params[1]);
+            datamap.put("PASSWORD",params[2]);
+            functionCall.logStatus("MRCODE "+params[0] + "\n" + "DEVICE ID"+ params[1] + "\n" + "PASSWORD" + params[2]);
+            try
+            {
+                response = UrlPostConnection("http://bc_service2.hescomtrm.com/Service.asmx/MRDetails",datamap);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            receivingData.getMR_Details(result, handler, getSetValues);
+        }
+    }
+    //Disconnection List
+    public class Discon_List extends AsyncTask<String,String,String>
+    {
+        String response = "";
+        Handler handler;
+        GetSetValues getSetValues;
+        ArrayList<GetSetValues>arrayList;
+        public Discon_List(Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues>arrayList)
+        {
+            this.handler = handler;
+            this.getSetValues = getSetValues;
+            this.arrayList = arrayList;
+        }
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String,String>datamap = new HashMap<>();
+            datamap.put("MRCode",params[0]);
+            datamap.put("Date",params[1]);
+            functionCall.logStatus("Discon_Mrcoe"+params[0]+"\n"+"Discon_Date"+params[1]);
+            try {
+                response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/DisConList",datamap);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            receivingData.getDiscon_List(result, handler,getSetValues,arrayList);
+        }
+    }
+
+    //Disconnection Update
+    @SuppressLint("StaticFieldLeak")
+    public class Disconnect_Update extends AsyncTask<String, String, String> {
+        String response="";
+        Handler handler;
+        GetSetValues getSetValues;
+        public Disconnect_Update(Handler handler,GetSetValues getSetValues) {
+            this.handler = handler;
+            this.getSetValues = getSetValues;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String, String> datamap = new HashMap<>();
+            datamap.put("Acc_id", params[0]);
+            datamap.put("Dis_Date", params[1]);
+            datamap.put("CURREAD", params[2]);
+            datamap.put("Remarks",params[3]);
+            functionCall.logStatus("Acc_id: "+params[0] + "\n" + "Dis_Date: "+params[1] + "\n" + "CURREAD: "+params[2] + "\n" + "Remarks:"+ params[3]);
+            try {
+                response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/DisConUpdate", datamap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            receivingData.getDisconnection_update_status(result, handler, getSetValues);
+        }
+    }
+
+    //Reconnection List
+    public class Recon_List extends AsyncTask<String,String,String>
+    {
+        String response = "";
+        Handler handler;
+        GetSetValues getSetValues;
+        ArrayList<GetSetValues>arrayList;
+        public Recon_List(Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues>arrayList)
+        {
+            this.handler = handler;
+            this.getSetValues = getSetValues;
+            this.arrayList = arrayList;
+        }
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String,String>datamap = new HashMap<>();
+            datamap.put("MRCode",params[0]);
+            datamap.put("Date",params[1]);
+            functionCall.logStatus("Recon_MrCode"+params[0]+"\n"+"Recon_Date"+params[1]);
+            try {
+                response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/ReConList",datamap);
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            receivingData.getReconcon_List(result, handler,getSetValues,arrayList);
+        }
+    }
+
+    //Reconnection Update
+    @SuppressLint("StaticFieldLeak")
+    public class Reconnect_Update extends AsyncTask<String, String, String> {
+        String response="";
+        Handler handler;
+        GetSetValues getSetValues;
+        public Reconnect_Update(Handler handler,GetSetValues getSetValues) {
+            this.handler = handler;
+            this.getSetValues = getSetValues;
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String, String> datamap = new HashMap<>();
+            datamap.put("Acc_id", params[0]);
+            datamap.put("Dis_Date", params[1]);
+            datamap.put("CURREAD", params[2]);
+            datamap.put("Remarks",params[3]);
+            functionCall.logStatus("Acc_id: "+params[0] + "\n" + "Dis_Date: "+params[1] + "\n" + "CURREAD: "+params[2] + "\n" + "Remarks:"+ params[3]);
+            try {
+                response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/ReConUpdate", datamap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            receivingData.getReconnectionUpdateStatus(result, handler, getSetValues);
+        }
+    }
+    //Checking Server Date
+    public class Get_server_date extends AsyncTask<String,String,String>
+    {
+        String response = "";
+        Handler handler;
+        GetSetValues getSetValues;
+        public Get_server_date(Handler handler,GetSetValues getSetValues)
+        {
+            this.handler = handler;
+            this.getSetValues = getSetValues;
+        }
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                response = UrlGetConnection("http://bc_service2.hescomtrm.com/Service.asmx/systemDate");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            receivingData.get_Server_Date_status(result,handler,getSetValues);
+            super.onPostExecute(result);
+        }
+    }
+}
