@@ -4,9 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.example.tvd.trm_discon_recon.adapter.Discon_List_Adapter;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
@@ -25,8 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
-
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.CONNECTION_TIME_OUT;
 
 public class SendingData {
     private ReceivingData receivingData = new ReceivingData();

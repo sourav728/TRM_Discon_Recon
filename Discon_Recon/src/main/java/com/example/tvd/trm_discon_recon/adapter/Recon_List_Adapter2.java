@@ -1,6 +1,5 @@
 package com.example.tvd.trm_discon_recon.adapter;
 
-
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,47 +13,44 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tvd.trm_discon_recon.R;
-import com.example.tvd.trm_discon_recon.fragments.Discon_List;
+import com.example.tvd.trm_discon_recon.activities.Recon_List_Activity;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCONNECTION_DIALOG;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECONNECTION_DIALOG;
 
-public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapter.Discon_Holder> implements Filterable{
-    private ArrayList<GetSetValues> arraylist ;
+public class Recon_List_Adapter2 extends RecyclerView.Adapter<Recon_List_Adapter2.Recon_Holder> implements Filterable {
+    private ArrayList<GetSetValues> arraylist;
     private ArrayList<GetSetValues>filteredList;
     private Context context;
-    private Discon_List discon_list;
-
-    public Discon_List_Adapter(Context context, ArrayList<GetSetValues> arrayList,Discon_List discon_list) {
+    private Recon_List_Activity recon_list;
+    public Recon_List_Adapter2(Context context, ArrayList<GetSetValues>arraylist,Recon_List_Activity recon_list)
+    {
         this.context = context;
-        this.arraylist = arrayList;
-        this.discon_list = discon_list;
-        this.filteredList = arrayList;
+        this.arraylist = arraylist;
+        this.recon_list = recon_list;
+        this.filteredList = arraylist;
+    }
+    @Override
+    public Recon_List_Adapter2.Recon_Holder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recon_adapter_layout, null);
+        return new Recon_Holder(view);
     }
 
     @Override
-    public Discon_List_Adapter.Discon_Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.discon_adapter_layout, null);
-        return new Discon_Holder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(Discon_List_Adapter.Discon_Holder holder, int position) {
+    public void onBindViewHolder(Recon_List_Adapter2.Recon_Holder holder, int position) {
         GetSetValues getSetValues = arraylist.get(position);
-        holder.accountid.setText(getSetValues.getDiscon_acc_id());
-        Log.d("Holder","Acc id"+getSetValues.getDiscon_acc_id());
+        holder.accountid.setText(getSetValues.getRecon_acc_id());
+        Log.d("Debug","Recon_Acc id"+getSetValues.getRecon_acc_id());
         //here %s%s meaning first string will set on first then space and then second string
-        holder.arrears.setText(String.format("%s %s", context.getResources().getString(R.string.rupee), getSetValues.getDiscon_arrears()));
-        Log.d("Holder","Arrears"+getSetValues.getDiscon_arrears());
-        holder.prevraed.setText(getSetValues.getDiscon_prevread());
-        Log.d("Holder","PrevRead"+getSetValues.getDiscon_prevread());
-        if (StringUtils.startsWithIgnoreCase(getSetValues.getDiscon_flag(),"Y"))
-            holder.disconnected.setVisibility(View.VISIBLE);
-        else holder.disconnected.setVisibility(View.INVISIBLE);
+        holder.prevraed.setText(getSetValues.getRecon_prevread());
+        Log.d("Debug","Recon_PrevRead"+getSetValues.getRecon_prevread());
+        if (StringUtils.startsWithIgnoreCase(getSetValues.getRecon_flag(),"Y"))
+            holder.reconnected.setVisibility(View.VISIBLE);
+        else holder.reconnected.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -74,7 +70,7 @@ public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapte
                     ArrayList<GetSetValues> filterlist = new ArrayList<>();
                     for (int i = 0; i < filteredList.size(); i++) {
                         GetSetValues getSetValues = filteredList.get(i);
-                        if (getSetValues.getDiscon_acc_id().contains(search)) {
+                        if (getSetValues.getRecon_acc_id().contains(search)) {
                             filterlist.add(getSetValues);
                         }
                     }
@@ -93,17 +89,16 @@ public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapte
         };
     }
 
-    public class Discon_Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView accountid, arrears, prevraed, disconnected;
+    public class Recon_Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
+        TextView accountid, prevraed, reconnected;
         LinearLayout lin;
 
-        public Discon_Holder(View itemView) {
+        public Recon_Holder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             accountid = (TextView) itemView.findViewById(R.id.txt_account_id);
-            arrears = (TextView) itemView.findViewById(R.id.txt_arrears);
             prevraed = (TextView) itemView.findViewById(R.id.txt_prevread);
-            disconnected = (TextView)itemView.findViewById(R.id.txt_disconnected);
+            reconnected = (TextView) itemView.findViewById(R.id.txt_reconnected);
             lin = (LinearLayout) itemView.findViewById(R.id.lin_layout);
             lin.setOnClickListener(this);
         }
@@ -111,12 +106,11 @@ public class Discon_List_Adapter extends RecyclerView.Adapter<Discon_List_Adapte
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            /*****Comment should be removed from here************/
             GetSetValues getSetValues = arraylist.get(position);
-            if (StringUtils.startsWithIgnoreCase(getSetValues.getDiscon_flag(),"Y"))
-                Toast.makeText(context, "Account ID already Disconnected!!", Toast.LENGTH_SHORT).show();
-            else discon_list.show_disconnection_dialog(DISCONNECTION_DIALOG, position, arraylist);
+            /*****Comment should be removed from here************/
+            if (StringUtils.startsWithIgnoreCase(getSetValues.getRecon_flag(),"Y"))
+                Toast.makeText(context, "Account ID Already Reconnected!!", Toast.LENGTH_SHORT).show();
+            else recon_list.show_reconnection_dialog(RECONNECTION_DIALOG, position, arraylist);
         }
     }
-
 }

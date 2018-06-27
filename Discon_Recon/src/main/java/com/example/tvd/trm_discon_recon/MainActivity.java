@@ -3,13 +3,8 @@ package com.example.tvd.trm_discon_recon;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,26 +14,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.tvd.trm_discon_recon.activities.DateSelectActivity;
+import com.example.tvd.trm_discon_recon.activities.DateSelectActivity2;
 import com.example.tvd.trm_discon_recon.database.Database;
-import com.example.tvd.trm_discon_recon.fragments.DateSelect2;
-import com.example.tvd.trm_discon_recon.fragments.Date_select;
-import com.example.tvd.trm_discon_recon.fragments.Discon_List;
 import com.example.tvd.trm_discon_recon.fragments.HomeFragment;
 import com.example.tvd.trm_discon_recon.invoke.SendingData;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
-
-import java.util.ArrayList;
-import java.util.Date;
-
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.LOGIN_FAILURE;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.LOGIN_SUCCESS;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_SUCCESS;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -173,10 +157,15 @@ public class MainActivity extends AppCompatActivity
             intent.setFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
-        }else if (id == R.id.nav_disconnect)
-            fragment = new Date_select();
+        }else if (id == R.id.nav_disconnect){
+            Intent intent = new Intent(MainActivity.this, DateSelectActivity.class);
+            startActivity(intent);
+        }
         else if (id == R.id.nav_reconnect)
-            fragment = new DateSelect2();
+        {
+            Intent intent = new Intent(MainActivity.this, DateSelectActivity2.class);
+            startActivity(intent);
+        }
         if (fragment != null) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.content_frame, fragment);

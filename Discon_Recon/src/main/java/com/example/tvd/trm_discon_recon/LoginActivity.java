@@ -139,7 +139,7 @@ public class LoginActivity extends AppCompatActivity {
                     getMrcode = mrcode.getText().toString();
                     SavePreferences("GET_LOGIN_MRCODE", getMrcode);
 
-                    //String DeviceID ="352514083077473";
+                    String DeviceID ="863697039938021";
                    /*Code: 54003892
                    Date: 2018/06/13
                    Password: 123123*/
@@ -154,7 +154,7 @@ public class LoginActivity extends AppCompatActivity {
                         // for ActivityCompat#requestPermissions for more details.
                         return;
                     }
-                    String DeviceID = telephonyManager.getDeviceId();
+                   // String DeviceID = telephonyManager.getDeviceId();
                     Log.d("Debug", "Device ID" + DeviceID);
 
                     getpassword = password.getText().toString();

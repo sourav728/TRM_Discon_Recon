@@ -1,13 +1,13 @@
-package com.example.tvd.trm_discon_recon.fragments;
+package com.example.tvd.trm_discon_recon.activities;
 
-
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -19,10 +19,7 @@ import com.example.tvd.trm_discon_recon.values.FunctionCall;
 
 import java.util.Calendar;
 
-import static android.content.Context.MODE_PRIVATE;
-
-public class DateSelect2 extends Fragment {
-
+public class DateSelectActivity2 extends AppCompatActivity {
     ImageView date;
     String dd, date1, date2;
     FunctionCall fcall;
@@ -30,25 +27,36 @@ public class DateSelect2 extends Fragment {
     private int day, month, year;
     Button reconnect;
     private Calendar mcalender;
-
-    public DateSelect2() {
-    }
-
-
+    private Toolbar toolbar;
+    TextView toolbar_text;
+    @SuppressLint("WrongViewCast")
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_date_select2, container, false);
-        show_date = (TextView) view.findViewById(R.id.txt_date);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_date_select2);
+
+        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        toolbar_text = toolbar.findViewById(R.id.toolbar_title);
+        toolbar_text.setText("Select Date");
+        toolbar.setNavigationIcon(R.drawable.back);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        show_date = (TextView) findViewById(R.id.txt_date);
         fcall = new FunctionCall();
-        reconnect = (Button) view.findViewById(R.id.btn_Reconnect);
+        reconnect = (Button) findViewById(R.id.btn_Reconnect);
 
         mcalender = Calendar.getInstance();
         day = mcalender.get(Calendar.DAY_OF_MONTH);
         year = mcalender.get(Calendar.YEAR);
         month = mcalender.get(Calendar.MONTH);
 
-        date = (ImageView) view.findViewById(R.id.img_fromdate);
+        date = (ImageView) findViewById(R.id.img_fromdate);
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,17 +67,14 @@ public class DateSelect2 extends Fragment {
             @Override
             public void onClick(View v) {
                 if (!show_date.getText().toString().equals("")) {
-                    Recon_List recon_list = new Recon_List();
                     SavePreferences("RECONNECTION_DATE", date1);
-                    android.support.v4.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.replace(R.id.content_frame, recon_list).addToBackStack(null).commit();
+                    Intent intent = new Intent(DateSelectActivity2.this,Recon_List_Activity.class);
+                    startActivity(intent);
                 } else
-                    Toast.makeText(getActivity(), "Please Select Reconnection Date!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DateSelectActivity2.this, "Please Select Reconnection Date!!", Toast.LENGTH_SHORT).show();
 
             }
         });
-
-        return view;
     }
 
     public void DateDialog1() {
@@ -82,7 +87,7 @@ public class DateSelect2 extends Fragment {
                 show_date.setText(date1);
             }
         };
-        DatePickerDialog dpdialog = new DatePickerDialog(getActivity(), listener, year, month, day);
+        DatePickerDialog dpdialog = new DatePickerDialog(this, listener, year, month, day);
         //it will show dates upto current date
         dpdialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         //below code will set calender min date to 30 days before from system date
@@ -90,12 +95,10 @@ public class DateSelect2 extends Fragment {
         dpdialog.getDatePicker().setMinDate(mcalender.getTimeInMillis());
         dpdialog.show();
     }
-
     private void SavePreferences(String key, String value) {
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key, value);
         editor.commit();
     }
-
 }

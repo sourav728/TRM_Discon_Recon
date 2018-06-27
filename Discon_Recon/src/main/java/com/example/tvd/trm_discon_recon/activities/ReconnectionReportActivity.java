@@ -1,16 +1,14 @@
-package com.example.tvd.trm_discon_recon.fragments;
-
+package com.example.tvd.trm_discon_recon.activities;
 
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -20,54 +18,56 @@ import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.database.Database;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 
-import static android.content.Context.MODE_PRIVATE;
-
-
-public class Reconnection_Report extends Fragment {
-
+public class ReconnectionReportActivity extends AppCompatActivity {
     Database database;
     FunctionCall fcall;
     String from_date = "", to_date = "";
-
-    public Reconnection_Report() {
-
-    }
-
-
+    private Toolbar toolbar;
+    TextView toolbar_text;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_reconnection_report);
 
-        View view = inflater.inflate(R.layout.fragment_reconnection__report, container, false);
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        toolbar_text = toolbar.findViewById(R.id.toolbar_title);
+        toolbar_text.setText("Reconnection Report");
+        toolbar.setNavigationIcon(R.drawable.back);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         from_date = sharedPreferences.getString("RECONNECTION_FROM_DATE", "");
         to_date = sharedPreferences.getString("RECONNECTION_TO_DATE", "");
 
         Log.d("Debug", "RECONNECTION_FROM_DATE" + from_date);
         Log.d("Debug", "RECONNECTION_TO_DATE" + to_date);
 
-        database = new Database(getActivity());
+        database = new Database(this);
         database.open();
-        getActivity().setTitle("Reconnection Report");
         fcall = new FunctionCall();
 
-        TableLayout stk = (TableLayout) view.findViewById(R.id.table_main);
-        TableRow tbrow0 = new TableRow(getActivity());
+        TableLayout stk = (TableLayout) findViewById(R.id.table_main);
+        TableRow tbrow0 = new TableRow(this);
 
-        TextView tv0 = new TextView(getActivity());
+        TextView tv0 = new TextView(this);
         tv0.setText(" Recon Date ");
         tv0.setTextColor(Color.RED);
         tv0.setTextSize(15);
         tbrow0.addView(tv0);
 
-        TextView tv1 = new TextView(getActivity());
+        TextView tv1 = new TextView(this);
         tv1.setText(" Tot_cnt ");
         tv1.setTextColor(Color.RED);
         tv1.setTextSize(15);
         tbrow0.addView(tv1);
 
-
-        TextView tv3 = new TextView(getActivity());
+        TextView tv3 = new TextView(this);
         tv3.setText(" Recon_cnt ");
         tv3.setTextColor(Color.RED);
         tv3.setTextSize(15);
@@ -83,20 +83,20 @@ public class Reconnection_Report extends Fragment {
                 String tot_cnt = String.valueOf(c1.getString(c1.getColumnIndex("tot_cnt")));
                 String dis_cnt = String.valueOf(c1.getString(c1.getColumnIndex("Re_cnt")));
 
-                TableRow tbrow = new TableRow(getActivity());
-                TextView t1v = new TextView(getActivity());
-                t1v.setText(fcall.Parse_Date4(recon_date));
+                TableRow tbrow = new TableRow(this);
+                TextView t1v = new TextView(this);
+                t1v.setText(recon_date);
                 t1v.setTextColor(Color.BLACK);
                 t1v.setGravity(Gravity.CENTER);
                 tbrow.addView(t1v);
 
-                TextView t2v = new TextView(getActivity());
+                TextView t2v = new TextView(this);
                 t2v.setText(tot_cnt);
                 t2v.setTextColor(Color.BLACK);
                 t2v.setGravity(Gravity.CENTER);
                 tbrow.addView(t2v);
 
-                TextView t4v = new TextView(getActivity());
+                TextView t4v = new TextView(this);
                 t4v.setText(dis_cnt);
                 t4v.setTextColor(Color.BLACK);
                 t4v.setGravity(Gravity.CENTER);
@@ -106,13 +106,9 @@ public class Reconnection_Report extends Fragment {
             }
         }else
         {
-            Toast.makeText(getActivity(), "Reconnection data is not available!!", Toast.LENGTH_SHORT).show();
-            HomeFragment homeFragment = new HomeFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.content_frame, homeFragment).commit();
+            Toast.makeText(ReconnectionReportActivity.this, "Reconnection data is not available!!", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
-        return view;
     }
-
 }

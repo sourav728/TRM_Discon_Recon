@@ -8,4 +8,5 @@
     <color name="black2">#000000</color>
     <color name="white">#FAFAFA</color>
     <color name="yellow">#FFC000</color>
+    <color name="colorTransBg">#26000000</color>
 </resources>

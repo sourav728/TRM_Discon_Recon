@@ -1,9 +1,7 @@
 package com.example.tvd.trm_discon_recon.invoke;
 
 import android.os.Handler;
-import android.util.Log;
 
-import com.example.tvd.trm_discon_recon.adapter.Discon_List_Adapter;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
