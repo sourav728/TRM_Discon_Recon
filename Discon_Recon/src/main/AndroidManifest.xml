@@ -28,16 +28,38 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".activities.DateSelectActivity" />
-        <activity android:name=".activities.DisconListActivity" >
-        </activity>
-        <activity android:name=".activities.DateSelectActivity2" />
-        <activity android:name=".activities.Recon_List_Activity" />
-        <activity android:name=".activities.DateSelectActivity3" />
-        <activity android:name=".activities.DateSelectActivity4" />
-        <activity android:name=".activities.DisconnectionReportActivity" />
-        <activity android:name=".activities.ReconnectionReportActivity"></activity>
+        <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.DateSelectActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.DisconListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.DateSelectActivity2"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.Recon_List_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.DateSelectActivity3"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.DateSelectActivity4"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.DisconnectionReportActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ReconnectionReportActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.DisconnectionEfficiency"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activities.DateSelectActivity5" />
+        <activity android:name=".activities.ReconnectionEfficiency"></activity>
     </application>
 
 </manifest>
