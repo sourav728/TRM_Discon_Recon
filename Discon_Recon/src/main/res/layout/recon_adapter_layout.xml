@@ -65,10 +65,40 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textAlignment="viewStart"/>
-                    <TextView
+                    <ImageView
+                        android:id="@+id/img_location"
                         android:layout_weight="1.2"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="30dp"
+                        android:src="@drawable/map_icon"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_weight="1.3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Re_date"/>
+                    <TextView
+                        android:layout_weight="1.8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text=":"/>
+                    <TextView
+                        android:id="@+id/txt_redate"
+                        android:layout_weight="1.2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="viewStart"/>
+                    <ImageView
+                        android:id="@+id/img_reconnect"
+                        android:layout_weight="1.2"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:src="@drawable/reconnection"/>
                 </LinearLayout>
 
                 <LinearLayout

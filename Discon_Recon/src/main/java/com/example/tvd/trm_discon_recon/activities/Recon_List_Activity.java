@@ -169,7 +169,8 @@ public class Recon_List_Activity extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         reconnection_date = sharedPreferences.getString("RECONNECTION_DATE", "");
-        login_mr_code = sharedPreferences.getString("GET_LOGIN_MRCODE", "");
+        Log.d("Debug","Recon_Date"+reconnection_date);
+        login_mr_code = sharedPreferences.getString("MRCODE", "");
 
         total_count = (TextView) findViewById(R.id.txt_total_recon_count);
         recon_count = (TextView) findViewById(R.id.txt_recon_count);
@@ -186,9 +187,6 @@ public class Recon_List_Activity extends AppCompatActivity {
 
         getsetvalues = new GetSetValues();
 
-       /* SendingData.Get_server_date get_server_date = sendingData.new Get_server_date(mhandler, getsetvalues);
-        get_server_date.execute();*/
-
         progressDialog = new ProgressDialog(this, R.style.MyProgressDialogstyle);
         progressDialog.setTitle("Connecting To Server");
         progressDialog.setMessage("Please Wait..");
@@ -196,6 +194,7 @@ public class Recon_List_Activity extends AppCompatActivity {
         SendingData.Recon_List recon_list = sendingData.new Recon_List(mhandler, getsetvalues, arraylist);
         /*******Below Mrcode and date is hardcoaded*******/
         recon_list.execute(login_mr_code, reconnection_date);
+        //recon_list.execute("54003714","2018/06/13");
 
     }
 
@@ -284,13 +283,16 @@ public class Recon_List_Activity extends AppCompatActivity {
                                     if (!selected_role.equals("--SELECT--")) {
                                         reading = curread.getText().toString();
                                         if (Double.parseDouble(getSetValues.getRecon_prevread()) <= Double.parseDouble(reading)) {
-                                            progressDialog = new ProgressDialog(Recon_List_Activity.this, R.style.MyProgressDialogstyle);
-                                            progressDialog.setTitle("Updating Reconnection");
-                                            progressDialog.setMessage("Please Wait..");
-                                            progressDialog.show();
-                                            SendingData.Reconnect_Update reconnect_update = sendingData.new Reconnect_Update(mhandler, getSetValues);
-                                            reconnect_update.execute(getSetValues.getRecon_acc_id(), reconnection_date, reading, selected_role);
+                                            if (!comments.getText().toString().equals(""))
+                                            {
+                                                progressDialog = new ProgressDialog(Recon_List_Activity.this, R.style.MyProgressDialogstyle);
+                                                progressDialog.setTitle("Updating Reconnection");
+                                                progressDialog.setMessage("Please Wait..");
+                                                progressDialog.show();
+                                                SendingData.Reconnect_Update reconnect_update = sendingData.new Reconnect_Update(mhandler, getSetValues);
+                                                reconnect_update.execute(getSetValues.getRecon_acc_id(), reconnection_date, reading, selected_role,comments.getText().toString());
 
+                                            }else Toast.makeText(Recon_List_Activity.this, "Please Enter Comments!!", Toast.LENGTH_SHORT).show();
                                         } else {
                                             functionCall.setEdittext_error(curread, "Current Reading should be greater than Previous Reading!!");
                                         }

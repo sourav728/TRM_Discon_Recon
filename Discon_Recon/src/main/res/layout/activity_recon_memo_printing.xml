@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#E0E0E0"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".activities.Recon_memo_printing">
+
+    <ImageView
+        android:id="@+id/imr_hescom"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/subdiv" />
+   <android.support.v7.widget.CardView
+       android:layout_below="@+id/imr_hescom"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_marginTop="5dp"
+       android:layout_marginLeft="5dp"
+       android:layout_marginRight="5dp"
+       app:cardCornerRadius="5dp"
+       app:cardElevation="5dp">
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_marginLeft="5dp"
+           android:layout_marginRight="5dp"
+           android:orientation="vertical">
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1.2"
+                   android:text="Account ID"
+                   android:textColor="@color/black2"
+                   android:textSize="17sp" />
+
+               <TextView
+                   android:id="@+id/txt_acc_id"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1"
+                   android:text="Account ID"
+                   android:textSize="17sp" />
+           </LinearLayout>
+
+           <LinearLayout
+               android:layout_marginTop="5dp"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1.2"
+                   android:text="RR NO"
+                   android:textColor="@color/black2"
+                   android:textSize="17sp" />
+
+               <TextView
+                   android:id="@+id/txt_rrno"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1"
+                   android:text="RR NO"
+                   android:textSize="17sp" />
+           </LinearLayout>
+           <LinearLayout
+               android:layout_marginTop="5dp"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1.2"
+                   android:text="Subdiv Code"
+                   android:textColor="@color/black2"
+                   android:textSize="17sp" />
+
+               <TextView
+                   android:id="@+id/txt_subdiv_code"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1"
+                   android:text="RR NO"
+                   android:textSize="17sp" />
+           </LinearLayout>
+
+           <TextView
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:gravity="center"
+               android:text="Name and Address"
+               android:textColor="@color/black2"
+               android:textSize="17sp" />
+           <TextView
+               android:layout_marginTop="5dp"
+               android:id="@+id/txt_name"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="Name and Address"
+               android:textAlignment="center"
+               android:textSize="17sp" />
+           <TextView
+               android:layout_marginTop="5dp"
+               android:id="@+id/txt_address"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="Name and Address"
+               android:textAlignment="center"
+               android:textSize="17sp" />
+
+           <LinearLayout
+               android:layout_marginTop="5dp"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1.2"
+                   android:text="Tariff"
+                   android:textSize="17sp" />
+
+               <TextView
+                   android:id="@+id/txt_tariff"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1"
+                   android:text="Tariff" />
+           </LinearLayout>
+
+           <LinearLayout
+               android:layout_marginTop="5dp"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1.2"
+                   android:text="Reconnection Date"
+                   android:textSize="17sp" />
+
+               <TextView
+                   android:id="@+id/txt_recon_date"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1"
+                   android:text="Reconnection Date" />
+           </LinearLayout>
+
+           <LinearLayout
+               android:layout_marginTop="5dp"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1.2"
+                   android:textColor="@color/black2"
+                   android:text="Bill Amount"
+                   android:textSize="17sp" />
+
+               <TextView
+                   android:id="@+id/txt_bill_amt"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1"
+                   android:text="Bill Amount" />
+           </LinearLayout>
+
+           <LinearLayout
+               android:layout_marginTop="5dp"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1.2"
+                   android:text="Section"
+                   android:textSize="17sp" />
+
+               <TextView
+                   android:id="@+id/txt_so"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1"
+                   android:text="SO" />
+           </LinearLayout>
+
+
+           <LinearLayout
+               android:layout_marginTop="5dp"
+               android:layout_marginBottom="20dp"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content">
+
+               <TextView
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1.2"
+                   android:text="D &amp; R Fee"
+                   android:textSize="17sp" />
+
+               <TextView
+                   android:id="@+id/txt_dr_fee"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="1"
+                   android:text="D &amp; R Fee" />
+           </LinearLayout>
+       </LinearLayout>
+   </android.support.v7.widget.CardView>
+   <FrameLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_alignParentBottom="true">
+       <include layout="@layout/submit_layout"/>
+   </FrameLayout>
+</RelativeLayout>

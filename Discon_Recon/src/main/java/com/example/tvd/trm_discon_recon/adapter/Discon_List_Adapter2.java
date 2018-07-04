@@ -1,6 +1,7 @@
 package com.example.tvd.trm_discon_recon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,17 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.activities.DisconListActivity;
+import com.example.tvd.trm_discon_recon.location.Location;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCONNECTION_DIALOG;
 
@@ -93,6 +97,7 @@ public class Discon_List_Adapter2 extends RecyclerView.Adapter<Discon_List_Adapt
 
     public class Discon_Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
         TextView accountid, arrears, prevraed, disconnected;
+        ImageView marker,disconnection;
         LinearLayout lin;
         public Discon_Holder(View itemView) {
             super(itemView);
@@ -101,6 +106,10 @@ public class Discon_List_Adapter2 extends RecyclerView.Adapter<Discon_List_Adapt
             arrears =  itemView.findViewById(R.id.txt_arrears);
             prevraed =  itemView.findViewById(R.id.txt_prevread);
             disconnected = itemView.findViewById(R.id.txt_disconnected);
+            marker = itemView.findViewById(R.id.img_marker);
+            marker.setOnClickListener(this);
+            disconnection = itemView.findViewById(R.id.img_disconnect);
+            disconnection.setOnClickListener(this);
             lin =  itemView.findViewById(R.id.lin_layout);
             lin.setOnClickListener(this);
         }
@@ -110,9 +119,22 @@ public class Discon_List_Adapter2 extends RecyclerView.Adapter<Discon_List_Adapt
             int position = getAdapterPosition();
             /*****Comment should be removed from here************/
             GetSetValues getSetValues = arraylist.get(position);
-            if (StringUtils.startsWithIgnoreCase(getSetValues.getDiscon_flag(),"Y"))
-                Toast.makeText(context, "Account ID already Disconnected!!", Toast.LENGTH_SHORT).show();
-            else disconListActivity.show_disconnection_dialog(DISCONNECTION_DIALOG, position, arraylist);
+            switch (v.getId())
+            {
+                case R.id.img_marker:
+                    String lat = getSetValues.getDiscon_lat();
+                    String lon = getSetValues.getDiscon_lon();
+                    Intent intent = new Intent(context, Location.class);
+                    intent.putExtra("LATITUDE",lat);
+                    intent.putExtra("LONGITUDE", lon);
+                    context.startActivity(intent);
+                    break;
+                case R.id.img_disconnect:
+                    if (StringUtils.startsWithIgnoreCase(getSetValues.getDiscon_flag(),"Y"))
+                        Toast.makeText(context, "Account ID already Disconnected!!", Toast.LENGTH_SHORT).show();
+                    else disconListActivity.show_disconnection_dialog(DISCONNECTION_DIALOG, position, arraylist);
+                    break;
+            }
         }
     }
 }

@@ -5,6 +5,9 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 
+import com.example.tvd.trm_discon_recon.adapter.Feeder_details_Adapter;
+import com.example.tvd.trm_discon_recon.adapter.Recon_Memo_Adapter;
+import com.example.tvd.trm_discon_recon.adapter.RoleAdapter;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
@@ -190,7 +193,8 @@ public class SendingData {
             datamap.put("Dis_Date", params[1]);
             datamap.put("CURREAD", params[2]);
             datamap.put("Remarks",params[3]);
-            functionCall.logStatus("Acc_id: "+params[0] + "\n" + "Dis_Date: "+params[1] + "\n" + "CURREAD: "+params[2] + "\n" + "Remarks:"+ params[3]);
+            datamap.put("Comment",params[4]);
+            functionCall.logStatus("Acc_id: "+params[0] + "\n" + "Dis_Date: "+params[1] + "\n" + "CURREAD: "+params[2] + "\n" + "Remarks:"+ params[3] + "\n" + "Comment:"+params[4]);
             try {
                 response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/DisConUpdate", datamap);
             } catch (IOException e) {
@@ -259,6 +263,7 @@ public class SendingData {
             datamap.put("Dis_Date", params[1]);
             datamap.put("CURREAD", params[2]);
             datamap.put("Remarks",params[3]);
+            datamap.put("Comment",params[4]);
             functionCall.logStatus("Acc_id: "+params[0] + "\n" + "Dis_Date: "+params[1] + "\n" + "CURREAD: "+params[2] + "\n" + "Remarks:"+ params[3]);
             try {
                 response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/ReConUpdate", datamap);
@@ -280,6 +285,7 @@ public class SendingData {
         String response = "";
         Handler handler;
         GetSetValues getSetValues;
+        ArrayList<GetSetValues>arrayList;
         public Get_server_date(Handler handler,GetSetValues getSetValues)
         {
             this.handler = handler;
@@ -301,4 +307,171 @@ public class SendingData {
             super.onPostExecute(result);
         }
     }
+    //Send Feeder Details
+    public class SendFeeder_Details extends AsyncTask<String,String,String>{
+        String response = "";
+        Handler handler;
+        GetSetValues getSetValues;
+        ArrayList<GetSetValues>arrayList;
+        Feeder_details_Adapter feeder_details_adapter;
+        public SendFeeder_Details(Handler handler, GetSetValues getSetValues,ArrayList<GetSetValues>arrayList,Feeder_details_Adapter feeder_details_adapter)
+        {
+            this.handler = handler;
+            this.getSetValues = getSetValues;
+            this.arrayList = arrayList;
+            this.feeder_details_adapter = feeder_details_adapter;
+        }
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String,String>datamap = new HashMap<>();
+            //Send TC Code
+            datamap.put("SUB_DIVCODE", params[0]);
+            datamap.put("DATE", params[1]);
+            try{
+                response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/FDR_DETAILS", datamap);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            receivingData.get_Feeder_details(result,handler,getSetValues,arrayList, feeder_details_adapter);
+            super.onPostExecute(result);
+        }
+    }
+
+    //FDR_FR_UPDATE
+    public class FDR_Fr_Update extends AsyncTask<String,String,String>{
+        String response="";
+        Handler handler;
+        GetSetValues getSetValues;
+        public FDR_Fr_Update(Handler handler, GetSetValues getSetValues)
+        {
+            this.handler = handler;
+            this.getSetValues = getSetValues;
+        }
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String,String>datamap = new HashMap<>();
+            datamap.put("FDRCODE",params[0]);
+            datamap.put("DATE",params[1]);
+            datamap.put("FDRFR",params[2]);
+            try {
+                response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/FDRFR_Update",datamap);
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            receivingData.get_fdr_update_status(result,handler,getSetValues);
+            super.onPostExecute(result);
+        }
+    }
+
+    //FDR FETCH
+    public class FDR_Fetch extends AsyncTask<String,String,String>{
+        String response = "";
+        Handler handler;
+        GetSetValues getSetValues;
+        ArrayList<GetSetValues>arrayList;
+        RoleAdapter roleAdapter;
+        public FDR_Fetch(Handler handler,GetSetValues getSetValues,ArrayList<GetSetValues>arrayList,RoleAdapter roleAdapter)
+        {
+            this.handler = handler;
+            this.getSetValues = getSetValues;
+            this.arrayList = arrayList;
+            this.roleAdapter = roleAdapter;
+        }
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String,String>datamap = new HashMap<>();
+            datamap.put("SUBDIV_CODE",params[0]);
+            datamap.put("DATE",params[1]);
+            try{
+                response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/FDR_FETCH",datamap);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            receivingData.get_fdr_fetch(result,handler,getSetValues,arrayList,roleAdapter);
+            super.onPostExecute(result);
+        }
+    }
+
+   public class Recon_Memo_details extends AsyncTask<String,String,String>
+   {
+        String response ="";
+        Handler handler;
+        GetSetValues getSetValues;
+        ArrayList<GetSetValues>arrayList;
+        Recon_Memo_Adapter recon_memo_adapter;
+        public Recon_Memo_details(Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues>arrayList, Recon_Memo_Adapter recon_memo_adapter)
+        {
+            this.handler = handler;
+            this.getSetValues = getSetValues;
+            this.arrayList = arrayList;
+            this.recon_memo_adapter = recon_memo_adapter;
+        }
+       @Override
+       protected String doInBackground(String... params) {
+            HashMap<String,String>datamap = new HashMap<>();
+            datamap.put("AccountId",params[0]);
+            try
+            {
+                response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/ReConMemo",datamap);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+           return response;
+       }
+
+       @Override
+       protected void onPostExecute(String result) {
+           receivingData.get_reconMemo_details(result,handler,getSetValues,arrayList,recon_memo_adapter);
+           super.onPostExecute(result);
+       }
+   }
+
+   public class Print_Update extends AsyncTask<String,String,String>
+   {
+        String response ="";
+        Handler handler;
+        public Print_Update(Handler handler)
+        {
+            this.handler = handler;
+        }
+       @Override
+       protected String doInBackground(String... params) {
+           HashMap<String,String>datamap = new HashMap<>();
+           datamap.put("ACCT_ID",params[0]);
+           try{
+               response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/ReconMemo_Update",datamap);
+           }
+           catch (Exception e)
+           {
+               e.printStackTrace();
+           }
+           return response;
+       }
+
+       @Override
+       protected void onPostExecute(String result) {
+           receivingData.get_print_update_status(result, handler);
+           super.onPostExecute(result);
+       }
+   }
 }

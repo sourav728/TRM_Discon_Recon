@@ -18,12 +18,17 @@ import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.database.Database;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class ReconnectionReportActivity extends AppCompatActivity {
     Database database;
     FunctionCall fcall;
     String from_date = "", to_date = "";
     private Toolbar toolbar;
     TextView toolbar_text;
+    Double percentage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +79,13 @@ public class ReconnectionReportActivity extends AppCompatActivity {
         tbrow0.addView(tv3);
         stk.addView(tbrow0);
 
+        TextView tv4 = new TextView(this);
+        tv4.setText(" Recon_Eff ");
+        tv4.setTextColor(Color.RED);
+        tv4.setTextSize(15);
+        tbrow0.addView(tv4);
+
+
         Cursor c1 = database.get_recon_report(fcall.Parse_Date5(from_date), fcall.Parse_Date5(to_date));
         Log.d("Debug", "After Parse recon_from_date" + fcall.Parse_Date5(from_date));
         Log.d("Debug", "After Parse recon_to_date" + fcall.Parse_Date5(to_date));
@@ -82,6 +94,11 @@ public class ReconnectionReportActivity extends AppCompatActivity {
                 String recon_date = String.valueOf(c1.getString(c1.getColumnIndex("ReDate1")));
                 String tot_cnt = String.valueOf(c1.getString(c1.getColumnIndex("tot_cnt")));
                 String dis_cnt = String.valueOf(c1.getString(c1.getColumnIndex("Re_cnt")));
+
+                percentage = (100 * (Double.parseDouble(dis_cnt)) / Double.parseDouble(tot_cnt));
+                //Below code will rounding off to 2 digits
+                BigDecimal bd = new BigDecimal(percentage).setScale(2, RoundingMode.HALF_EVEN);
+                percentage = bd.doubleValue();
 
                 TableRow tbrow = new TableRow(this);
                 TextView t1v = new TextView(this);
@@ -102,10 +119,15 @@ public class ReconnectionReportActivity extends AppCompatActivity {
                 t4v.setGravity(Gravity.CENTER);
                 tbrow.addView(t4v);
 
+                TextView t5v = new TextView(this);
+                t5v.setText(String.valueOf(percentage)+"%");
+                t5v.setTextColor(Color.BLACK);
+                t5v.setGravity(Gravity.CENTER);
+                tbrow.addView(t5v);
+
                 stk.addView(tbrow);
             }
-        }else
-        {
+        } else {
             Toast.makeText(ReconnectionReportActivity.this, "Reconnection data is not available!!", Toast.LENGTH_SHORT).show();
             finish();
         }

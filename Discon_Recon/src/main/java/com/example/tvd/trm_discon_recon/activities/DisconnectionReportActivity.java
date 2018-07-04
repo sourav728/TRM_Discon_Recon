@@ -18,12 +18,17 @@ import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.database.Database;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class DisconnectionReportActivity extends AppCompatActivity {
     Database database;
     FunctionCall fcall;
-    String from_date="",to_date="";
+    String from_date = "", to_date = "";
     private Toolbar toolbar;
     TextView toolbar_text;
+    double percentage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,11 +46,11 @@ public class DisconnectionReportActivity extends AppCompatActivity {
             }
         });
 
-        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF",MODE_PRIVATE);
-        from_date = sharedPreferences.getString("DISON_FROM_DATE","");
-        to_date = sharedPreferences.getString("DISCON_TO_DATE","");
-        Log.d("Debug","DISCONNECTION_FROM_DATE"+from_date);
-        Log.d("Debug","DISCONNECTION_TO_DATE"+to_date);
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+        from_date = sharedPreferences.getString("DISON_FROM_DATE", "");
+        to_date = sharedPreferences.getString("DISCON_TO_DATE", "");
+        Log.d("Debug", "DISCONNECTION_FROM_DATE" + from_date);
+        Log.d("Debug", "DISCONNECTION_TO_DATE" + to_date);
 
         database = new Database(this);
         database.open();
@@ -83,22 +88,31 @@ public class DisconnectionReportActivity extends AppCompatActivity {
         tv4.setTextColor(Color.RED);
         tv4.setTextSize(15);
         tbrow0.addView(tv4);
+
+        TextView tv5 = new TextView(this);
+        tv5.setText(" Dis eff ");
+        tv5.setTextColor(Color.RED);
+        tv5.setTextSize(15);
+        tbrow0.addView(tv5);
+
         stk.addView(tbrow0);
 
-        Cursor c1 = database.get_report(fcall.Parse_Date5(from_date),fcall.Parse_Date5(to_date));
-        Log.d("Debug","After Parse discon_from_date"+fcall.Parse_Date5(from_date));
-        Log.d("Debug","After Parse discon_to_date"+ fcall.Parse_Date5(to_date));
-        if (c1.getCount()>0)
-        {
-            while (c1.moveToNext())
-            {
+        Cursor c1 = database.get_report(fcall.Parse_Date5(from_date), fcall.Parse_Date5(to_date));
+        Log.d("Debug", "After Parse discon_from_date" + fcall.Parse_Date5(from_date));
+        Log.d("Debug", "After Parse discon_to_date" + fcall.Parse_Date5(to_date));
+        if (c1.getCount() > 0) {
+            while (c1.moveToNext()) {
                 String dis_date = String.valueOf(c1.getString(c1.getColumnIndex("DisDate1")));
-                Log.d("Debug","Dis_Date1"+dis_date);
+                Log.d("Debug", "Dis_Date1" + dis_date);
                 String tot_cnt = String.valueOf(c1.getString(c1.getColumnIndex("tot_cnt")));
                 String tot_amt = String.valueOf(c1.getString(c1.getColumnIndex("tot_amt")));
                 String dis_cnt = String.valueOf(c1.getString(c1.getColumnIndex("Dis_cnt")));
                 String dis_amt = String.valueOf(c1.getString(c1.getColumnIndex("Dis_Amt")));
 
+                percentage = (100 * (Double.parseDouble(dis_cnt)) / Double.parseDouble(tot_cnt));
+                //Below code will rounding off to 2 digits
+                BigDecimal bd = new BigDecimal(percentage).setScale(2, RoundingMode.HALF_EVEN);
+                percentage = bd.doubleValue();
 
                 TableRow tbrow = new TableRow(this);
                 TextView t1v = new TextView(this);
@@ -131,9 +145,15 @@ public class DisconnectionReportActivity extends AppCompatActivity {
                 t5v.setGravity(Gravity.CENTER);
                 tbrow.addView(t5v);
 
+                TextView t6v = new TextView(this);
+                t6v.setText(String.valueOf(percentage) + "%");
+                t6v.setTextColor(Color.BLACK);
+                t6v.setGravity(Gravity.CENTER);
+                tbrow.addView(t6v);
+
                 stk.addView(tbrow);
             }
-        }else {
+        } else {
             Toast.makeText(DisconnectionReportActivity.this, "Disconnection data is not available!!", Toast.LENGTH_SHORT).show();
             finish();
         }

@@ -112,7 +112,7 @@ public class DisconListActivity extends AppCompatActivity{
                     Date selected_date1 = functionCall.selectiondate(functionCall.convertdateview(functionCall.Parse_Date2("2018/06/26"), "dd", "/"));
                     Log.d("Debug", "Hardcoaded" + selected_date1);
 
-                    if (server_date.equals(selected_date1)) {
+                   /* if (server_date.equals(selected_date1)) {
                         Log.d("Debug", "Date Matching..");
                         progressDialog = new ProgressDialog(DisconListActivity.this, R.style.MyProgressDialogstyle);
                         progressDialog.setTitle("Connecting To Server");
@@ -122,9 +122,9 @@ public class DisconListActivity extends AppCompatActivity{
                         discon_list.execute(login_mr_code, disconnection_date);
                     } else {
                         Log.d("Debug", "Date Not Matching..");
-                        /***************Datbase should be cleared if user enter more than 30 days than the system date***************/
+                        *//***************Datbase should be cleared if user enter more than 30 days than the system date***************//*
                         //database.delete_table();
-                    }
+                    }*/
                     break;
                 case SERVER_DATE_FAILURE:
                     Log.d("Debug", "Server Date Failure!!");
@@ -173,7 +173,7 @@ public class DisconListActivity extends AppCompatActivity{
         database.open();
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         disconnection_date = sharedPreferences.getString("DISCONNECTION_DATE", "");
-        login_mr_code = sharedPreferences.getString("GET_LOGIN_MRCODE","");
+        login_mr_code = sharedPreferences.getString("MRCODE","");
         Log.d("Debug", "Got Disconnection Date" + disconnection_date);
 
 
@@ -200,7 +200,9 @@ public class DisconListActivity extends AppCompatActivity{
         progressDialog.setMessage("Please Wait..");
         progressDialog.show();
         SendingData.Discon_List discon_list = sendingData.new Discon_List(mhandler, getsetvalues, arraylist);
+        /****************MRCode and Date is hardcoaded******************/
         discon_list.execute(login_mr_code, disconnection_date);
+        //discon_list.execute("54003714","2018/06/13");
     }
 
     public void show_disconnection_dialog(int id, final int position, ArrayList<GetSetValues> arrayList) {
@@ -291,12 +293,16 @@ public class DisconListActivity extends AppCompatActivity{
                                     if (!selected_role.equals("--SELECT--")) {
                                         reading = curread.getText().toString();
                                         if (Double.parseDouble(getSetValues.getDiscon_prevread()) <= Double.parseDouble(reading)) {
-                                            progressDialog = new ProgressDialog(DisconListActivity.this, R.style.MyProgressDialogstyle);
-                                            progressDialog.setTitle("Updating Disconnection");
-                                            progressDialog.setMessage("Please Wait..");
-                                            progressDialog.show();
-                                            SendingData.Disconnect_Update disconnect_update = sendingData.new Disconnect_Update(mhandler, getSetValues);
-                                            disconnect_update.execute(getSetValues.getDiscon_acc_id(), disconnection_date, reading, selected_role);
+                                            if (!comments.getText().toString().equals(""))
+                                            {
+                                                progressDialog = new ProgressDialog(DisconListActivity.this, R.style.MyProgressDialogstyle);
+                                                progressDialog.setTitle("Updating Disconnection");
+                                                progressDialog.setMessage("Please Wait..");
+                                                progressDialog.show();
+                                                SendingData.Disconnect_Update disconnect_update = sendingData.new Disconnect_Update(mhandler, getSetValues);
+                                                disconnect_update.execute(getSetValues.getDiscon_acc_id(), disconnection_date, reading, selected_role,comments.getText().toString());
+                                            }else Toast.makeText(DisconListActivity.this, "Please Enter Comments!!", Toast.LENGTH_SHORT).show();
+
                                         } else {
                                             functionCall.setEdittext_error(curread, "Current Reading should be greater than Previous Reading!!");
                                         }

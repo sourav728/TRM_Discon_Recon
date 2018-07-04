@@ -1,6 +1,7 @@
 package com.example.tvd.trm_discon_recon;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -23,9 +24,10 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 public class splash_screen extends Activity {
     public static final int RequestPermissionCode = 1;
     Typewriter load;
-    TextView version,splash_text;
-    String current_version="";
+    TextView version, splash_text;
+    String current_version = "";
     Typeface typeface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,13 +38,13 @@ public class splash_screen extends Activity {
             Window w = getWindow(); // in Activity's onCreate() for instance
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
+
         version = (TextView) findViewById(R.id.txt_version_code);
         splash_text = (TextView) findViewById(R.id.txt_splash_text);
         splash_text.setTypeface(typeface);
         PackageInfo packageInfo;
-        try
-        {
-            packageInfo = getPackageManager().getPackageInfo(getPackageName(),0);
+        try {
+            packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             current_version = packageInfo.versionName;
             version.setText(current_version);
         } catch (PackageManager.NameNotFoundException e) {

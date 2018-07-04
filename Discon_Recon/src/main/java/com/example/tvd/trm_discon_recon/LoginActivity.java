@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
     String dd, date1, date2;
     private int day, month, year;
     EditText selected_date;
+    int length;
     private final Handler mhandler;
 
     {
@@ -69,10 +70,11 @@ public class LoginActivity extends AppCompatActivity {
                         SavePreferences("MRCODE", getsetvalues.getMrcode());
                         SavePreferences("MRNAME", getsetvalues.getMrname());
                         SavePreferences("SUBDIVCODE", getsetvalues.getSubdivcode());
+                        SavePreferences("USER_ROLE",getsetvalues.getUser_role());
                         progressdialog.dismiss();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
-
+                        finish();
                         //Below code is for custom toast message
                         inflater = getLayoutInflater();
                         layout = inflater.inflate(R.layout.toast1,
@@ -137,9 +139,14 @@ public class LoginActivity extends AppCompatActivity {
                     Log.d("Debug","Selected Date"+selected_date.getText().toString());*/
 
                     getMrcode = mrcode.getText().toString();
-                    SavePreferences("GET_LOGIN_MRCODE", getMrcode);
 
-                    String DeviceID ="863697039938021";
+                    // String DeviceID ="863697039938021";
+                    //Device ID for MR
+                    //User ID 54003799
+                    //String DeviceID ="354016070557564";
+                    //Device id for AAO
+                    //User ID 10540038
+                    String DeviceID = "866133033048564";
                    /*Code: 54003892
                    Date: 2018/06/13
                    Password: 123123*/
@@ -154,9 +161,8 @@ public class LoginActivity extends AppCompatActivity {
                         // for ActivityCompat#requestPermissions for more details.
                         return;
                     }
-                   // String DeviceID = telephonyManager.getDeviceId();
-                    Log.d("Debug", "Device ID" + DeviceID);
-
+                   /* String DeviceID = telephonyManager.getDeviceId();
+                    Log.d("Debug", "Device ID" + DeviceID);*/
                     getpassword = password.getText().toString();
                     if (mrcode.getText().length() <= 0) {
                         mrcode.setError("Please Enter MR code!!");
@@ -175,13 +181,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-      /*  select_date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DateDialog1();
-            }
-        })*/
-        ;
     }
 
     public void initialize() {
@@ -191,8 +190,7 @@ public class LoginActivity extends AppCompatActivity {
         fcall = new FunctionCall();
         mrcode = (EditText) findViewById(R.id.edit_mrcode);
         password = (EditText) findViewById(R.id.edit_password);
-       /* select_date = (ImageView) findViewById(R.id.img_date);
-        selected_date = (EditText) findViewById(R.id.txt_selected_date);*/
+
     }
 
     private void SavePreferences(String key, String value) {
@@ -200,21 +198,5 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key, value);
         editor.commit();
-    }
-
-    public void DateDialog1() {
-        DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
-                dd = (year + "-" + (month + 1) + "-" + dayOfMonth);
-                date1 = fcall.Parse_Date2(dd);
-                selected_date.setText(date1);
-            }
-        };
-        DatePickerDialog dpdialog = new DatePickerDialog(this, listener, year, month, day);
-        //it will show dates upto current date
-        dpdialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-        dpdialog.show();
     }
 }

@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:allowBackup="true"
@@ -58,8 +60,53 @@
         <activity
             android:name=".activities.DisconnectionEfficiency"
             android:screenOrientation="portrait" />
-        <activity android:name=".activities.DateSelectActivity5" />
-        <activity android:name=".activities.ReconnectionEfficiency"></activity>
+        <activity
+            android:name=".activities.DateSelectActivity5"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ReconnectionEfficiency"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.FeederDetails"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.TcDetails"
+            android:screenOrientation="portrait" />
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
+        <activity
+            android:name=".location.Location"
+            android:label="@string/title_activity_location"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.Select_FDR_Details_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.Select_FDR_Fetch_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.DateSelectActivity6"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.Reconnection_memo_details"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.Recon_memo_printing"
+            android:screenOrientation="portrait" />
+
+        <service android:name=".service.BluetoothService" />
+
+        <activity android:name=".activities.SettingActivity"></activity>
     </application>
 
 </manifest>

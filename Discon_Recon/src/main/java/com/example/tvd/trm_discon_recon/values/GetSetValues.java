@@ -2,12 +2,16 @@ package com.example.tvd.trm_discon_recon.values;
 
 public class GetSetValues {
     private String mrcode="",mrname="",subdivcode="",acc_id="",arrears="",dis_date="",prev_read="",server_date="", login_date="",
-                   consumer_name="",add1="",lati="",longi="",mtr_read="" ;
+                   consumer_name="",add1="",lati="",longi="",mtr_read="",user_role="";
     private String discon_id="",discon_acc_id="",discon_arrears="",discon_date="",discon_prevread="",discon_consumer_name="",
                    discon_add1="",discon_lat="",discon_lon="",discon_mtr_read="",discon_flag="",remark="";
     private String recon_id="",recon_acc_id="",recon_arrears="",recon_date="",recon_prevread="",recon_consumer_name="",
             recon_add1="",recon_lat="",recon_lon="",recon_mtr_read="",recon_flag="",recon_remark="",re_date="";
     private String selected_discon_date="";
+    private String fdr_code="",fdr_ir="",fdr_fr="",fdr_mf="";
+    private String feeder_code="";
+    private String recon_memo_acc_id="",recon_memo_rrno="",reoon_memo_tariff="",recon_memo_so="",recon_memo_prev_read="",recon_memo_customer_name="",
+                   recon_memo_add1="",recon_memo_mtr_read="",recon_memo_arrears="",recon_memo_dr_fee="",recon_memo_reconnection_date="", recon_memo_subdiv="";
     public String getMrcode() {
         return mrcode;
     }
@@ -16,8 +20,123 @@ public class GetSetValues {
         return discon_id;
     }
 
+    public String getFeeder_code() {
+        return feeder_code;
+    }
+
+    public String getUser_role() {
+        return user_role;
+    }
+
+    public String getRecon_memo_subdiv() {
+        return recon_memo_subdiv;
+    }
+
+    public void setRecon_memo_subdiv(String recon_memo_subdiv) {
+        this.recon_memo_subdiv = recon_memo_subdiv;
+    }
+
+    public void setUser_role(String user_role) {
+        this.user_role = user_role;
+    }
+
+    public void setFeeder_code(String feeder_code) {
+        this.feeder_code = feeder_code;
+    }
+
     public void setDiscon_id(String discon_id) {
         this.discon_id = discon_id;
+    }
+
+    public String getRecon_memo_acc_id() {
+        return recon_memo_acc_id;
+    }
+
+    public String getRecon_memo_reconnection_date() {
+        return recon_memo_reconnection_date;
+    }
+
+    public void setRecon_memo_reconnection_date(String recon_memo_reconnection_date) {
+        this.recon_memo_reconnection_date = recon_memo_reconnection_date;
+    }
+
+    public void setRecon_memo_acc_id(String recon_memo_acc_id) {
+
+        this.recon_memo_acc_id = recon_memo_acc_id;
+    }
+
+
+    public String getRecon_memo_rrno() {
+        return recon_memo_rrno;
+    }
+
+    public void setRecon_memo_rrno(String recon_memo_rrno) {
+        this.recon_memo_rrno = recon_memo_rrno;
+    }
+
+    public String getReoon_memo_tariff() {
+        return reoon_memo_tariff;
+
+    }
+
+    public void setReoon_memo_tariff(String reoon_memo_tariff) {
+        this.reoon_memo_tariff = reoon_memo_tariff;
+    }
+
+    public String getRecon_memo_so() {
+        return recon_memo_so;
+    }
+
+    public void setRecon_memo_so(String recon_memo_so) {
+        this.recon_memo_so = recon_memo_so;
+    }
+
+    public String getRecon_memo_prev_read() {
+        return recon_memo_prev_read;
+    }
+
+    public void setRecon_memo_prev_read(String recon_memo_prev_read) {
+        this.recon_memo_prev_read = recon_memo_prev_read;
+    }
+
+    public String getRecon_memo_customer_name() {
+        return recon_memo_customer_name;
+    }
+
+    public void setRecon_memo_customer_name(String recon_memo_customer_name) {
+        this.recon_memo_customer_name = recon_memo_customer_name;
+    }
+
+    public String getRecon_memo_add1() {
+        return recon_memo_add1;
+    }
+
+    public void setRecon_memo_add1(String recon_memo_add1) {
+        this.recon_memo_add1 = recon_memo_add1;
+    }
+
+    public String getRecon_memo_mtr_read() {
+        return recon_memo_mtr_read;
+    }
+
+    public void setRecon_memo_mtr_read(String recon_memo_mtr_read) {
+        this.recon_memo_mtr_read = recon_memo_mtr_read;
+    }
+
+    public String getRecon_memo_arrears() {
+        return recon_memo_arrears;
+    }
+
+    public void setRecon_memo_arrears(String recon_memo_arrears) {
+        this.recon_memo_arrears = recon_memo_arrears;
+    }
+
+    public String getRecon_memo_dr_fee() {
+        return recon_memo_dr_fee;
+    }
+
+    public void setRecon_memo_dr_fee(String recon_memo_dr_fee) {
+        this.recon_memo_dr_fee = recon_memo_dr_fee;
     }
 
     public String getSelected_discon_date() {
@@ -30,6 +149,38 @@ public class GetSetValues {
 
     public String getRe_date() {
         return re_date;
+    }
+
+    public String getFdr_code() {
+        return fdr_code;
+    }
+
+    public void setFdr_code(String fdr_code) {
+        this.fdr_code = fdr_code;
+    }
+
+    public String getFdr_ir() {
+        return fdr_ir;
+    }
+
+    public void setFdr_ir(String fdr_ir) {
+        this.fdr_ir = fdr_ir;
+    }
+
+    public String getFdr_fr() {
+        return fdr_fr;
+    }
+
+    public void setFdr_fr(String fdr_fr) {
+        this.fdr_fr = fdr_fr;
+    }
+
+    public String getFdr_mf() {
+        return fdr_mf;
+    }
+
+    public void setFdr_mf(String fdr_mf) {
+        this.fdr_mf = fdr_mf;
     }
 
     public void setRe_date(String re_date) {

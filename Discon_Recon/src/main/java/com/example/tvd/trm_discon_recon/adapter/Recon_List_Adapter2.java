@@ -1,6 +1,7 @@
 package com.example.tvd.trm_discon_recon.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,12 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.activities.Recon_List_Activity;
+import com.example.tvd.trm_discon_recon.location.Location;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
 import org.apache.commons.lang3.StringUtils;
@@ -47,6 +50,7 @@ public class Recon_List_Adapter2 extends RecyclerView.Adapter<Recon_List_Adapter
         Log.d("Debug","Recon_Acc id"+getSetValues.getRecon_acc_id());
         //here %s%s meaning first string will set on first then space and then second string
         holder.prevraed.setText(getSetValues.getRecon_prevread());
+        holder.re_date.setText(getSetValues.getRecon_date());
         Log.d("Debug","Recon_PrevRead"+getSetValues.getRecon_prevread());
         if (StringUtils.startsWithIgnoreCase(getSetValues.getRecon_flag(),"Y"))
             holder.reconnected.setVisibility(View.VISIBLE);
@@ -90,15 +94,20 @@ public class Recon_List_Adapter2 extends RecyclerView.Adapter<Recon_List_Adapter
     }
 
     public class Recon_Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView accountid, prevraed, reconnected;
+        TextView accountid, prevraed, reconnected, re_date;
         LinearLayout lin;
-
+        ImageView reconnect, location;
         public Recon_Holder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             accountid = (TextView) itemView.findViewById(R.id.txt_account_id);
             prevraed = (TextView) itemView.findViewById(R.id.txt_prevread);
             reconnected = (TextView) itemView.findViewById(R.id.txt_reconnected);
+            re_date = itemView.findViewById(R.id.txt_redate);
+            reconnect = itemView.findViewById(R.id.img_reconnect);
+            reconnect.setOnClickListener(this);
+            location = itemView.findViewById(R.id.img_location);
+            location.setOnClickListener(this);
             lin = (LinearLayout) itemView.findViewById(R.id.lin_layout);
             lin.setOnClickListener(this);
         }
@@ -107,10 +116,22 @@ public class Recon_List_Adapter2 extends RecyclerView.Adapter<Recon_List_Adapter
         public void onClick(View v) {
             int position = getAdapterPosition();
             GetSetValues getSetValues = arraylist.get(position);
-            /*****Comment should be removed from here************/
-            if (StringUtils.startsWithIgnoreCase(getSetValues.getRecon_flag(),"Y"))
-                Toast.makeText(context, "Account ID Already Reconnected!!", Toast.LENGTH_SHORT).show();
-            else recon_list.show_reconnection_dialog(RECONNECTION_DIALOG, position, arraylist);
+            switch (v.getId())
+            {
+                case R.id.img_location:
+                    String lat = getSetValues.getRecon_lat();
+                    String lon = getSetValues.getRecon_lon();
+                    Intent intent = new Intent(context, Location.class);
+                    intent.putExtra("LATITUDE",lat);
+                    intent.putExtra("LONGITUDE", lon);
+                    context.startActivity(intent);
+                     break;
+                case R.id.img_reconnect:
+                    if (StringUtils.startsWithIgnoreCase(getSetValues.getRecon_flag(),"Y"))
+                        Toast.makeText(context, "Account ID Already Reconnected!!", Toast.LENGTH_SHORT).show();
+                    else recon_list.show_reconnection_dialog(RECONNECTION_DIALOG, position, arraylist);
+                    break;
+            }
         }
     }
 }

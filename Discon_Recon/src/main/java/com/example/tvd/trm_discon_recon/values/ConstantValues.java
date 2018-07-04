@@ -1,6 +1,12 @@
 package com.example.tvd.trm_discon_recon.values;
 
 public class ConstantValues {
+
+    public static final String BLUETOOTH_RESULT = "connection";
+    public static final String CONNECTED = "connected";
+    public static final String DISCONNECTED = "disconnected";
+    public static final String TURNED_OFF = "printer_turned_off";
+
     public static final int LOGIN_SUCCESS = 1;
     public static final int LOGIN_FAILURE = 2;
     public static final int DISCON_LIST_SUCCESS = 3;
@@ -17,4 +23,22 @@ public class ConstantValues {
     public static final int RECON_SUCCESS = 13;
     public static final int RECON_FAILURE = 14;
     public static final int RECONNECTION_DIALOG = 15;
+    public static final int FEEDER_DETAILS_SUCCESS = 16;
+    public static final int FEEDER_DETAILS_FAILURE = 17;
+    public static final int FEEDER_DETAILS_UPDATE_DIALOG = 18;
+    public static final int FDR_UPDATE_SUCCESS = 19;
+    public static final int FDR_UPDATE_FAILURE = 20;
+    public static final int FDR_FETCH_SUCCESS = 21;
+    public static final int FDR_FETCH_FAILURE = 22;
+
+    public static final int RECON_MEMO_SUCCESS = 23;
+    public static final int RECON_MEMO_FAILURE = 24;
+
+    public static final int ANALOGICS_PRINTER_CONNECTED = 25;
+    public static final int ANALOGICS_PRINTER_DISCONNECTED = 26;
+    public static final int ANALOGICS_PRINTER_PAIRED = 27;
+
+    public static final int PRINT_SUCCESS = 28;
+    public static final int PRINT_FAILURE = 29;
+
 }

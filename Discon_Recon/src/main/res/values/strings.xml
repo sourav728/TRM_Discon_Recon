@@ -19,6 +19,14 @@
         <item>By Fuse</item>
         <item>By Pole</item>
     </string-array>
+    <string-array name="printer">
+        <item>--SELECT--</item>
+        <item>ALG</item>
+        <item>GPT</item>
+    </string-array>
     <string name="company_details">© 2018 Transvision Software &amp; Data Solutions Pvt Ltd.\n
         All Rights Reserved\n<u>www.transvisionsolutions.com</u></string>
+    <string name="title_activity_location">Map</string>
+    <string name="printsuccess">Print Success</string>
+    <string name="printfailed">Print Failure!!</string>
 </resources>

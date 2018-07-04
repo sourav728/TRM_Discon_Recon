@@ -2,11 +2,13 @@ package com.example.tvd.trm_discon_recon.values;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.TextInputEditText;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.File;
 import java.text.ParseException;
@@ -122,7 +124,7 @@ public class FunctionCall {
 
     public String Parse_Date4(String time) {
         String input = "dd-MM-yyyy hh:mm:ss";
-        String output = "dd/MM/yyyy";
+        String output = "dd-MM-yyyy";
         SimpleDateFormat inputFormat = new SimpleDateFormat(input, Locale.getDefault());
         SimpleDateFormat outputFormat = new SimpleDateFormat(output, Locale.getDefault());
 
@@ -152,6 +154,28 @@ public class FunctionCall {
         }
         return str;
     }
+    public String Parse_Date6(String time)
+    {
+        String input = "yyyy/MM/dd";
+        String output = "yyyyMM";
+        SimpleDateFormat inputFormat = new SimpleDateFormat(input, Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat(output, Locale.getDefault());
+
+        Date date;
+        String str = null;
+        try {
+            date = inputFormat.parse(time);
+            str = outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
+    public void showtoast(Context context, String Message) {
+        Toast.makeText(context, Message, Toast.LENGTH_SHORT).show();
+    }
+
     public Date selectiondate(String date) {
         Date date1 = null;
         try {
@@ -179,5 +203,32 @@ public class FunctionCall {
             dir.mkdirs();
         }
         return dir.toString();
+    }
+
+
+
+    public String space(String s, int len) {
+        int temp;
+        StringBuilder spaces = new StringBuilder();
+        temp = len - s.length();
+        for (int i = 0; i < temp; i++) {
+            spaces.append(" ");
+        }
+        return (s + spaces);
+    }
+
+    public String aligncenter(String msg, int len) {
+        int count = msg.length();
+        int value = len - count;
+        int append = (value / 2);
+        return space(" ", append) + msg + space(" ", append);
+    }
+
+    public String alignright(String msg, int len) {
+        for (int i = 0; i < len - msg.length(); i++) {
+            msg = " " + msg;
+        }
+        msg = String.format("%" + len + "s", msg);
+        return msg;
     }
 }

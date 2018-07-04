@@ -1,8 +1,16 @@
 package com.example.tvd.trm_discon_recon;
 
+import android.app.ActivityManager;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -16,13 +24,29 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.analogics.thermalAPI.Bluetooth_Printer_3inch_prof_ThermalAPI;
+import com.analogics.thermalprinter.AnalogicsThermalPrinter;
 import com.example.tvd.trm_discon_recon.activities.DateSelectActivity;
 import com.example.tvd.trm_discon_recon.activities.DateSelectActivity2;
 import com.example.tvd.trm_discon_recon.database.Database;
 import com.example.tvd.trm_discon_recon.fragments.HomeFragment;
 import com.example.tvd.trm_discon_recon.invoke.SendingData;
+import com.example.tvd.trm_discon_recon.service.BluetoothService;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.io.IOException;
+
+import static com.example.tvd.trm_discon_recon.service.BluetoothService.conn;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.ANALOGICS_PRINTER_CONNECTED;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.ANALOGICS_PRINTER_DISCONNECTED;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.ANALOGICS_PRINTER_PAIRED;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.BLUETOOTH_RESULT;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.CONNECTED;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCONNECTED;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.TURNED_OFF;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -32,32 +56,9 @@ public class MainActivity extends AppCompatActivity
     GetSetValues getSetValues;
     SendingData sendingData;
     Database database;
-    /*private final Handler mhandler;
-    {
-        mhandler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what)
-                {
-                    case SERVER_DATE_SUCCESS:
-                        Date server_date = fcall.selectiondate(fcall.convertdateview(getSetValues.getServer_date(),"dd","/"));
-                        Log.d("Debug","Server_date"+server_date);
-                        Date selected_date = fcall.selectiondate(fcall.convertdateview(selected_date2, "dd", "/"));
-                        Log.d("Debug","Got_Selected_date"+selected_date);
-                        if (server_date.equals(selected_date))
-                            Log.d("Debug","Date Matching..");
-                        else
-                        {
-                            Log.d("Debug","Date Not Matching..");
-                            database.delete_table();
-                        }
-                        break;
+    private BluetoothAdapter mBluetoothAdapter;
+    private static final int REQUEST_ENABLE_BT = 1;
 
-                }
-                super.handleMessage(msg);
-            }
-        };
-    }*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,28 +66,23 @@ public class MainActivity extends AppCompatActivity
         database = new Database(this);
         database.open();
 
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+
         replaceFragment(R.id.nav_home);
         fcall = new FunctionCall();
         getSetValues = new GetSetValues();
         sendingData = new SendingData();
-
-       /* SendingData.Get_server_date get_server_date = sendingData.new Get_server_date(mhandler, getSetValues);
-        get_server_date.execute();*/
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF",MODE_PRIVATE);
         Mrname = sharedPreferences.getString("MRNAME","");
         Mrcode = sharedPreferences.getString("MRCODE","");
-       // selected_date2 = sharedPreferences.getString("Selected_Date","");
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
+        String user_role = sharedPreferences.getString("USER_ROLE","");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -96,6 +92,19 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        Menu menu = navigationView.getMenu();
+        MenuItem disconnect = menu.findItem(R.id.nav_disconnect);
+        MenuItem reconnect = menu.findItem(R.id.nav_reconnect);
+
+        if (user_role.equals("MR"))
+        {
+            disconnect.setVisible(true);
+            reconnect.setVisible(true);
+        }
+        else {
+            disconnect.setVisible(false);
+            reconnect.setVisible(false);
+        }
         View view = navigationView.getHeaderView(0);
         mrname = (TextView) view.findViewById(R.id.nav_mrname);
         mrcode = (TextView) view.findViewById(R.id.nav_mrcode);
@@ -103,7 +112,10 @@ public class MainActivity extends AppCompatActivity
         mrcode.setText(Mrcode);
         NavigationView logout_view = (NavigationView) findViewById(R.id.nav_view2);
         logout_view.setNavigationItemSelectedListener(this);
+
+
     }
+
 
     @Override
     public void onBackPressed() {
