@@ -17,18 +17,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.analogics.thermalAPI.Bluetooth_Printer_3inch_prof_ThermalAPI;
 import com.analogics.thermalprinter.AnalogicsThermalPrinter;
 import com.example.tvd.trm_discon_recon.MainActivity;
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.service.BluetoothService;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
-
 import org.apache.commons.lang3.StringUtils;
-
 import java.io.IOException;
-
 import static com.example.tvd.trm_discon_recon.service.BluetoothService.conn;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.ANALOGICS_PRINTER_CONNECTED;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.ANALOGICS_PRINTER_DISCONNECTED;
@@ -40,7 +36,6 @@ import static com.example.tvd.trm_discon_recon.values.ConstantValues.TURNED_OFF;
 
 public class DateSelectActivity6 extends AppCompatActivity {
     FunctionCall fcall;
-
     private Toolbar toolbar;
     TextView toolbar_text;
     EditText acc_id;
@@ -52,6 +47,7 @@ public class DateSelectActivity6 extends AppCompatActivity {
     public static String printer_address = "";
     Bluetooth_Printer_3inch_prof_ThermalAPI api;
     public static boolean PRINTER_CONNECT_OR_NOT = false;
+    String selected_printer="";
 
     Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -86,9 +82,14 @@ public class DateSelectActivity6 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_select6);
 
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF",MODE_PRIVATE);
+        selected_printer = sharedPreferences.getString("PRINTER","");
+
         api = new Bluetooth_Printer_3inch_prof_ThermalAPI();
         /****************Printer name is hardcoaded*************/
-        printer = "GPT";
+       // printer = "GPT";
+        //printer = "ALG";
+        printer = selected_printer;
 
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar_text = toolbar.findViewById(R.id.toolbar_title);

@@ -98,6 +98,8 @@ public class ReceivingData {
                     getSetValues.setMrcode(jsonObject.getString("MRCODE"));
                     getSetValues.setMrname(jsonObject.getString("MRNAME"));
                     getSetValues.setSubdivcode(jsonObject.getString("SUBDIVCODE"));
+                    getSetValues.setMr_device_id(jsonObject.getString("DEVICE_ID"));
+                    getSetValues.setMr_subdiv_name(jsonObject.getString("SUBDIVNAME"));
                     getSetValues.setUser_role(jsonObject.getString("USER_ROLE"));
                     handler.sendEmptyMessage(LOGIN_SUCCESS);
                 } else handler.sendEmptyMessage(LOGIN_FAILURE);
@@ -375,6 +377,8 @@ public class ReceivingData {
                     String subdivcode = jsonObject.getString("subdivcode");
                     String ARREARS = jsonObject.getString("ARREARS");
                     String DR_FEE = jsonObject.getString("DR_FEE");
+                    String MR_CODE = jsonObject.getString("MRCODE");
+                    String READ_DATE = jsonObject.getString("date1");
 
                     if (!ACCT_ID.equals(""))
                         getSetValues.setRecon_memo_acc_id(ACCT_ID);
@@ -388,7 +392,6 @@ public class ReceivingData {
                     if (!SO.equals(""))
                         getSetValues.setRecon_memo_so(SO);
                     else getSetValues.setRecon_memo_so("NA");
-
                     if (!RE_DATE.equals(""))
                         getSetValues.setRecon_memo_reconnection_date(RE_DATE);
                     else getSetValues.setRecon_memo_reconnection_date(RE_DATE);
@@ -407,6 +410,13 @@ public class ReceivingData {
                     if (!DR_FEE.equals(""))
                         getSetValues.setRecon_memo_dr_fee(DR_FEE);
                     else getSetValues.setRecon_memo_dr_fee("NA");
+                    if (!MR_CODE.equals(""))
+                        getSetValues.setRecon_memo_mrcode(MR_CODE);
+                    else getSetValues.setRecon_memo_mrcode("NA");
+                    if (!READ_DATE.equals(""))
+                        getSetValues.setRecon_memo_readdate(READ_DATE);
+                    else getSetValues.setRecon_memo_readdate("NA");
+
                     arrayList.add(getSetValues);
                     recon_memo_adapter.notifyDataSetChanged();
                 }

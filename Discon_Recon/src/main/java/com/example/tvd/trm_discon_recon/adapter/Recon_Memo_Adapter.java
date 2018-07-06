@@ -7,11 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.activities.Recon_memo_printing;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
-
 import java.util.ArrayList;
 
 public class Recon_Memo_Adapter extends RecyclerView.Adapter<Recon_Memo_Adapter.ReconHolder> {
@@ -66,10 +64,12 @@ public class Recon_Memo_Adapter extends RecyclerView.Adapter<Recon_Memo_Adapter.
             intent.putExtra("ADD1", getSetValues.getRecon_memo_add1());
             intent.putExtra("TARIFF", getSetValues.getReoon_memo_tariff());
             intent.putExtra("RE_DATE", getSetValues.getRecon_memo_reconnection_date());
-            intent.putExtra("ARREARS", getSetValues.getRecon_memo_arrears());
+            //intent.putExtra("ARREARS", getSetValues.getRecon_memo_arrears());
             intent.putExtra("SO", getSetValues.getRecon_memo_so());
             intent.putExtra("subdivcode", getSetValues.getRecon_memo_subdiv());
             intent.putExtra("DR_FEE", getSetValues.getRecon_memo_dr_fee());
+            intent.putExtra("READ_DATE", getSetValues.getRecon_memo_readdate());
+            intent.putExtra("MRCODE", getSetValues.getRecon_memo_mrcode());
             context.startActivity(intent);
         }
     }

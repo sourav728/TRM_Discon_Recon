@@ -106,7 +106,8 @@
 
         <service android:name=".service.BluetoothService" />
 
-        <activity android:name=".activities.SettingActivity"></activity>
+        <activity android:name=".activities.SettingActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

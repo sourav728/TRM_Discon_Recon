@@ -59,6 +59,7 @@ public class BluetoothService extends Service implements IOCallBack {
     public static ExecutorService es = Executors.newScheduledThreadPool(30);
     BluetoothService mActivity;
     Bluetooth_Printer_3inch_prof_ThermalAPI api;
+    String selected_printer="";
 
     Handler mHandler = new Handler(new Handler.Callback() {
         @Override
@@ -150,11 +151,15 @@ public class BluetoothService extends Service implements IOCallBack {
     @Override
     public void onCreate() {
         super.onCreate();
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF",MODE_PRIVATE);
+        selected_printer = sharedPreferences.getString("PRINTER","");
+
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         functionCall = new FunctionCall();
-//        printer = "ALG";
-        printer = "GPT";
+         // printer = "ALG";
+//        printer = "GPT";
 //        printer = "NGX";
+         printer = selected_printer;
         api = new Bluetooth_Printer_3inch_prof_ThermalAPI();
 
         if (printer.equals("GPT")) {

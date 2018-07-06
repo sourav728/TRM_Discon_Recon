@@ -71,6 +71,8 @@ public class LoginActivity extends AppCompatActivity {
                         SavePreferences("MRNAME", getsetvalues.getMrname());
                         SavePreferences("SUBDIVCODE", getsetvalues.getSubdivcode());
                         SavePreferences("USER_ROLE",getsetvalues.getUser_role());
+                        SavePreferences("DEVICE_ID", getsetvalues.getMr_device_id());
+                        SavePreferences("SUBDIVNAME", getsetvalues.getMr_subdiv_name());
                         progressdialog.dismiss();
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(intent);
@@ -161,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
                         // for ActivityCompat#requestPermissions for more details.
                         return;
                     }
-                   /* String DeviceID = telephonyManager.getDeviceId();
+                    /*String DeviceID = telephonyManager.getDeviceId();
                     Log.d("Debug", "Device ID" + DeviceID);*/
                     getpassword = password.getText().toString();
                     if (mrcode.getText().length() <= 0) {

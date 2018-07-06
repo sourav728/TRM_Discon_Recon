@@ -3,6 +3,7 @@ package com.example.tvd.trm_discon_recon;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Typeface;
@@ -47,6 +48,8 @@ public class splash_screen extends Activity {
             packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             current_version = packageInfo.versionName;
             version.setText(current_version);
+            SavePreferences("CURRENT_VERSION", current_version);
+
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -119,5 +122,11 @@ public class splash_screen extends Activity {
                 }
                 break;
         }
+    }
+    private void SavePreferences(String key, String value) {
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, value);
+        editor.commit();
     }
 }

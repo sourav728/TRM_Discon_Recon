@@ -7,11 +7,60 @@ public class GetSetValues {
                    discon_add1="",discon_lat="",discon_lon="",discon_mtr_read="",discon_flag="",remark="";
     private String recon_id="",recon_acc_id="",recon_arrears="",recon_date="",recon_prevread="",recon_consumer_name="",
             recon_add1="",recon_lat="",recon_lon="",recon_mtr_read="",recon_flag="",recon_remark="",re_date="";
+    private String mr_device_id="",mr_subdiv_name="";
     private String selected_discon_date="";
     private String fdr_code="",fdr_ir="",fdr_fr="",fdr_mf="";
     private String feeder_code="";
-    private String recon_memo_acc_id="",recon_memo_rrno="",reoon_memo_tariff="",recon_memo_so="",recon_memo_prev_read="",recon_memo_customer_name="",
-                   recon_memo_add1="",recon_memo_mtr_read="",recon_memo_arrears="",recon_memo_dr_fee="",recon_memo_reconnection_date="", recon_memo_subdiv="";
+    private String recon_memo_acc_id="";
+    private String recon_memo_rrno="";
+    private String reoon_memo_tariff="";
+    private String recon_memo_so="";
+    private String recon_memo_prev_read="";
+
+    public String getMr_device_id() {
+        return mr_device_id;
+    }
+
+    public void setMr_device_id(String mr_device_id) {
+        this.mr_device_id = mr_device_id;
+    }
+
+    public String getMr_subdiv_name() {
+        return mr_subdiv_name;
+    }
+
+    public void setMr_subdiv_name(String mr_subdiv_name) {
+        this.mr_subdiv_name = mr_subdiv_name;
+    }
+
+    private String recon_memo_customer_name="";
+    private String recon_memo_add1="";
+    private String recon_memo_mtr_read="";
+    private String recon_memo_arrears="";
+    private String recon_memo_dr_fee="";
+    private String recon_memo_reconnection_date="";
+    private String recon_memo_subdiv="";
+
+    public String getRecon_memo_readdate() {
+        return recon_memo_readdate;
+    }
+
+    public void setRecon_memo_readdate(String recon_memo_readdate) {
+        this.recon_memo_readdate = recon_memo_readdate;
+    }
+
+    private String recon_memo_readdate="";
+
+
+    public String getRecon_memo_mrcode() {
+        return recon_memo_mrcode;
+    }
+
+    public void setRecon_memo_mrcode(String recon_memo_mrcode) {
+        this.recon_memo_mrcode = recon_memo_mrcode;
+    }
+
+    private String recon_memo_mrcode="";
     public String getMrcode() {
         return mrcode;
     }

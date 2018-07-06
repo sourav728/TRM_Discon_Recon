@@ -41,4 +41,6 @@ public class ConstantValues {
     public static final int PRINT_SUCCESS = 28;
     public static final int PRINT_FAILURE = 29;
 
+    public static final int DLG_PRINT = 30;
+
 }

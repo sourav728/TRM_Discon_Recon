@@ -28,6 +28,7 @@ import com.analogics.thermalAPI.Bluetooth_Printer_3inch_prof_ThermalAPI;
 import com.analogics.thermalprinter.AnalogicsThermalPrinter;
 import com.example.tvd.trm_discon_recon.activities.DateSelectActivity;
 import com.example.tvd.trm_discon_recon.activities.DateSelectActivity2;
+import com.example.tvd.trm_discon_recon.activities.SettingActivity;
 import com.example.tvd.trm_discon_recon.database.Database;
 import com.example.tvd.trm_discon_recon.fragments.HomeFragment;
 import com.example.tvd.trm_discon_recon.invoke.SendingData;
@@ -137,6 +138,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+            startActivity(intent);
             return true;
         }
         onNavigationItemSelected(item);
