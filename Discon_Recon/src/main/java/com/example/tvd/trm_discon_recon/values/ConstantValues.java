@@ -7,6 +7,11 @@ public class ConstantValues {
     public static final String DISCONNECTED = "disconnected";
     public static final String TURNED_OFF = "printer_turned_off";
 
+    public static String FTP_HOST = "ftp2.hescomtrm.com";
+    public static String FTP_USER = "TRMFTP01";
+    public static String FTP_PASS = "TrmFTp1$";
+    public static final int FTP_PORT = 21;
+
     public static final int LOGIN_SUCCESS = 1;
     public static final int LOGIN_FAILURE = 2;
     public static final int DISCON_LIST_SUCCESS = 3;
@@ -42,5 +47,12 @@ public class ConstantValues {
     public static final int PRINT_FAILURE = 29;
 
     public static final int DLG_PRINT = 30;
+    public static final int DLG_APK_UPDATE_SUCCESS = 31;
+    public static  final int DOWNLOAD_FILE_DELETE_CONNECTION_ERROR = 32;
+    public static final int APK_FILE_DOWNLOADED = 33;
+    public static final int APK_FILE_NOT_FOUND = 34;
+    public static final int DOWNLOAD_FILE_DELETED = 35;
+    public static final int DOWNLOAD_FILE_NOT_DELETED = 36;
+    public static final int DLG_APK_UPDATE_FAILURE = 37;
 
 }

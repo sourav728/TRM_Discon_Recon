@@ -2,7 +2,7 @@ package com.example.tvd.trm_discon_recon.values;
 
 public class GetSetValues {
     private String mrcode="",mrname="",subdivcode="",acc_id="",arrears="",dis_date="",prev_read="",server_date="", login_date="",
-                   consumer_name="",add1="",lati="",longi="",mtr_read="",user_role="";
+                   consumer_name="",add1="",lati="",longi="",mtr_read="",user_role="", mrpassword="",app_version="";
     private String discon_id="",discon_acc_id="",discon_arrears="",discon_date="",discon_prevread="",discon_consumer_name="",
                    discon_add1="",discon_lat="",discon_lon="",discon_mtr_read="",discon_flag="",remark="";
     private String recon_id="",recon_acc_id="",recon_arrears="",recon_date="",recon_prevread="",recon_consumer_name="",
@@ -17,8 +17,24 @@ public class GetSetValues {
     private String recon_memo_so="";
     private String recon_memo_prev_read="";
 
+    public String getApp_version() {
+        return app_version;
+    }
+
+    public void setApp_version(String app_version) {
+        this.app_version = app_version;
+    }
+
     public String getMr_device_id() {
         return mr_device_id;
+    }
+
+    public String getMrpassword() {
+        return mrpassword;
+    }
+
+    public void setMrpassword(String mrpassword) {
+        this.mrpassword = mrpassword;
     }
 
     public void setMr_device_id(String mr_device_id) {

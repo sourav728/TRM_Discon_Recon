@@ -17,14 +17,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.analogics.thermalAPI.Bluetooth_Printer_3inch_prof_ThermalAPI;
 import com.analogics.thermalprinter.AnalogicsThermalPrinter;
 import com.example.tvd.trm_discon_recon.MainActivity;
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.service.BluetoothService;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
+
 import org.apache.commons.lang3.StringUtils;
+
 import java.io.IOException;
+
 import static com.example.tvd.trm_discon_recon.service.BluetoothService.conn;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.ANALOGICS_PRINTER_CONNECTED;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.ANALOGICS_PRINTER_DISCONNECTED;
@@ -38,7 +42,7 @@ public class DateSelectActivity6 extends AppCompatActivity {
     FunctionCall fcall;
     private Toolbar toolbar;
     TextView toolbar_text;
-    EditText acc_id;
+    EditText acc_id, subdivision;
     Button submit;
     String printer = "";
     BluetoothAdapter deviceadapter;
@@ -47,7 +51,7 @@ public class DateSelectActivity6 extends AppCompatActivity {
     public static String printer_address = "";
     Bluetooth_Printer_3inch_prof_ThermalAPI api;
     public static boolean PRINTER_CONNECT_OR_NOT = false;
-    String selected_printer="";
+    String selected_printer = "";
 
     Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -82,12 +86,12 @@ public class DateSelectActivity6 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_select6);
 
-        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF",MODE_PRIVATE);
-        selected_printer = sharedPreferences.getString("PRINTER","");
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+        selected_printer = sharedPreferences.getString("PRINTER", "");
 
         api = new Bluetooth_Printer_3inch_prof_ThermalAPI();
         /****************Printer name is hardcoaded*************/
-       // printer = "GPT";
+        // printer = "GPT";
         //printer = "ALG";
         printer = selected_printer;
 
@@ -106,6 +110,7 @@ public class DateSelectActivity6 extends AppCompatActivity {
 
         fcall = new FunctionCall();
         acc_id = findViewById(R.id.edit_acc_id);
+        subdivision = findViewById(R.id.edit_subdivision);
         submit = findViewById(R.id.btn_submit);
 
 
@@ -131,9 +136,12 @@ public class DateSelectActivity6 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!acc_id.getText().toString().equals("")) {
-                    SavePreferences("RECON_MEMO_ACC_ID", acc_id.getText().toString());
-                    Intent intent = new Intent(DateSelectActivity6.this, Reconnection_memo_details.class);
-                    startActivity(intent);
+                    if (!subdivision.getText().toString().equals("")) {
+                        SavePreferences("RECON_MEMO_ACC_ID", acc_id.getText().toString());
+                        SavePreferences("RECON_MEMO_SUBDIVISION", subdivision.getText().toString());
+                        Intent intent = new Intent(DateSelectActivity6.this, Reconnection_memo_details.class);
+                        startActivity(intent);
+                    } else subdivision.setError("Please Enter Subdivision!!");
                 } else acc_id.setError("Please Enter Account Id!!");
 
             }
@@ -168,6 +176,7 @@ public class DateSelectActivity6 extends AppCompatActivity {
         registerReceiver(Receiver, new IntentFilter(BLUETOOTH_RESULT));
         super.onResume();
     }
+
     private void startBroadcast() {
         deviceadapter = BluetoothAdapter.getDefaultAdapter();
         new Handler().postDelayed(new Runnable() {
@@ -239,6 +248,7 @@ public class DateSelectActivity6 extends AppCompatActivity {
             }
         }
     };
+
     //***********************************************************************************************************************
     public boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);

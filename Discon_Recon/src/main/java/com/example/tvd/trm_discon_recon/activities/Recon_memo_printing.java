@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -57,6 +58,8 @@ public class Recon_memo_printing extends AppCompatActivity {
             memo_bill_amt = "", memo_section = "", memo_dr_fee = "", memo_rcptdate = "", memo_rcptno = "", memo_mrcode = "", memo_readdate = "", memo_mblno = "";
     SendingData sendingData;
     String selected_printer = "";
+    String rep_address_1="",rep_address_2="",address="",regex="",splchar="";
+    ArrayList<String>addresslist;
     private final Handler mhandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -79,6 +82,7 @@ public class Recon_memo_printing extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         selected_printer = sharedPreferences.getString("PRINTER", "");
+        addresslist = new ArrayList<>();
 
         functionCall = new FunctionCall();
         sendingData = new SendingData();
@@ -142,6 +146,17 @@ public class Recon_memo_printing extends AppCompatActivity {
                 memo_rcptdate = rcpt_date.getText().toString();
                 memo_rcptno = rcpt_no.getText().toString();
                 memo_mblno = mobile_no.getText().toString();
+
+
+                address = memo_address;
+
+                fcall.splitString(address, 40, addresslist);
+                if (addresslist.size() > 0) {
+                    rep_address_1 = "  "+addresslist.get(0);
+                    if (addresslist.size() > 1) {
+                        rep_address_2 = "  "+addresslist.get(1);
+                    }
+                }
 
                 if (!memo_bill_amt.equals("")) {
                     if (!memo_rcptdate.equals("")) {
@@ -223,7 +238,7 @@ public class Recon_memo_printing extends AppCompatActivity {
                     if (bIsOpened) {
                         yaxis = 0;
                         SendingData.Print_Update print_update = sendingData.new Print_Update(mhandler);
-                        print_update.execute(memo_acc_id);
+                        print_update.execute(memo_acc_id,memo_bill_amt,memo_rcptno);
                     }
                 }
             });
@@ -239,25 +254,26 @@ public class Recon_memo_printing extends AppCompatActivity {
             printdoubleText("RECONNECTION MEMO");
             printText("");
             pos.POS_S_Align(0);
+            printText(functionCall.space("  Reconnection Date", pre_normal_text_length) + ":" + " " + functionCall.Parse_Date4(memo_recon_date));
             printText(functionCall.space("  Sub Division", pre_normal_text_length) + ":" + " " + memo_subdiv);
+            printText(functionCall.space("  Section", pre_normal_text_length) + ":" + " " + memo_section);
             printdoubleText(functionCall.space("  Account ID", pre_normal_text_length) + ":" + " " + memo_acc_id);
             printText(functionCall.space("  RR NO", pre_normal_text_length) + ":" + " " + memo_rrno);
             pos.POS_S_Align(1);
             printText("Name and Address");
             pos.POS_S_Align(0);
             printText("  " + memo_name);
-            printText("  " + memo_address);
-            printdoubleText(functionCall.space("  Tariff", pre_normal_text_length) + ":" + " " + memo_tariff);
+            printText( rep_address_1);
+            printText( rep_address_2);
+            printText(functionCall.space("  Mobile No", pre_normal_text_length) + ":" + " " + memo_mblno);
+            printText(functionCall.space("  Tariff", pre_normal_text_length) + ":" + " " + memo_tariff);
             printText(functionCall.space("  Reading Date", pre_normal_text_length) + ":" + " " + functionCall.Parse_Date4(memo_readdate));
             printText(functionCall.space("  MR Code", pre_normal_text_length) + ":" + " " + memo_mrcode);
-
-            printText(functionCall.space("  Reconnection Date", pre_normal_text_length) + ":" + " " + functionCall.Parse_Date4(memo_recon_date));
-            printText(functionCall.space("  Section", pre_normal_text_length) + ":" + " " + memo_section);
-            printdoubleText(functionCall.space("  D & R Fee", pre_normal_text_length) + ":" + " " + memo_dr_fee + ".00");
+            printText(functionCall.space("  Paid Amount", pre_normal_text_length) + ":" + " " + memo_bill_amt);
             printText(functionCall.space("  Receipt No", pre_normal_text_length) + ":" + " " + memo_rcptno);
-            printText(functionCall.space("  Receipt Date", pre_normal_text_length) + ":" + " " + memo_rcptdate);
-            printText(functionCall.space("  Mobile No", pre_normal_text_length) + ":" + " " + memo_mblno);
-            printdoubleText(functionCall.space("  Paid Amount", pre_normal_text_length) + ":" + " " + memo_bill_amt);
+            printText(functionCall.space("  Receipt Date", pre_normal_text_length) + ":" + " " + functionCall.Parse_Date7(memo_rcptdate));
+            printdoubleText(functionCall.space("  D & R Fee", pre_normal_text_length) + ":" + " " + memo_dr_fee + ".00");
+
             pos.POS_FeedLine();
             pos.POS_FeedLine();
             printText(functionCall.space("                                 sign",pre_normal_text_length));
@@ -287,22 +303,24 @@ public class Recon_memo_printing extends AppCompatActivity {
         analogics_header__double_print(functionCall.aligncenter("HUBLI ELECTRICITY SUPPLY COMPANY LTD", 38), 4);
         analogics_header__double_print(functionCall.aligncenter("RECONNECTION MEMO", 38), 4);
         analogicsprint(functionCall.space("", 12), 4);
+        analogicsprint(functionCall.space(" Reconnection Date", 12) + ":" + " " + functionCall.Parse_Date4(memo_recon_date), 4);
         analogicsprint(functionCall.space(" Sub Division", 12) + ":" + " " + memo_subdiv, 4);
+        analogicsprint(functionCall.space(" Section", 12) + ":" + " " + memo_section, 4);
         analogics_double_print(functionCall.space(" Account ID", 12) + ":" + " " + memo_acc_id, 4);
         analogicsprint(functionCall.space(" RRNO", 12) + ":" + " " + memo_rrno, 4);
         analogics_48_print(functionCall.aligncenter("Name and Address", 48), 6);
-        analogics_48_print(memo_name, 3);
-        analogics_48_print(memo_address, 3);
-        analogics_double_print(functionCall.space(" Tariff", 12) + ":" + " " + memo_tariff, 4);
+        analogics_48_print("  "+memo_name, 3);
+        analogics_48_print(rep_address_1, 3);
+        analogics_48_print(rep_address_2, 3);
+        analogicsprint(functionCall.space(" Mobile No", 12) + ":" + " " + memo_mblno, 4);
+        analogicsprint(functionCall.space(" Tariff", 12) + ":" + " " + memo_tariff, 4);
         analogicsprint(functionCall.space(" Reading Date", 12) + ":" + " " + functionCall.Parse_Date4(memo_readdate), 4);
         analogicsprint(functionCall.space(" MR Code", 12) + ":" + " " + memo_mrcode, 4);
-        analogicsprint(functionCall.space(" Reconnection Date", 12) + ":" + " " + functionCall.Parse_Date4(memo_recon_date), 4);
-        analogicsprint(functionCall.space(" Section", 12) + ":" + " " + memo_section, 4);
-        analogics_double_print(functionCall.space(" D&R Fee", 12) + ":" + " " + memo_dr_fee + ".00", 4);
+        analogicsprint(functionCall.space(" Paid Amount", 12) + ":" + " " + memo_bill_amt, 4);
         analogicsprint(functionCall.space(" Receipt No", 12) + ":" + " " + memo_rcptno, 4);
-        analogicsprint(functionCall.space(" Receipt Date", 12) + ":" + " " + memo_rcptdate, 4);
-        analogicsprint(functionCall.space(" Mobile No", 12) + ":" + " " + memo_mblno, 4);
-        analogics_double_print(functionCall.space(" Paid Amount", 12) + ":" + " " + memo_bill_amt, 4);
+        analogicsprint(functionCall.space(" Receipt Date", 12) + ":" + " " + functionCall.Parse_Date7(memo_rcptdate), 4);
+        analogics_double_print(functionCall.space(" D&R Fee", 12) + ":" + " " + memo_dr_fee + ".00", 4);
+
         analogicsprint(functionCall.space("", 12), 4);
         stringBuilder.setLength(0);
         stringBuilder.append("\n");

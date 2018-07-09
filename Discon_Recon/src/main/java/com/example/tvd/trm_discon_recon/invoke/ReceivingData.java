@@ -101,6 +101,8 @@ public class ReceivingData {
                     getSetValues.setMr_device_id(jsonObject.getString("DEVICE_ID"));
                     getSetValues.setMr_subdiv_name(jsonObject.getString("SUBDIVNAME"));
                     getSetValues.setUser_role(jsonObject.getString("USER_ROLE"));
+                    getSetValues.setMrpassword(jsonObject.getString("PASSWORD"));
+                    getSetValues.setApp_version(jsonObject.getString("DISRECONN_VER"));
                     handler.sendEmptyMessage(LOGIN_SUCCESS);
                 } else handler.sendEmptyMessage(LOGIN_FAILURE);
             }

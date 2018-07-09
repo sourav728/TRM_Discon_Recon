@@ -2,10 +2,15 @@ package com.example.tvd.trm_discon_recon;
 
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -31,13 +36,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tvd.trm_discon_recon.fragments.HomeFragment;
+import com.example.tvd.trm_discon_recon.ftp.FTPAPI;
+import com.example.tvd.trm_discon_recon.invoke.ApkNotification;
 import com.example.tvd.trm_discon_recon.invoke.SendingData;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
+import java.io.File;
 import java.util.Date;
 
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.APK_FILE_DOWNLOADED;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.APK_FILE_NOT_FOUND;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.CONNECTION_TIME_OUT;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.DLG_APK_UPDATE_FAILURE;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.DLG_APK_UPDATE_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.LOGIN_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.LOGIN_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_FAILURE;
@@ -59,6 +71,9 @@ public class LoginActivity extends AppCompatActivity {
     private int day, month, year;
     EditText selected_date;
     int length;
+    FTPAPI ftpapi;
+    String cur_version="";
+    Context context;
     private final Handler mhandler;
 
     {
@@ -70,27 +85,40 @@ public class LoginActivity extends AppCompatActivity {
                         SavePreferences("MRCODE", getsetvalues.getMrcode());
                         SavePreferences("MRNAME", getsetvalues.getMrname());
                         SavePreferences("SUBDIVCODE", getsetvalues.getSubdivcode());
-                        SavePreferences("USER_ROLE",getsetvalues.getUser_role());
+                        SavePreferences("USER_ROLE", getsetvalues.getUser_role());
                         SavePreferences("DEVICE_ID", getsetvalues.getMr_device_id());
                         SavePreferences("SUBDIVNAME", getsetvalues.getMr_subdiv_name());
+                        SavePreferences("PASSWORD", getsetvalues.getMrpassword());
+                        SavePreferences("APP_VERSION", getsetvalues.getApp_version());
+                        start_version_check();
+                       /* //call for new app version update
+                        SendingData.Login login = sendingdata.new Login();
+                        login.execute(getsetvalues.getMrcode(), getsetvalues.getMr_device_id(), getsetvalues.getMrpassword());
+                        //end of call for new notification for apk*/
+
                         progressdialog.dismiss();
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                        //Below code is for custom toast message
-                        inflater = getLayoutInflater();
-                        layout = inflater.inflate(R.layout.toast1,
-                                (ViewGroup) findViewById(R.id.toast_layout));
-                        ImageView imageView = (ImageView) layout.findViewById(R.id.image);
-                        imageView.setImageResource(R.drawable.tick);
-                        TextView textView = (TextView) layout.findViewById(R.id.text);
-                        textView.setText("Success");
-                        textView.setTextSize(20);
-                        Toast toast = new Toast(getApplicationContext());
-                        toast.setGravity(Gravity.BOTTOM, 0, 0);
-                        toast.setDuration(Toast.LENGTH_SHORT);
-                        toast.setView(layout);
-                        toast.show();
+                        if (fcall.compare(cur_version, getsetvalues.getApp_version()))
+                        showdialog(DLG_APK_UPDATE_SUCCESS);
+                        else {
+                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                            //Below code is for custom toast message
+                            inflater = getLayoutInflater();
+                            layout = inflater.inflate(R.layout.toast1,
+                                    (ViewGroup) findViewById(R.id.toast_layout));
+                            ImageView imageView = (ImageView) layout.findViewById(R.id.image);
+                            imageView.setImageResource(R.drawable.tick);
+                            TextView textView = (TextView) layout.findViewById(R.id.text);
+                            textView.setText("Success");
+                            textView.setTextSize(20);
+                            Toast toast = new Toast(getApplicationContext());
+                            toast.setGravity(Gravity.BOTTOM, 0, 0);
+                            toast.setDuration(Toast.LENGTH_SHORT);
+                            toast.setView(layout);
+                            toast.show();
+                        }
+
                         //end of custom toast coding
                         break;
                     case LOGIN_FAILURE:
@@ -115,7 +143,18 @@ public class LoginActivity extends AppCompatActivity {
                         mrcode.requestFocus();
                         break;
 
-
+                    case APK_FILE_DOWNLOADED:
+                        progressdialog.dismiss();
+                        fcall.updateApp(LoginActivity.this, new File(fcall.filepath("ApkFolder") +
+                                File.separator + "Discon_Recon_" + getsetvalues.getApp_version() + ".apk"));
+                        break;
+                    case APK_FILE_NOT_FOUND:
+                        progressdialog.dismiss();
+                        Toast.makeText(LoginActivity.this, "Apk FIle not FOund!!", Toast.LENGTH_SHORT).show();
+                        break;
+                    case DLG_APK_UPDATE_FAILURE:
+                        Toast.makeText(LoginActivity.this, "Apk Update Failure", Toast.LENGTH_SHORT).show();
+                        break;
                 }
                 super.handleMessage(msg);
             }
@@ -126,6 +165,11 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        context = this;
+
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF",MODE_PRIVATE);
+        cur_version = sharedPreferences.getString("CURRENT_VERSION","");
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow(); // in Activity's onCreate() for instance
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -186,6 +230,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void initialize() {
+        ftpapi = new FTPAPI();
         getsetvalues = new GetSetValues();
         sendingdata = new SendingData();
         login = (Button) findViewById(R.id.login_btn);
@@ -201,4 +246,47 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString(key, value);
         editor.commit();
     }
+
+    private void start_version_check() {
+        fcall.logStatus("Version_receiver Checking..");
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getApplicationContext(), ApkNotification.class);
+        boolean alarmRunning = (PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_NO_CREATE) != null);
+        if (!alarmRunning) {
+            fcall.logStatus("Version_receiver Started..");
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), (10000), pendingIntent);
+        } else fcall.logStatus("Version_receiver Already running..");
+    }
+
+    public void showdialog(int id)
+    {
+        Dialog dialog = null;
+        switch (id)
+        {
+            case DLG_APK_UPDATE_SUCCESS:
+                AlertDialog.Builder appupdate = new AlertDialog.Builder(context);
+                appupdate.setTitle("App Update");
+                appupdate.setCancelable(false);
+                appupdate.setMessage("New Version Available to Download");
+                appupdate.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        fcall.showprogressdialog("Apk Downloading Please Wait...", progressdialog);
+                        FTPAPI.Download_apk downloadApk = ftpapi.new Download_apk(mhandler, getsetvalues.getApp_version());
+                        downloadApk.execute();
+                    }
+                });
+               /* appupdate.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });*/
+                dialog = appupdate.create();
+                dialog.show();
+                break;
+        }
+    }
+
 }

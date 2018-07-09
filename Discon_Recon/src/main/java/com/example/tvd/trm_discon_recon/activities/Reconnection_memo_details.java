@@ -27,7 +27,7 @@ import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_MEMO_
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_MEMO_SUCCESS;
 
 public class Reconnection_memo_details extends AppCompatActivity {
-    String acc_id ="";
+    String acc_id = "", subdivision = "";
     ProgressDialog progressDialog;
     GetSetValues getsetvalues;
     RecyclerView recyclerview;
@@ -36,8 +36,6 @@ public class Reconnection_memo_details extends AppCompatActivity {
     FunctionCall functionCall;
     private Toolbar toolbar;
     TextView toolbar_text, date;
-    String fdr_details_date = "", subdivision = "";
-    AlertDialog feeder_details_update_dialog;
     Recon_Memo_Adapter recon_memo_adapter;
     private final Handler mhandler = new Handler(new Handler.Callback() {
         @Override
@@ -50,6 +48,7 @@ public class Reconnection_memo_details extends AppCompatActivity {
                 case RECON_MEMO_FAILURE:
                     progressDialog.dismiss();
                     Toast.makeText(Reconnection_memo_details.this, "Account ID does not exists..", Toast.LENGTH_SHORT).show();
+                    finish();
                     break;
             }
             return false;
@@ -60,8 +59,9 @@ public class Reconnection_memo_details extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reconnection_memo_details);
-        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF",MODE_PRIVATE);
-        acc_id = sharedPreferences.getString("RECON_MEMO_ACC_ID","");
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+        acc_id = sharedPreferences.getString("RECON_MEMO_ACC_ID", "");
+        subdivision = sharedPreferences.getString("RECON_MEMO_SUBDIVISION", "");
 
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar_text = toolbar.findViewById(R.id.toolbar_title);
@@ -90,7 +90,7 @@ public class Reconnection_memo_details extends AppCompatActivity {
         progressDialog.setTitle("Connecting To Server");
         progressDialog.setMessage("Please Wait..");
         progressDialog.show();
-        SendingData.Recon_Memo_details recon_memo_details = sendingData.new Recon_Memo_details(mhandler,getsetvalues,arraylist,recon_memo_adapter);
-        recon_memo_details.execute(acc_id);
+        SendingData.Recon_Memo_details recon_memo_details = sendingData.new Recon_Memo_details(mhandler, getsetvalues, arraylist, recon_memo_adapter);
+        recon_memo_details.execute(acc_id, subdivision);
     }
 }

@@ -2,23 +2,38 @@ package com.example.tvd.trm_discon_recon.values;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
 import android.support.design.widget.TextInputEditText;
+import android.support.v4.content.FileProvider;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.tvd.trm_discon_recon.other.CheckInternetConnection;
+
 import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FunctionCall {
     public void logStatus(String message) {
         Log.d("debug", message);
+    }
+
+    public boolean checkInternetConnection(Context context) {
+        CheckInternetConnection cd = new CheckInternetConnection(context.getApplicationContext());
+        return cd.isConnectingToInternet();
     }
     /***********CHECKING INTERNET IS ON OR NOT****************/
     public final boolean isInternetOn(Activity activity) {
@@ -172,6 +187,22 @@ public class FunctionCall {
         return str;
     }
 
+    public String Parse_Date7(String time) {
+        String input = "yyyy/MM/dd";
+        String output = "dd-MM-yyyy";
+        SimpleDateFormat inputFormat = new SimpleDateFormat(input, Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat(output, Locale.getDefault());
+
+        Date date;
+        String str = null;
+        try {
+            date = inputFormat.parse(time);
+            str = outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
     public void showtoast(Context context, String Message) {
         Toast.makeText(context, Message, Toast.LENGTH_SHORT).show();
     }
@@ -230,5 +261,56 @@ public class FunctionCall {
         }
         msg = String.format("%" + len + "s", msg);
         return msg;
+    }
+    public boolean compare(String v1, String v2) {
+        String s1 = normalisedVersion(v1);
+        String s2 = normalisedVersion(v2);
+        int cmp = s1.compareTo(s2);
+        String cmpStr = cmp < 0 ? "<" : cmp > 0 ? ">" : "==";
+        return cmpStr.equals("<");
+    }
+    public String normalisedVersion(String version) {
+        return normalisedVersion(version, ".", 4);
+    }
+
+    private String normalisedVersion(String version, String sep, int maxWidth) {
+        String[] split = Pattern.compile(sep, Pattern.LITERAL).split(version);
+        StringBuilder sb = new StringBuilder();
+        for (String s : split) {
+            sb.append(String.format("%" + maxWidth + 's', s));
+        }
+        return sb.toString();
+    }
+    public String currentRecpttime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a", Locale.US);
+        return sdf.format(new Date());
+    }
+
+    public void showprogressdialog(String Message, ProgressDialog dialog) {
+        dialog.setTitle("Downloading");
+        dialog.setMessage(Message);
+        dialog.setCancelable(false);
+        dialog.setIndeterminate(true);
+        dialog.show();
+    }
+
+    public void updateApp(Context context, File Apkfile) {
+        Uri path;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            path = FileProvider.getUriForFile(context, context.getApplicationContext().getPackageName() + ".provider", Apkfile);
+        } else path = Uri.fromFile(Apkfile);
+        Intent objIntent = new Intent(Intent.ACTION_VIEW);
+        objIntent.setDataAndType(path, "application/vnd.android.package-archive");
+        objIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        objIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        context.startActivity(objIntent);
+    }
+    public void splitString(String msg, int lineSize, ArrayList<String> arrayList) {
+        arrayList.clear();
+        Pattern p = Pattern.compile("\\b.{0," + (lineSize - 1) + "}\\b\\W?");
+        Matcher m = p.matcher(msg);
+        while (m.find()) {
+            arrayList.add(m.group().trim());
+        }
     }
 }

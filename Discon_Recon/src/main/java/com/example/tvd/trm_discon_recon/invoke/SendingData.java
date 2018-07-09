@@ -409,7 +409,7 @@ public class SendingData {
             super.onPostExecute(result);
         }
     }
-
+   //Recon memo details
    public class Recon_Memo_details extends AsyncTask<String,String,String>
    {
         String response ="";
@@ -428,6 +428,7 @@ public class SendingData {
        protected String doInBackground(String... params) {
             HashMap<String,String>datamap = new HashMap<>();
             datamap.put("AccountId",params[0]);
+            datamap.put("SUBDIVCODE",params[1]);
             try
             {
                 response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/ReConMemo",datamap);
@@ -445,7 +446,7 @@ public class SendingData {
            super.onPostExecute(result);
        }
    }
-
+    //recon memo update
    public class Print_Update extends AsyncTask<String,String,String>
    {
         String response ="";
@@ -458,6 +459,8 @@ public class SendingData {
        protected String doInBackground(String... params) {
            HashMap<String,String>datamap = new HashMap<>();
            datamap.put("ACCT_ID",params[0]);
+           datamap.put("paid_amount",params[1]);
+           datamap.put("rcpt_num",params[2]);
            try{
                response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/ReconMemo_Update",datamap);
            }

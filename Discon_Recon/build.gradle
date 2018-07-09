@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 def versionMajor = 1
-def versionMinor = 0
-def versionPatch = 8
+def versionMinor = 1
+def versionPatch = 0
 def code = 0
 
 android {
@@ -51,9 +51,9 @@ dependencies {
     implementation files('libs/AnalogicsDecrypter.jar')
     implementation files('libs/AnalogicsMultilingual_BT_Printer_3T_API_1_1.jar')
     implementation files('libs/common-lang3.jar')
-    implementation files('libs/commons-net-1.4.1.jar')
     implementation files('libs/ngx_btp120_320_sdk_1.0.4.jar')
     implementation files('libs/opencv_library-2.4.3.jar')
     implementation files('libs/org-apache-commons-codec.jar')
     implementation files('libs/printerlibs.jar')
+    implementation files('libs/commons-net-20030211.160026.jar')
 }
