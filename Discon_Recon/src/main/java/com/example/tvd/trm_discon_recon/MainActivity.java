@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity
     private BluetoothAdapter mBluetoothAdapter;
     private static final int REQUEST_ENABLE_BT = 1;
     ProgressDialog progress;
-
+    String user_role="";
 
 
     @Override
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF",MODE_PRIVATE);
         Mrname = sharedPreferences.getString("MRNAME","");
         Mrcode = sharedPreferences.getString("MRCODE","");
-        String user_role = sharedPreferences.getString("USER_ROLE","");
+        user_role = sharedPreferences.getString("USER_ROLE","");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -110,7 +110,6 @@ public class MainActivity extends AppCompatActivity
         Menu menu = navigationView.getMenu();
         MenuItem disconnect = menu.findItem(R.id.nav_disconnect);
         MenuItem reconnect = menu.findItem(R.id.nav_reconnect);
-
         if (user_role.equals("MR"))
         {
             disconnect.setVisible(true);
@@ -145,12 +144,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        MenuItem item = menu.findItem(R.id.action_settings);
+        if (user_role.equals("MR"))
+        item.setVisible(false);
+        else item.setVisible(true);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
+
         if (id == R.id.action_settings) {
             Intent intent = new Intent(MainActivity.this, SettingActivity.class);
             startActivity(intent);

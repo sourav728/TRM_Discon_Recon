@@ -81,7 +81,7 @@ public class Recon_List_Activity extends AppCompatActivity {
                 case RECON_LIST_FAILURE:
                     progressDialog.dismiss();
                     Toast.makeText(Recon_List_Activity.this, "Reconnection Data is not available for you!!", Toast.LENGTH_SHORT).show();
-
+                    finish();
                     break;
                 case RECON_SUCCESS:
                     progressDialog.dismiss();

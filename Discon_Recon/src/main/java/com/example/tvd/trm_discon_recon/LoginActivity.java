@@ -192,7 +192,7 @@ public class LoginActivity extends AppCompatActivity {
                     //String DeviceID ="354016070557564";
                     //Device id for AAO
                     //User ID 10540038
-                    String DeviceID = "866133033048564";
+                   // String DeviceID = "866133033048564";
                    /*Code: 54003892
                    Date: 2018/06/13
                    Password: 123123*/
@@ -207,8 +207,8 @@ public class LoginActivity extends AppCompatActivity {
                         // for ActivityCompat#requestPermissions for more details.
                         return;
                     }
-                    /*String DeviceID = telephonyManager.getDeviceId();
-                    Log.d("Debug", "Device ID" + DeviceID);*/
+                    String DeviceID = telephonyManager.getDeviceId();
+                    Log.d("Debug", "Device ID" + DeviceID);
                     getpassword = password.getText().toString();
                     if (mrcode.getText().length() <= 0) {
                         mrcode.setError("Please Enter MR code!!");
