@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
@@ -82,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
             public void handleMessage(Message msg) {
                 switch (msg.what) {
                     case LOGIN_SUCCESS:
+                        progressdialog.dismiss();
                         SavePreferences("MRCODE", getsetvalues.getMrcode());
                         SavePreferences("MRNAME", getsetvalues.getMrname());
                         SavePreferences("SUBDIVCODE", getsetvalues.getSubdivcode());
@@ -96,7 +98,6 @@ public class LoginActivity extends AppCompatActivity {
                         login.execute(getsetvalues.getMrcode(), getsetvalues.getMr_device_id(), getsetvalues.getMrpassword());
                         //end of call for new notification for apk*/
 
-                        progressdialog.dismiss();
                         if (fcall.compare(cur_version, getsetvalues.getApp_version()))
                         showdialog(DLG_APK_UPDATE_SUCCESS);
                         else {
@@ -167,8 +168,19 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         context = this;
 
+        PackageInfo packageInfo;
+        try {
+            packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            cur_version = packageInfo.versionName;
+            Log.d("Debug","Got_Current_Version"+cur_version);
+            // SavePreferences("CURRENT_VERSION", current_version);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF",MODE_PRIVATE);
-        cur_version = sharedPreferences.getString("CURRENT_VERSION","");
+        /*cur_version = sharedPreferences.getString("CURRENT_VERSION","");
+        Log.d("Debug","current_version"+cur_version);*/
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow(); // in Activity's onCreate() for instance
@@ -196,6 +208,7 @@ public class LoginActivity extends AppCompatActivity {
                    /*Code: 54003892
                    Date: 2018/06/13
                    Password: 123123*/
+                   //String DeviceID = "352514083875934";
                     TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                     if (ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
