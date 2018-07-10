@@ -17,6 +17,39 @@ public class GetSetValues {
     private String recon_memo_so="";
     private String recon_memo_prev_read="";
 
+    public String getTc_code() {
+        return tc_code;
+    }
+
+    public void setTc_code(String tc_code) {
+        this.tc_code = tc_code;
+    }
+
+    public String getTcir() {
+        return tcir;
+    }
+
+    public void setTcir(String tcir) {
+        this.tcir = tcir;
+    }
+
+    public String getTcfr() {
+        return tcfr;
+    }
+
+    public void setTcfr(String tcfr) {
+        this.tcfr = tcfr;
+    }
+
+    public String getTcmf() {
+        return tcmf;
+    }
+
+    public void setTcmf(String tcmf) {
+        this.tcmf = tcmf;
+    }
+
+    private String tc_code="",tcir="",tcfr="",tcmf="";
     public String getApp_version() {
         return app_version;
     }

@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="FDRCODE"
+                android:text="TCCODE"
                 android:textColor="@color/black2"
                 android:textSize="17sp" />
 
@@ -39,7 +39,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/txt_fdr_code"
+                android:id="@+id/txt_tccode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

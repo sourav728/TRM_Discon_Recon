@@ -122,17 +122,22 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-       <!-- <receiver android:name=".invoke.WakeUpReceiver">
+        <!--
+        <receiver android:name=".invoke.WakeUpReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </receiver>-->
-       <!-- <service
+        </receiver>
+        -->
+        <!--
+            <service
             android:name=".service.Apk_Update_Service"
             android:enabled="true"
-            android:exported="true"></service>-->
+            android:exported="true"></service>
+        -->
+        <activity android:name=".activities.TcDetails2"></activity>
     </application>
 
 </manifest>

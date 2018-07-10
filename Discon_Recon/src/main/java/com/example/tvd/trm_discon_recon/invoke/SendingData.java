@@ -8,6 +8,8 @@ import android.util.Log;
 import com.example.tvd.trm_discon_recon.adapter.Feeder_details_Adapter;
 import com.example.tvd.trm_discon_recon.adapter.Recon_Memo_Adapter;
 import com.example.tvd.trm_discon_recon.adapter.RoleAdapter;
+import com.example.tvd.trm_discon_recon.adapter.RoleAdapter2;
+import com.example.tvd.trm_discon_recon.adapter.TcDetailsAdapter;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
@@ -380,8 +382,8 @@ public class SendingData {
         Handler handler;
         GetSetValues getSetValues;
         ArrayList<GetSetValues>arrayList;
-        RoleAdapter roleAdapter;
-        public FDR_Fetch(Handler handler,GetSetValues getSetValues,ArrayList<GetSetValues>arrayList,RoleAdapter roleAdapter)
+        RoleAdapter2 roleAdapter;
+        public FDR_Fetch(Handler handler,GetSetValues getSetValues,ArrayList<GetSetValues>arrayList,RoleAdapter2 roleAdapter)
         {
             this.handler = handler;
             this.getSetValues = getSetValues;
@@ -477,4 +479,75 @@ public class SendingData {
            super.onPostExecute(result);
        }
    }
+
+   public class Send_Tc_details extends AsyncTask<String,String,String>
+   {
+        String response="";
+        Handler handler;
+        GetSetValues getSetValues;
+        ArrayList<GetSetValues>arrayList;
+        TcDetailsAdapter tcDetailsAdapter;
+        public Send_Tc_details(Handler handler,GetSetValues getSetValues,ArrayList<GetSetValues>arrayList,TcDetailsAdapter tcDetailsAdapter)
+        {
+            this.handler = handler;
+            this.getSetValues = getSetValues;
+            this.arrayList = arrayList;
+            this.tcDetailsAdapter = tcDetailsAdapter;
+        }
+       @Override
+       protected String doInBackground(String... params) {
+            HashMap<String,String>datamap = new HashMap<>();
+            datamap.put("SUB_DIVCODE",params[0]);
+            datamap.put("DATE",params[1]);
+            datamap.put("FDCRCODE",params[2]);
+            try {
+                response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/TC_DETAILS",datamap);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+           return response;
+       }
+
+       @Override
+       protected void onPostExecute(String result) {
+            receivingData.get_tc_details_status(result,handler,getSetValues,arrayList, tcDetailsAdapter);
+           super.onPostExecute(result);
+       }
+   }
+
+   //Tc Details update
+   //FDR_FR_UPDATE
+   public class TC_Update extends AsyncTask<String,String,String>{
+       String response="";
+       Handler handler;
+       GetSetValues getSetValues;
+       public TC_Update(Handler handler, GetSetValues getSetValues)
+       {
+           this.handler = handler;
+           this.getSetValues = getSetValues;
+       }
+       @Override
+       protected String doInBackground(String... params) {
+           HashMap<String,String>datamap = new HashMap<>();
+           datamap.put("TCCODE",params[0]);
+           datamap.put("DATE",params[1]);
+           datamap.put("TCFR",params[2]);
+           try {
+               response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/TCFR_Update",datamap);
+           }catch (Exception e)
+           {
+               e.printStackTrace();
+           }
+           return response;
+       }
+
+       @Override
+       protected void onPostExecute(String result) {
+           receivingData.get_tc_update_status(result,handler,getSetValues);
+           super.onPostExecute(result);
+       }
+   }
+
 }

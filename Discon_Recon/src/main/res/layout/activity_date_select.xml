@@ -34,12 +34,14 @@
                 android:id="@+id/txt_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="2dp"
                 android:background="@drawable/border_style"
                 android:layout_weight="1"/>
             <ImageView
                 android:id="@+id/img_fromdate"
                 android:layout_width="50dp"
                 android:layout_height="30dp"
+                android:layout_marginLeft="2dp"
                 android:src="@drawable/calender"/>
         </LinearLayout>
         <Button

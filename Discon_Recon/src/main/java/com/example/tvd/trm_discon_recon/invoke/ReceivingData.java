@@ -5,6 +5,8 @@ import android.os.Handler;
 import com.example.tvd.trm_discon_recon.adapter.Feeder_details_Adapter;
 import com.example.tvd.trm_discon_recon.adapter.Recon_Memo_Adapter;
 import com.example.tvd.trm_discon_recon.adapter.RoleAdapter;
+import com.example.tvd.trm_discon_recon.adapter.RoleAdapter2;
+import com.example.tvd.trm_discon_recon.adapter.TcDetailsAdapter;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
@@ -42,6 +44,10 @@ import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_MEMO_
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_SUCCESS;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_DETAILS_FAILURE;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_DETAILS_SUCCESS;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_UPDATE_FAILURE;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_UPDATE_SUCCESS;
 
 
 public class ReceivingData {
@@ -333,7 +339,7 @@ public class ReceivingData {
         }
     }
     //Get FDR Status
-    public void get_fdr_fetch(String result, Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues>arrayList, RoleAdapter roleAdapter)
+    public void get_fdr_fetch(String result, Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues>arrayList, RoleAdapter2 roleAdapter)
     {
         result = parseServerXML(result);
         functionCall.logStatus("Feeder Details:"+ result);
@@ -430,7 +436,7 @@ public class ReceivingData {
             handler.sendEmptyMessage(RECON_MEMO_FAILURE);
         }
     }
-
+    //print update status
     public void get_print_update_status(String result, Handler handler) {
         result = parseServerXML(result);
         functionCall.logStatus("PRINT Update Status: " + result);
@@ -444,4 +450,60 @@ public class ReceivingData {
             handler.sendEmptyMessage(PRINT_FAILURE);
         }
     }
+
+    public void get_tc_details_status(String result, Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues> arrayList, TcDetailsAdapter tcDetailsAdapter) {
+        result = parseServerXML(result);
+        functionCall.logStatus("TC Details:" + result);
+        JSONArray jsonArray;
+        try {
+            jsonArray = new JSONArray(result);
+            if (jsonArray.length() > 0) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    getSetValues = new GetSetValues();
+                    String TCCODE = jsonObject.getString("TCCODE");
+                    String TCIR = jsonObject.getString("TCIR");
+                    String TCFR = jsonObject.getString("TCFR");
+                    String TCMF = jsonObject.getString("TCMF");
+
+                    if (!TCCODE.equals(""))
+                        getSetValues.setTc_code(TCCODE);
+                    else getSetValues.setTc_code("NA");
+                    if (!TCIR.equals(""))
+                        getSetValues.setTcir(TCIR);
+                    else getSetValues.setTcir("NA");
+                    if (!TCFR.equals(""))
+                        getSetValues.setTcfr(TCFR);
+                    else getSetValues.setTcfr("NA");
+                    if (!TCMF.equals(""))
+                        getSetValues.setTcmf(TCMF);
+                    else getSetValues.setTcmf("NA");
+                    arrayList.add(getSetValues);
+                    tcDetailsAdapter.notifyDataSetChanged();
+                }
+                handler.sendEmptyMessage(TC_DETAILS_SUCCESS);
+            } else handler.sendEmptyMessage(TC_DETAILS_FAILURE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            functionCall.logStatus("JSON Exception Failure!!");
+            handler.sendEmptyMessage(TC_DETAILS_FAILURE);
+        }
+    }
+
+
+    //getting_tc_update_status
+    public void get_tc_update_status(String result, Handler handler, GetSetValues getSetValues) {
+        result = parseServerXML(result);
+        functionCall.logStatus("TC Update Status: " + result);
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            if (StringUtils.startsWithIgnoreCase(jsonObject.getString("message"), "Success"))
+                handler.sendEmptyMessage(TC_UPDATE_SUCCESS);
+            else handler.sendEmptyMessage(TC_UPDATE_FAILURE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            handler.sendEmptyMessage(TC_UPDATE_FAILURE);
+        }
+    }
+
 }

@@ -18,30 +18,28 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tvd.trm_discon_recon.R;
-import com.example.tvd.trm_discon_recon.adapter.Feeder_details_Adapter;
-import com.example.tvd.trm_discon_recon.adapter.RoleAdapter;
+import com.example.tvd.trm_discon_recon.adapter.TcDetailsAdapter;
 import com.example.tvd.trm_discon_recon.invoke.SendingData;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
 import java.util.ArrayList;
 
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCONNECTION_DIALOG;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.FDR_UPDATE_FAILURE;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.FDR_UPDATE_SUCCESS;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.FEEDER_DETAILS_FAILURE;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.FEEDER_DETAILS_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.FEEDER_DETAILS_UPDATE_DIALOG;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_DETAILS_FAILURE;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_DETAILS_SUCCESS;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_DETAILS_UPDATE_DIALOG;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_UPDATE_FAILURE;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_UPDATE_SUCCESS;
 
-public class FeederDetails extends AppCompatActivity {
+
+public class TcDetails2 extends AppCompatActivity {
     ProgressDialog progressDialog;
     GetSetValues getsetvalues;
     RecyclerView recyclerview;
@@ -49,36 +47,36 @@ public class FeederDetails extends AppCompatActivity {
     SendingData sendingData;
     FunctionCall functionCall;
     private Toolbar toolbar;
-    TextView toolbar_text, date, display_subdivision;
+    TextView toolbar_text, date;
     String fdr_details_date = "", subdivision = "", parsed_date = "";
-    AlertDialog feeder_details_update_dialog;
-    private Feeder_details_Adapter feeder_details_adapter;
+    AlertDialog tc_details_update_dialog;
+    private TcDetailsAdapter tcDetailsAdapter;
+    String fdr_fetch_subdiv_code="",fdr_fetch_date="", fdr_type="";
     private final Handler mhandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
-                case FEEDER_DETAILS_SUCCESS:
+                case TC_DETAILS_SUCCESS:
                     progressDialog.dismiss();
-                    Toast.makeText(FeederDetails.this, "Success", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TcDetails2.this, "Success", Toast.LENGTH_SHORT).show();
                     break;
-                case FEEDER_DETAILS_FAILURE:
+                case TC_DETAILS_FAILURE:
                     progressDialog.dismiss();
-                    Toast.makeText(FeederDetails.this, "Failure..", Toast.LENGTH_SHORT).show();
-                    finish();
+                    Toast.makeText(TcDetails2.this, "Failure..", Toast.LENGTH_SHORT).show();
                     break;
-                case FDR_UPDATE_SUCCESS:
+                case TC_UPDATE_SUCCESS:
                     progressDialog.dismiss();
-                    Toast.makeText(FeederDetails.this, "Updated successfully..", Toast.LENGTH_SHORT).show();
-                    feeder_details_update_dialog.dismiss();
+                    Toast.makeText(TcDetails2.this, "Updated successfully..", Toast.LENGTH_SHORT).show();
+                    tc_details_update_dialog.dismiss();
                    /* finish();
                     overridePendingTransition(0,0);
                     startActivity(getIntent());
                     overridePendingTransition(0,0);*/
                     break;
-                case FDR_UPDATE_FAILURE:
+                case TC_UPDATE_FAILURE:
                     progressDialog.dismiss();
-                    Toast.makeText(FeederDetails.this, "Failure!!", Toast.LENGTH_SHORT).show();
-                    feeder_details_update_dialog.dismiss();
+                    Toast.makeText(TcDetails2.this, "Failure!!", Toast.LENGTH_SHORT).show();
+                    tc_details_update_dialog.dismiss();
                     finish();
                     break;
             }
@@ -89,21 +87,12 @@ public class FeederDetails extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feeder_details);
-
-        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
-        fdr_details_date = sharedPreferences.getString("FDR_DETAILS_DATE", "");
-        subdivision = sharedPreferences.getString("SUB_DIVCODE", "");
+        setContentView(R.layout.activity_tc_details2);
 
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar_text = toolbar.findViewById(R.id.toolbar_title);
-        toolbar_text.setText("Feeder Details");
+        toolbar_text.setText("TC Details");
         toolbar.setNavigationIcon(R.drawable.back);
-        date = findViewById(R.id.txt_date);
-        display_subdivision = findViewById(R.id.txt_subdiv);
-
-        date.setText(fdr_details_date);
-        display_subdivision.setText(subdivision);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +100,11 @@ public class FeederDetails extends AppCompatActivity {
                 finish();
             }
         });
+
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF",MODE_PRIVATE);
+        fdr_fetch_subdiv_code = sharedPreferences.getString("FDR_FETCH_SUB_DIVCODE","");
+        fdr_fetch_date = sharedPreferences.getString("FDR_FETCH_DATE","");
+        fdr_type = sharedPreferences.getString("FEEDER_TYPE","");
 
         sendingData = new SendingData();
         functionCall = new FunctionCall();
@@ -120,41 +114,42 @@ public class FeederDetails extends AppCompatActivity {
         arraylist = new ArrayList<>();
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         recyclerview.setHasFixedSize(true);
-        feeder_details_adapter = new Feeder_details_Adapter(arraylist, this, getsetvalues, FeederDetails.this);
-        recyclerview.setAdapter(feeder_details_adapter);
+
+        tcDetailsAdapter = new TcDetailsAdapter(arraylist, this, getsetvalues, TcDetails2.this);
+        recyclerview.setAdapter(tcDetailsAdapter);
 
         progressDialog = new ProgressDialog(this, R.style.MyProgressDialogstyle);
         progressDialog.setTitle("Connecting To Server");
         progressDialog.setMessage("Please Wait..");
         progressDialog.show();
 
-        parsed_date = functionCall.Parse_Date6(fdr_details_date);
+        parsed_date = functionCall.Parse_Date6(fdr_fetch_date);
         Log.d("Debug", "PARSED_DATE" + parsed_date);
-        SendingData.SendFeeder_Details sendFeeder_details = sendingData.new SendFeeder_Details(mhandler, getsetvalues, arraylist, feeder_details_adapter);
-        sendFeeder_details.execute(subdivision, parsed_date);
+        SendingData.Send_Tc_details send_tc_details = sendingData.new Send_Tc_details(mhandler, getsetvalues, arraylist, tcDetailsAdapter);
+        send_tc_details.execute(fdr_fetch_subdiv_code,functionCall.Parse_Date6(fdr_fetch_date),fdr_type);
     }
 
-    public void show_fdr_details_update_dialog(int id, final int position, ArrayList<GetSetValues> arrayList) {
+    public void show_tc_details_update_dialog(int id, final int position, ArrayList<GetSetValues> arrayList) {
         final AlertDialog alertDialog;
         final GetSetValues getSetValues = arrayList.get(position);
         switch (id) {
-            case FEEDER_DETAILS_UPDATE_DIALOG:
+            case TC_DETAILS_UPDATE_DIALOG:
                 AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-                dialog.setTitle("FDR UPDATE");
+                dialog.setTitle("TC UPDATE");
                 dialog.setCancelable(false);
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View view = inflater.inflate(R.layout.feeder_details_update_layout, null);
+                View view = inflater.inflate(R.layout.tc_details_update_layout, null);
                 dialog.setView(view);
-                final TextView fdr_code = view.findViewById(R.id.txt_fdr_code);
+                final TextView tc_code = view.findViewById(R.id.txt_tccode);
                 final EditText current_reading = view.findViewById(R.id.edit_current_reading);
                 final Button cancel_button = view.findViewById(R.id.dialog_negative_btn);
                 final Button update_button = view.findViewById(R.id.dialog_positive_btn);
 
-                feeder_details_update_dialog = dialog.create();
-                feeder_details_update_dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+                tc_details_update_dialog = dialog.create();
+                tc_details_update_dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface dialog) {
-                        fdr_code.setText(getSetValues.getFdr_code());
+                        tc_code.setText(getSetValues.getTc_code());
                         current_reading.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -175,14 +170,17 @@ public class FeederDetails extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 if (!current_reading.getText().toString().equals("")) {
-                                    progressDialog = new ProgressDialog(FeederDetails.this, R.style.MyProgressDialogstyle);
-                                    progressDialog.setTitle("Updating Feeder details..");
+                                    progressDialog = new ProgressDialog(TcDetails2.this, R.style.MyProgressDialogstyle);
+                                    progressDialog.setTitle("Updating Tc details..");
                                     progressDialog.setMessage("Please Wait..");
                                     progressDialog.show();
-                                    SendingData.FDR_Fr_Update fdr_fr_update = sendingData.new FDR_Fr_Update(mhandler, getSetValues);
-                                    fdr_fr_update.execute(getSetValues.getFdr_code(), parsed_date, current_reading.getText().toString());
+
+                                    SendingData.TC_Update tc_update = sendingData.new TC_Update(mhandler, getSetValues);
+                                    tc_update.execute(getSetValues.getTc_code(), parsed_date, current_reading.getText().toString());
+
+
                                 } else
-                                    Toast.makeText(FeederDetails.this, "Please Enter Current Reading!!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(TcDetails2.this, "Please Enter Current Reading!!", Toast.LENGTH_SHORT).show();
 
                             }
                         });
@@ -190,12 +188,12 @@ public class FeederDetails extends AppCompatActivity {
                         cancel_button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                feeder_details_update_dialog.dismiss();
+                                tc_details_update_dialog.dismiss();
                             }
                         });
                     }
                 });
-                feeder_details_update_dialog.show();
+                tc_details_update_dialog.show();
                 break;
         }
     }

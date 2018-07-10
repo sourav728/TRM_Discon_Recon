@@ -13,17 +13,17 @@ import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
 import java.util.ArrayList;
 
-public class RoleAdapter extends BaseAdapter {
-    private ArrayList<GetSetValues> arraylist = new ArrayList<>();
+public class RoleAdapter2 extends BaseAdapter {
+    private ArrayList<GetSetValues> arraylist;
     private Context context;
     private LayoutInflater inflater;
 
-    public RoleAdapter(ArrayList<GetSetValues> arraylist, Context context) {
-        this.arraylist = arraylist;
+    public RoleAdapter2(ArrayList<GetSetValues>arrayList, Context context)
+    {
+        this.arraylist = arrayList;
         this.context = context;
         inflater = LayoutInflater.from(this.context);
     }
-
     @Override
     public int getCount() {
         return arraylist.size();
@@ -39,12 +39,12 @@ public class RoleAdapter extends BaseAdapter {
         return position;
     }
 
-    @SuppressLint({"InflateParams", "ViewHolder"})
+    @SuppressLint({"ViewHolder", "InflateParams"})
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView = inflater.inflate(R.layout.spinner_items, null);
-        TextView tv_role = (TextView) convertView.findViewById(R.id.spinner_txt);
-        tv_role.setText(arraylist.get(position).getRemark());
+        TextView tv_role = convertView.findViewById(R.id.spinner_txt);
+        tv_role.setText(arraylist.get(position).getFeeder_code());
         return convertView;
     }
 }

@@ -55,4 +55,11 @@ public class ConstantValues {
     public static final int DOWNLOAD_FILE_NOT_DELETED = 36;
     public static final int DLG_APK_UPDATE_FAILURE = 37;
 
+    public static final int TC_DETAILS_SUCCESS = 38;
+    public static final int TC_DETAILS_FAILURE = 39;
+    public static final int TC_UPDATE_SUCCESS = 40;
+    public static final int TC_UPDATE_FAILURE = 41;
+    public static final int TC_DETAILS_UPDATE_DIALOG = 42;
+
+
 }

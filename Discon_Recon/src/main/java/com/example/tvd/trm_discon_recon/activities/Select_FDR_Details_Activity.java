@@ -84,10 +84,20 @@ public class Select_FDR_Details_Activity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SavePreferences("SUB_DIVCODE", subdivision.getText().toString());
-                SavePreferences("FDR_DETAILS_DATE", date1);
-                Intent intent = new Intent(Select_FDR_Details_Activity.this, FeederDetails.class);
-                startActivity(intent);
+                if (!subdivision.getText().toString().equals(""))
+                {
+                    if (!show_date.getText().toString().equals(""))
+                    {
+                        SavePreferences("SUB_DIVCODE", subdivision.getText().toString());
+                        SavePreferences("FDR_DETAILS_DATE", date1);
+                        Intent intent = new Intent(Select_FDR_Details_Activity.this, FeederDetails.class);
+                        startActivity(intent);
+                    }
+                    Toast.makeText(Select_FDR_Details_Activity.this, "Please Select Date!! ", Toast.LENGTH_SHORT).show();
+
+                }
+                Toast.makeText(Select_FDR_Details_Activity.this, "Please Enter Subdivision code!!", Toast.LENGTH_SHORT).show();
+
             }
         });
     }

@@ -52,7 +52,7 @@
                         android:layout_weight="1.5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Tc"/>
+                        android:text="TCCODE"/>
                     <TextView
                         android:layout_weight="2.1"
                         android:layout_width="match_parent"
@@ -60,7 +60,7 @@
                         android:textStyle="bold"
                         android:text=":"/>
                     <TextView
-                        android:id="@+id/txt_account_id"
+                        android:id="@+id/txt_tccode"
                         android:layout_weight="1.2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                         android:layout_weight="1.5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Mc"/>
+                        android:text="TCIR"/>
                     <TextView
                         android:layout_weight="2.1"
                         android:layout_width="match_parent"
@@ -86,7 +86,7 @@
                         android:textStyle="bold"
                         android:text=":"/>
                     <TextView
-                        android:id="@+id/txt_arrears"
+                        android:id="@+id/txt_tcir"
                         android:layout_weight="1.2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -105,7 +105,7 @@
                         android:layout_weight="1.2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="PrevRead"/>
+                        android:text="TCFR"/>
                     <TextView
                         android:layout_weight="1.7"
                         android:layout_width="match_parent"
@@ -113,7 +113,7 @@
                         android:textStyle="bold"
                         android:text=":"/>
                     <TextView
-                        android:id="@+id/txt_prevread"
+                        android:id="@+id/txt_tcfr"
                         android:layout_weight="1.2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -133,7 +133,7 @@
                         android:layout_weight="1.2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="PresRead"/>
+                        android:text="TCMF"/>
                     <TextView
                         android:layout_weight="1.7"
                         android:layout_width="match_parent"
@@ -141,7 +141,7 @@
                         android:textStyle="bold"
                         android:text=":"/>
                     <TextView
-                        android:id="@+id/txt_presread"
+                        android:id="@+id/txt_tcmf"
                         android:layout_weight="1.2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
