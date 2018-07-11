@@ -16,7 +16,7 @@ public class GetSetValues {
     private String reoon_memo_tariff="";
     private String recon_memo_so="";
     private String recon_memo_prev_read="";
-
+    private String tc_code="",tcir="",tcfr="",tcmf="";
     public String getTc_code() {
         return tc_code;
     }
@@ -49,7 +49,6 @@ public class GetSetValues {
         this.tcmf = tcmf;
     }
 
-    private String tc_code="",tcir="",tcfr="",tcmf="";
     public String getApp_version() {
         return app_version;
     }

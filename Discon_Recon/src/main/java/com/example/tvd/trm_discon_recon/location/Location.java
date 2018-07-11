@@ -69,7 +69,7 @@ public class Location extends FragmentActivity implements OnMapReadyCallback,
     private ArrayList<GetSetValues> arrayList = new ArrayList<>();
     GoogleApiClient mGoogleApiClient;
     android.location.Location mLastLocation;
-    String lati = "", longi = "", csd_name="";
+    String lati = "", longi = "", accid="",consname="";
     Double double_lati, double_longi;
     ArrayList<Polyline> polylines;
     Polyline line;
@@ -100,6 +100,7 @@ public class Location extends FragmentActivity implements OnMapReadyCallback,
         Bundle bundle = getIntent().getExtras();
         lati = bundle.getString("LATITUDE");
         longi = bundle.getString("LONGITUDE");
+
         getsetvalues = new GetSetValues();
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             checkLocationPermission();

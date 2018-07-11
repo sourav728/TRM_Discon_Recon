@@ -121,9 +121,13 @@ public class Recon_List_Adapter2 extends RecyclerView.Adapter<Recon_List_Adapter
                 case R.id.img_location:
                     String lat = getSetValues.getRecon_lat();
                     String lon = getSetValues.getRecon_lon();
+                    String accid = getSetValues.getRecon_acc_id();
+                    String name = getSetValues.getRecon_consumer_name();
+
                     Intent intent = new Intent(context, Location.class);
                     intent.putExtra("LATITUDE",lat);
                     intent.putExtra("LONGITUDE", lon);
+
                     context.startActivity(intent);
                      break;
                 case R.id.img_reconnect:

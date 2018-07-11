@@ -92,11 +92,8 @@ public class Select_FDR_Details_Activity extends AppCompatActivity {
                         SavePreferences("FDR_DETAILS_DATE", date1);
                         Intent intent = new Intent(Select_FDR_Details_Activity.this, FeederDetails.class);
                         startActivity(intent);
-                    }
-                    Toast.makeText(Select_FDR_Details_Activity.this, "Please Select Date!! ", Toast.LENGTH_SHORT).show();
-
-                }
-                Toast.makeText(Select_FDR_Details_Activity.this, "Please Enter Subdivision code!!", Toast.LENGTH_SHORT).show();
+                    }else Toast.makeText(Select_FDR_Details_Activity.this, "Please Select Date!! ", Toast.LENGTH_SHORT).show();
+                }else Toast.makeText(Select_FDR_Details_Activity.this, "Please Enter Subdivision code!!", Toast.LENGTH_SHORT).show();
 
             }
         });

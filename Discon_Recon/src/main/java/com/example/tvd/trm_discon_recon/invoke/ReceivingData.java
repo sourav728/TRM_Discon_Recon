@@ -6,6 +6,7 @@ import com.example.tvd.trm_discon_recon.adapter.Feeder_details_Adapter;
 import com.example.tvd.trm_discon_recon.adapter.Recon_Memo_Adapter;
 import com.example.tvd.trm_discon_recon.adapter.RoleAdapter;
 import com.example.tvd.trm_discon_recon.adapter.RoleAdapter2;
+import com.example.tvd.trm_discon_recon.adapter.TCCode_Adapter;
 import com.example.tvd.trm_discon_recon.adapter.TcDetailsAdapter;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
@@ -44,6 +45,10 @@ import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_MEMO_
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_SUCCESS;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_CODE_FOUND;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_CODE_NOTFOUND;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_CODE_NOTUPDATE;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_CODE_UPDATE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_DETAILS_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_DETAILS_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_UPDATE_FAILURE;
@@ -307,7 +312,6 @@ public class ReceivingData {
                     if (!FDRFR.equals(""))
                         getSetValues.setFdr_fr(FDRFR);
                     else getSetValues.setFdr_mf("NA");
-                    arrayList.add(getSetValues);
                     if (!FDRMF.equals(""))
                         getSetValues.setFdr_mf(FDRMF);
                     else getSetValues.setFdr_mf("NA");
@@ -503,6 +507,82 @@ public class ReceivingData {
         } catch (JSONException e) {
             e.printStackTrace();
             handler.sendEmptyMessage(TC_UPDATE_FAILURE);
+        }
+    }
+
+   /* //Get FDR Status based on MR
+    public void get_fdr_fetch_basedon_MR(String result, Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues>arrayList, RoleAdapter2 roleAdapter)
+    {
+        result = parseServerXML(result);
+        functionCall.logStatus("Feeder Details Based on MR:"+ result);
+        JSONArray jsonArray;
+        try {
+            jsonArray = new JSONArray(result);
+            if (jsonArray.length() > 0) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    getSetValues = new GetSetValues();
+                    String TCCODE = jsonObject.getString("TCCODE");
+                    getSetValues.setFeeder_code(TCCODE);
+                    arrayList.add(getSetValues);
+                    roleAdapter.notifyDataSetChanged();
+                }
+                handler.sendEmptyMessage(TC_FETCH_BASED_ON_MR_SUCCESS);
+            } else handler.sendEmptyMessage(TC_FETCH_BASED_ON_MR_FAILURE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            functionCall.logStatus("JSON Exception Failure!!");
+            handler.sendEmptyMessage(TC_FETCH_BASED_ON_MR_FAILURE);
+        }
+    }*/
+
+    //get tccode status
+    public void get_tc_code(String result, Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues> arrayList,
+                            TCCode_Adapter tcCode_adapter) {
+        result = parseServerXML(result);
+        functionCall.logStatus("TC Details:" + result);
+        JSONArray jsonArray;
+        try {
+            jsonArray = new JSONArray(result);
+            if (jsonArray.length() > 0) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    getSetValues = new GetSetValues();
+                    String TCCODE = jsonObject.getString("TCCODE");
+                    String TCIR = jsonObject.getString("TCIR");
+                    String TCFR = jsonObject.getString("TCFR");
+
+                    if (!TCCODE.equals(""))
+                        getSetValues.setTc_code(TCCODE);
+                    else getSetValues.setTc_code("NA");
+                    if (!TCIR.equals(""))
+                        getSetValues.setTcir(TCIR);
+                    else getSetValues.setTcir("NA");
+                    if (!TCFR.equals(""))
+                        getSetValues.setTcfr(TCFR);
+                    else getSetValues.setTcfr("NA");
+                    arrayList.add(getSetValues);
+                    tcCode_adapter.notifyDataSetChanged();
+                }
+                handler.sendEmptyMessage(TC_CODE_FOUND);
+            } else handler.sendEmptyMessage(TC_CODE_NOTFOUND);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            functionCall.logStatus("JSON Exception Failure!!");
+            handler.sendEmptyMessage(TC_CODE_NOTFOUND);
+        }
+    }
+    //tc update status
+    public void get_tc_update(String result, Handler handler, GetSetValues getSetValues) {
+        result = parseServerXML(result);
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            if (StringUtils.startsWithIgnoreCase(jsonObject.getString("message"), "Success"))
+                handler.sendEmptyMessage(TC_CODE_UPDATE);
+            else handler.sendEmptyMessage(TC_CODE_NOTUPDATE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            handler.sendEmptyMessage(TC_CODE_NOTUPDATE);
         }
     }
 

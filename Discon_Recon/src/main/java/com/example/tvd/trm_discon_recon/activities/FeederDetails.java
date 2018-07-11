@@ -45,12 +45,12 @@ public class FeederDetails extends AppCompatActivity {
     ProgressDialog progressDialog;
     GetSetValues getsetvalues;
     RecyclerView recyclerview;
-    ArrayList<GetSetValues> arraylist;
+    ArrayList<GetSetValues> arrayList;
     SendingData sendingData;
     FunctionCall functionCall;
     private Toolbar toolbar;
     TextView toolbar_text, date, display_subdivision;
-    String fdr_details_date = "", subdivision = "", parsed_date = "";
+    String fdr_details_date = "", subdivision = "", parsed_date = "", cur_reading = "";
     AlertDialog feeder_details_update_dialog;
     private Feeder_details_Adapter feeder_details_adapter;
     private final Handler mhandler = new Handler(new Handler.Callback() {
@@ -91,6 +91,7 @@ public class FeederDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feeder_details);
 
+
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         fdr_details_date = sharedPreferences.getString("FDR_DETAILS_DATE", "");
         subdivision = sharedPreferences.getString("SUB_DIVCODE", "");
@@ -99,12 +100,6 @@ public class FeederDetails extends AppCompatActivity {
         toolbar_text = toolbar.findViewById(R.id.toolbar_title);
         toolbar_text.setText("Feeder Details");
         toolbar.setNavigationIcon(R.drawable.back);
-        date = findViewById(R.id.txt_date);
-        display_subdivision = findViewById(R.id.txt_subdiv);
-
-        date.setText(fdr_details_date);
-        display_subdivision.setText(subdivision);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,15 +107,23 @@ public class FeederDetails extends AppCompatActivity {
             }
         });
 
+        date = findViewById(R.id.txt_date);
+        display_subdivision = findViewById(R.id.txt_subdiv);
+
+        date.setText(fdr_details_date);
+        display_subdivision.setText(subdivision);
+
+
+
         sendingData = new SendingData();
         functionCall = new FunctionCall();
         getsetvalues = new GetSetValues();
 
         recyclerview = (RecyclerView) findViewById(R.id.feeder_details_recyclerview);
-        arraylist = new ArrayList<>();
+        arrayList = new ArrayList<>();
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         recyclerview.setHasFixedSize(true);
-        feeder_details_adapter = new Feeder_details_Adapter(arraylist, this, getsetvalues, FeederDetails.this);
+        feeder_details_adapter = new Feeder_details_Adapter(arrayList, this, getsetvalues, FeederDetails.this);
         recyclerview.setAdapter(feeder_details_adapter);
 
         progressDialog = new ProgressDialog(this, R.style.MyProgressDialogstyle);
@@ -130,7 +133,7 @@ public class FeederDetails extends AppCompatActivity {
 
         parsed_date = functionCall.Parse_Date6(fdr_details_date);
         Log.d("Debug", "PARSED_DATE" + parsed_date);
-        SendingData.SendFeeder_Details sendFeeder_details = sendingData.new SendFeeder_Details(mhandler, getsetvalues, arraylist, feeder_details_adapter);
+        SendingData.SendFeeder_Details sendFeeder_details = sendingData.new SendFeeder_Details(mhandler, getsetvalues, arrayList, feeder_details_adapter);
         sendFeeder_details.execute(subdivision, parsed_date);
     }
 
@@ -155,7 +158,8 @@ public class FeederDetails extends AppCompatActivity {
                     @Override
                     public void onShow(DialogInterface dialog) {
                         fdr_code.setText(getSetValues.getFdr_code());
-                        current_reading.addTextChangedListener(new TextWatcher() {
+                        current_reading.setText(getSetValues.getFdr_fr());
+                       /* current_reading.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                                 update_button.setEnabled(!TextUtils.isEmpty(s.toString().trim()));
@@ -170,11 +174,12 @@ public class FeederDetails extends AppCompatActivity {
                             public void afterTextChanged(Editable s) {
                                 update_button.setEnabled(!TextUtils.isEmpty(s.toString().trim()));
                             }
-                        });
+                        });*/
                         update_button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (!current_reading.getText().toString().equals("")) {
+                                cur_reading = current_reading.getText().toString();
+                                if (Double.parseDouble(getSetValues.getFdr_ir()) <= Double.parseDouble(cur_reading)) {
                                     progressDialog = new ProgressDialog(FeederDetails.this, R.style.MyProgressDialogstyle);
                                     progressDialog.setTitle("Updating Feeder details..");
                                     progressDialog.setMessage("Please Wait..");
@@ -182,7 +187,7 @@ public class FeederDetails extends AppCompatActivity {
                                     SendingData.FDR_Fr_Update fdr_fr_update = sendingData.new FDR_Fr_Update(mhandler, getSetValues);
                                     fdr_fr_update.execute(getSetValues.getFdr_code(), parsed_date, current_reading.getText().toString());
                                 } else
-                                    Toast.makeText(FeederDetails.this, "Please Enter Current Reading!!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(FeederDetails.this, "Current Reading should be greater than Previous Reading!!", Toast.LENGTH_SHORT).show();
 
                             }
                         });

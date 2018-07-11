@@ -28,6 +28,7 @@ import com.example.tvd.trm_discon_recon.activities.DateSelectActivity4;
 
 import com.example.tvd.trm_discon_recon.activities.DateSelectActivity5;
 import com.example.tvd.trm_discon_recon.activities.DateSelectActivity6;
+import com.example.tvd.trm_discon_recon.activities.DateSelectActivity7;
 import com.example.tvd.trm_discon_recon.activities.DisconnectionEfficiency;
 import com.example.tvd.trm_discon_recon.activities.Select_FDR_Details_Activity;
 import com.example.tvd.trm_discon_recon.activities.Select_FDR_Fetch_Activity;
@@ -39,7 +40,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class HomeFragment extends Fragment {
    /* Button disconnect,reconnect, discon_report, recon_report,discon_efficiency,recon_efficiency,tc_details;*/
-    RelativeLayout disconnect,reconnect,discon_report,recon_report,discon_efficiency,recon_efficiency,feeder_details,tc_details;
+    RelativeLayout disconnect,reconnect,discon_report,recon_report,discon_efficiency,recon_efficiency,feeder_details,tc_details, tcdetails2;
     Database database;
     CardView cardView1,cardView2;
     String user_length="";
@@ -70,6 +71,7 @@ public class HomeFragment extends Fragment {
         feeder_details = view.findViewById(R.id.relative_feeder);
         tc_details = view.findViewById(R.id.relative_tc);
         office = view.findViewById(R.id.btn_office);
+        tcdetails2 = view.findViewById(R.id.relativetc2);
 
         cardView1 = view.findViewById(R.id.card1);
         cardView2 = view.findViewById(R.id.card2);
@@ -164,7 +166,13 @@ public class HomeFragment extends Fragment {
                 startActivity(intent);
             }
         });
-
+        tcdetails2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), DateSelectActivity7.class);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 

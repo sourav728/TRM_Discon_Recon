@@ -51,7 +51,8 @@ public class TcDetails2 extends AppCompatActivity {
     String fdr_details_date = "", subdivision = "", parsed_date = "";
     AlertDialog tc_details_update_dialog;
     private TcDetailsAdapter tcDetailsAdapter;
-    String fdr_fetch_subdiv_code="",fdr_fetch_date="", fdr_type="";
+    String cur_reading = "";
+    String fdr_fetch_subdiv_code = "", fdr_fetch_date = "", fdr_type = "";
     private final Handler mhandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -101,10 +102,10 @@ public class TcDetails2 extends AppCompatActivity {
             }
         });
 
-        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF",MODE_PRIVATE);
-        fdr_fetch_subdiv_code = sharedPreferences.getString("FDR_FETCH_SUB_DIVCODE","");
-        fdr_fetch_date = sharedPreferences.getString("FDR_FETCH_DATE","");
-        fdr_type = sharedPreferences.getString("FEEDER_TYPE","");
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+        fdr_fetch_subdiv_code = sharedPreferences.getString("FDR_FETCH_SUB_DIVCODE", "");
+        fdr_fetch_date = sharedPreferences.getString("FDR_FETCH_DATE", "");
+        fdr_type = sharedPreferences.getString("FEEDER_TYPE", "");
 
         sendingData = new SendingData();
         functionCall = new FunctionCall();
@@ -126,7 +127,7 @@ public class TcDetails2 extends AppCompatActivity {
         parsed_date = functionCall.Parse_Date6(fdr_fetch_date);
         Log.d("Debug", "PARSED_DATE" + parsed_date);
         SendingData.Send_Tc_details send_tc_details = sendingData.new Send_Tc_details(mhandler, getsetvalues, arraylist, tcDetailsAdapter);
-        send_tc_details.execute(fdr_fetch_subdiv_code,functionCall.Parse_Date6(fdr_fetch_date),fdr_type);
+        send_tc_details.execute(fdr_fetch_subdiv_code, functionCall.Parse_Date6(fdr_fetch_date), fdr_type);
     }
 
     public void show_tc_details_update_dialog(int id, final int position, ArrayList<GetSetValues> arrayList) {
@@ -150,7 +151,8 @@ public class TcDetails2 extends AppCompatActivity {
                     @Override
                     public void onShow(DialogInterface dialog) {
                         tc_code.setText(getSetValues.getTc_code());
-                        current_reading.addTextChangedListener(new TextWatcher() {
+                        current_reading.setText(getSetValues.getTcfr());
+                      /*  current_reading.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                                 update_button.setEnabled(!TextUtils.isEmpty(s.toString().trim()));
@@ -165,23 +167,20 @@ public class TcDetails2 extends AppCompatActivity {
                             public void afterTextChanged(Editable s) {
                                 update_button.setEnabled(!TextUtils.isEmpty(s.toString().trim()));
                             }
-                        });
+                        });*/
                         update_button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                if (!current_reading.getText().toString().equals("")) {
+                                cur_reading = current_reading.getText().toString();
+                                if (Double.parseDouble(getSetValues.getTcir()) <= Double.parseDouble(cur_reading)) {
                                     progressDialog = new ProgressDialog(TcDetails2.this, R.style.MyProgressDialogstyle);
                                     progressDialog.setTitle("Updating Tc details..");
                                     progressDialog.setMessage("Please Wait..");
                                     progressDialog.show();
-
                                     SendingData.TC_Update tc_update = sendingData.new TC_Update(mhandler, getSetValues);
                                     tc_update.execute(getSetValues.getTc_code(), parsed_date, current_reading.getText().toString());
-
-
                                 } else
-                                    Toast.makeText(TcDetails2.this, "Please Enter Current Reading!!", Toast.LENGTH_SHORT).show();
-
+                                    Toast.makeText(TcDetails2.this, "Current Reading should be greater than Previous Reading!!", Toast.LENGTH_SHORT).show();
                             }
                         });
 

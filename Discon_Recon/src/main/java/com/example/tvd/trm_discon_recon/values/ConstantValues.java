@@ -61,5 +61,12 @@ public class ConstantValues {
     public static final int TC_UPDATE_FAILURE = 41;
     public static final int TC_DETAILS_UPDATE_DIALOG = 42;
 
+    public static final int TC_CODE_FOUND = 43;
+    public static final int TC_CODE_NOTFOUND = 44;
+    public static final int TC_CODE_UPDATE = 45;
+    public static final int TC_CODE_NOTUPDATE = 46;
+
+    public static final int TC_DETAILS_UPDATE = 47;
+
 
 }

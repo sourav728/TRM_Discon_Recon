@@ -9,6 +9,7 @@ import com.example.tvd.trm_discon_recon.adapter.Feeder_details_Adapter;
 import com.example.tvd.trm_discon_recon.adapter.Recon_Memo_Adapter;
 import com.example.tvd.trm_discon_recon.adapter.RoleAdapter;
 import com.example.tvd.trm_discon_recon.adapter.RoleAdapter2;
+import com.example.tvd.trm_discon_recon.adapter.TCCode_Adapter;
 import com.example.tvd.trm_discon_recon.adapter.TcDetailsAdapter;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
@@ -549,5 +550,111 @@ public class SendingData {
            super.onPostExecute(result);
        }
    }
+
+/*    //FDR FETCH Based on TC_DETAILS_MR
+    public class FDR_Fetch_Basedon_Tc_details_MR extends AsyncTask<String,String,String>{
+        String response = "";
+        Handler handler;
+        GetSetValues getSetValues;
+        ArrayList<GetSetValues>arrayList;
+        RoleAdapter2 roleAdapter;
+        public FDR_Fetch_Basedon_Tc_details_MR(Handler handler,GetSetValues getSetValues,ArrayList<GetSetValues>arrayList,RoleAdapter2 roleAdapter)
+        {
+            this.handler = handler;
+            this.getSetValues = getSetValues;
+            this.arrayList = arrayList;
+            this.roleAdapter = roleAdapter;
+        }
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String,String>datamap = new HashMap<>();
+            datamap.put("MRCODE",params[0]);
+            datamap.put("DATE",params[1]);
+            try{
+                response = UrlPostConnection("http://bc_service2.hescomtrm.com/Service.asmx/TC_DETAILS_MR",datamap);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            receivingData.get_fdr_fetch_basedon_MR(result,handler,getSetValues,arrayList,roleAdapter);
+            super.onPostExecute(result);
+        }
+    }*/
+
+    //For TC Search
+    public class Search_Tccode extends AsyncTask<String,String,String> {
+        String response="";
+        Handler handler;
+        GetSetValues getSetValues;
+        ArrayList<GetSetValues>arrayList;
+        TCCode_Adapter tcCode_adapter;
+
+        public Search_Tccode(Handler handler,GetSetValues getSetValues,ArrayList<GetSetValues>arrayList,
+                             TCCode_Adapter tcCode_adapter) {
+            this.handler = handler;
+            this.getSetValues = getSetValues;
+            this.arrayList = arrayList;
+            this.tcCode_adapter = tcCode_adapter;
+        }
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String,String>datamap = new HashMap<>();
+            datamap.put("MRCODE",params[0]);
+            datamap.put("DATE",params[1]);
+            try {
+                response = UrlPostConnection("http://bc_service2.hescomtrm.com/Service.asmx/TC_DETAILS_MR",datamap);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            receivingData.get_tc_code(result,handler,getSetValues,arrayList, tcCode_adapter);
+            super.onPostExecute(result);
+        }
+    }
+    //Update TC details
+    public class Update_Tcdetails extends AsyncTask<String,String,String> {
+        String response="";
+        Handler handler;
+        GetSetValues getSetValues;
+
+        public Update_Tcdetails(Handler handler,GetSetValues getSetValues) {
+            this.handler = handler;
+            this.getSetValues = getSetValues;
+        }
+        @Override
+        protected String doInBackground(String... params) {
+            HashMap<String,String>datamap = new HashMap<>();
+            datamap.put("MRCODE",params[0]);
+            datamap.put("TCCODE",params[1]);
+            datamap.put("DATE",params[2]);
+            datamap.put("TCFR",params[3]);
+            try {
+                response = UrlPostConnection("http://bc_service2.hescomtrm.com/Service.asmx/TCFR_Update_MR",datamap);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            receivingData.get_tc_update(result,handler,getSetValues);
+            super.onPostExecute(result);
+        }
+    }
 
 }

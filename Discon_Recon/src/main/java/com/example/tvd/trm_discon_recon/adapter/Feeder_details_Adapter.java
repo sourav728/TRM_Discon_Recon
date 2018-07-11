@@ -16,13 +16,13 @@ import java.util.ArrayList;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.FEEDER_DETAILS_UPDATE_DIALOG;
 
 public class Feeder_details_Adapter extends RecyclerView.Adapter<Feeder_details_Adapter.FeederHolder> {
-    private ArrayList<GetSetValues> arraylist ;
+    private ArrayList<GetSetValues> arrayList ;
     private Context context;
     private GetSetValues getSetValues;
     private FeederDetails feederDetails;
     public Feeder_details_Adapter(ArrayList<GetSetValues>arrayList, Context context, GetSetValues getSetValues,FeederDetails feederDetails)
     {
-        this.arraylist = arrayList;
+        this.arrayList = arrayList;
         this.context = context;
         this.getSetValues = getSetValues;
         this.feederDetails = feederDetails;
@@ -35,7 +35,7 @@ public class Feeder_details_Adapter extends RecyclerView.Adapter<Feeder_details_
 
     @Override
     public void onBindViewHolder(Feeder_details_Adapter.FeederHolder holder, int position) {
-        GetSetValues getSetValues = arraylist.get(position);
+        GetSetValues getSetValues = arrayList.get(position);
         holder.fdr_code.setText(getSetValues.getFdr_code());
         holder.fdr_ir.setText(getSetValues.getFdr_ir());
         holder.fdr_fr.setText(getSetValues.getFdr_fr());
@@ -44,7 +44,7 @@ public class Feeder_details_Adapter extends RecyclerView.Adapter<Feeder_details_
 
     @Override
     public int getItemCount() {
-        return arraylist.size();
+        return arrayList.size();
     }
 
     public class FeederHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -61,8 +61,8 @@ public class Feeder_details_Adapter extends RecyclerView.Adapter<Feeder_details_
         @Override
         public void onClick(View v) {
             int position = getAdapterPosition();
-            GetSetValues getSetValues = arraylist.get(position);
-            feederDetails.show_fdr_details_update_dialog(FEEDER_DETAILS_UPDATE_DIALOG,position,arraylist);
+            GetSetValues getSetValues = arrayList.get(position);
+            feederDetails.show_fdr_details_update_dialog(FEEDER_DETAILS_UPDATE_DIALOG,position,arrayList);
         }
     }
 }
