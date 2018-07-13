@@ -28,6 +28,7 @@ import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.util.DirectionConverter;
 import com.example.tvd.trm_discon_recon.R;
+import com.example.tvd.trm_discon_recon.adapter.InfoWindowCustom;
 import com.example.tvd.trm_discon_recon.other.DataParser;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 import com.google.android.gms.common.ConnectionResult;
@@ -137,6 +138,7 @@ public class Location extends FragmentActivity implements OnMapReadyCallback,
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
         }
+        mMap.setInfoWindowAdapter(new InfoWindowCustom(this));
 
     }
 
@@ -227,7 +229,7 @@ public class Location extends FragmentActivity implements OnMapReadyCallback,
          markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.loc1));
         //mMap.addMarker(markerOptions).setTitle("" + latLng + "," + subLocality + "," + state + "," + country);
         // mMap.addMarker(new MarkerOptions().title(mrname).snippet("Mrcode:   " + mrcode).position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-        if (!lati.equals("")&& !longi.equals("")&& !lati.equals("NA") && !longi.equals("NA") && !lati.equals("0.0") && !longi.equals("0.0"))
+        if (!lati.equals("")&& !longi.equals("")&& !lati.equals("NA") && !longi.equals("NA"))
         {
             try {
                 double_lati = Double.parseDouble(lati);

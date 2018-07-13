@@ -68,18 +68,22 @@ public class DateSelectActivity7 extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!subdivision.getText().toString().equals(""))
+                if (fcall.isInternetOn(DateSelectActivity7.this))
                 {
-                    if (!show_date.getText().toString().equals(""))
+                    if (!subdivision.getText().toString().equals(""))
                     {
-                        SavePreferences("TCMRCODE", subdivision.getText().toString());
-                        SavePreferences("TCMRDATE", date1);
-                        Intent intent = new Intent(DateSelectActivity7.this,TC_Details2.class );
-                        startActivity(intent);
-                    }else
-                        Toast.makeText(DateSelectActivity7.this, "Please Select Date!!", Toast.LENGTH_SHORT).show();
+                        if (!show_date.getText().toString().equals(""))
+                        {
+                            SavePreferences("TCMRCODE", subdivision.getText().toString());
+                            SavePreferences("TCMRDATE", date1);
+                            Intent intent = new Intent(DateSelectActivity7.this,TC_Details2.class );
+                            startActivity(intent);
+                        }else
+                            Toast.makeText(DateSelectActivity7.this, "Please Select Date!!", Toast.LENGTH_SHORT).show();
 
-                }else Toast.makeText(DateSelectActivity7.this, "Please Enter Subdivision code!!", Toast.LENGTH_SHORT).show();
+                    }else Toast.makeText(DateSelectActivity7.this, "Please Enter Subdivision code!!", Toast.LENGTH_SHORT).show();
+                }else Toast.makeText(DateSelectActivity7.this, "Please Turn on Internet!!", Toast.LENGTH_SHORT).show();
+
 
             }
         });

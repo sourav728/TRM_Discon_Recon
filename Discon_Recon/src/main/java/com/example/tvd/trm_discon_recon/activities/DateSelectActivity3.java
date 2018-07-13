@@ -75,17 +75,21 @@ public class DateSelectActivity3 extends AppCompatActivity {
         report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!from_date.getText().toString().equals(""))
+                if (fcall.isInternetOn(DateSelectActivity3.this))
                 {
-                    if (!to_date.getText().toString().equals(""))
+                    if (!from_date.getText().toString().equals(""))
                     {
-                        SavePreferences("DISON_FROM_DATE", date1);
-                        SavePreferences("DISCON_TO_DATE", date2);
-                        Intent intent = new Intent(DateSelectActivity3.this, DisconnectionReportActivity.class);
-                        startActivity(intent);
+                        if (!to_date.getText().toString().equals(""))
+                        {
+                            SavePreferences("DISON_FROM_DATE", date1);
+                            SavePreferences("DISCON_TO_DATE", date2);
+                            Intent intent = new Intent(DateSelectActivity3.this, DisconnectionReportActivity.class);
+                            startActivity(intent);
 
-                    }else Toast.makeText(DateSelectActivity3.this, "Please Select To Date!!", Toast.LENGTH_SHORT).show();
-                }else Toast.makeText(DateSelectActivity3.this, "Please Select From Date!!", Toast.LENGTH_SHORT).show();
+                        }else Toast.makeText(DateSelectActivity3.this, "Please Select To Date!!", Toast.LENGTH_SHORT).show();
+                    }else Toast.makeText(DateSelectActivity3.this, "Please Select From Date!!", Toast.LENGTH_SHORT).show();
+                }else Toast.makeText(DateSelectActivity3.this, "Please Turn on Internet!!", Toast.LENGTH_SHORT).show();
+
 
             }
         });

@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.analogics.thermalAPI.Bluetooth_Printer_3inch_prof_ThermalAPI;
 import com.analogics.thermalprinter.AnalogicsThermalPrinter;
@@ -135,14 +136,17 @@ public class DateSelectActivity6 extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!acc_id.getText().toString().equals("")) {
-                    if (!subdivision.getText().toString().equals("")) {
-                        SavePreferences("RECON_MEMO_ACC_ID", acc_id.getText().toString());
-                        SavePreferences("RECON_MEMO_SUBDIVISION", subdivision.getText().toString());
-                        Intent intent = new Intent(DateSelectActivity6.this, Reconnection_memo_details.class);
-                        startActivity(intent);
-                    } else subdivision.setError("Please Enter Subdivision!!");
-                } else acc_id.setError("Please Enter Account Id!!");
+                if (fcall.isInternetOn(DateSelectActivity6.this)) {
+                    if (!acc_id.getText().toString().equals("")) {
+                        if (!subdivision.getText().toString().equals("")) {
+                            SavePreferences("RECON_MEMO_ACC_ID", acc_id.getText().toString());
+                            SavePreferences("RECON_MEMO_SUBDIVISION", subdivision.getText().toString());
+                            Intent intent = new Intent(DateSelectActivity6.this, Reconnection_memo_details.class);
+                            startActivity(intent);
+                        } else subdivision.setError("Please Enter Subdivision!!");
+                    } else acc_id.setError("Please Enter Account Id!!");
+                } else Toast.makeText(DateSelectActivity6.this, "Please Turn on Internet!!", Toast.LENGTH_SHORT).show();
+
 
             }
         });

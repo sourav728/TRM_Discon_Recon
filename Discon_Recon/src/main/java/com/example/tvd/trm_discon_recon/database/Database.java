@@ -25,7 +25,7 @@ public class Database {
             databasefile = fcall.filestorepath(databasefolder, database_name);
             fcall.logStatus("Discon Database does not exists!!");
             databasepath = fcall.filepath(databasefolder) + File.separator + database_name;
-            mh = new MyHelper(context, databasepath, null, 5);
+            mh = new MyHelper(context, databasepath, null, 6);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -7,8 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
 
-import static com.example.tvd.trm_discon_recon.activities.DateSelectActivity.dialog2;
-import static com.example.tvd.trm_discon_recon.fragments.HomeFragment.dialog;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
     @Override
@@ -16,12 +14,14 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
         try{
             if (isOnline(context))
             {
-                dialog(true);
+                /*dialog(true);
                 dialog2(true);
+                dialog3(true);*/
                 Log.d("Debug","You are Online..");
             }else {
-                dialog(false);
+                /*dialog(false);
                 dialog2(false);
+                dialog3(false);*/
                 Log.d("Debug","Connectivity failure!!");
             }
         }

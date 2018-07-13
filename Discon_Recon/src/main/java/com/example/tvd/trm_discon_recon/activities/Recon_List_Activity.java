@@ -194,7 +194,7 @@ public class Recon_List_Activity extends AppCompatActivity {
         SendingData.Recon_List recon_list = sendingData.new Recon_List(mhandler, getsetvalues, arraylist);
         /*******Below Mrcode and date is hardcoaded*******/
         //recon_list.execute(login_mr_code, reconnection_date);
-        recon_list.execute("54003715","2018/07/05");
+        recon_list.execute("54003714","2018/07/05");
 
     }
 

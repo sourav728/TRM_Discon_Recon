@@ -30,6 +30,7 @@ public class DateSelectActivity4 extends AppCompatActivity {
     FunctionCall fcall;
     private Toolbar toolbar;
     TextView toolbar_text;
+
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +50,7 @@ public class DateSelectActivity4 extends AppCompatActivity {
         });
 
         from_date = (TextView) findViewById(R.id.txt_from_date);
-        to_date = (TextView)findViewById(R.id.txt_to_dtae);
+        to_date = (TextView) findViewById(R.id.txt_to_dtae);
         report = (Button) findViewById(R.id.btn_Report);
         fcall = new FunctionCall();
         img_from = (ImageView) findViewById(R.id.img_fromdate);
@@ -75,17 +76,21 @@ public class DateSelectActivity4 extends AppCompatActivity {
         report.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!from_date.getText().toString().equals(""))
-                {
-                    if (!to_date.getText().toString().equals(""))
-                    {
-                        SavePreferences("RECONNECTION_FROM_DATE", date1);
-                        SavePreferences("RECONNECTION_TO_DATE", date2);
-                        Intent intent = new Intent(DateSelectActivity4.this, ReconnectionReportActivity.class);
-                        startActivity(intent);
-                    }else Toast.makeText(DateSelectActivity4.this, "Please select To Date!!", Toast.LENGTH_SHORT).show();
+                if (fcall.isInternetOn(DateSelectActivity4.this)) {
+                    if (!from_date.getText().toString().equals("")) {
+                        if (!to_date.getText().toString().equals("")) {
+                            SavePreferences("RECONNECTION_FROM_DATE", date1);
+                            SavePreferences("RECONNECTION_TO_DATE", date2);
+                            Intent intent = new Intent(DateSelectActivity4.this, ReconnectionReportActivity.class);
+                            startActivity(intent);
+                        } else
+                            Toast.makeText(DateSelectActivity4.this, "Please select To Date!!", Toast.LENGTH_SHORT).show();
 
-                }else Toast.makeText(DateSelectActivity4.this, "Please select From Date!!", Toast.LENGTH_SHORT).show();
+                    } else
+                        Toast.makeText(DateSelectActivity4.this, "Please select From Date!!", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(DateSelectActivity4.this, "Please Turn on Internet!!", Toast.LENGTH_SHORT).show();
+
 
             }
         });

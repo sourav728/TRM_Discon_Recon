@@ -6,6 +6,7 @@ public class ConstantValues {
     public static final String CONNECTED = "connected";
     public static final String DISCONNECTED = "disconnected";
     public static final String TURNED_OFF = "printer_turned_off";
+    public static final String DATABASE_KEY = "12345";
 
     public static String FTP_HOST = "ftp2.hescomtrm.com";
     public static String FTP_USER = "TRMFTP01";

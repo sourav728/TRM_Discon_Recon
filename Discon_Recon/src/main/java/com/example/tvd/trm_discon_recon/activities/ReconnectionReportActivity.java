@@ -53,6 +53,7 @@ public class ReconnectionReportActivity extends AppCompatActivity {
         Log.d("Debug", "RECONNECTION_FROM_DATE" + from_date);
         Log.d("Debug", "RECONNECTION_TO_DATE" + to_date);
 
+
         database = new Database(this);
         database.open();
         fcall = new FunctionCall();

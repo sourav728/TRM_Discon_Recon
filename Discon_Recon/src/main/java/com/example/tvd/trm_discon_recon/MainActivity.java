@@ -1,20 +1,13 @@
 package com.example.tvd.trm_discon_recon;
 
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -27,10 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.analogics.thermalAPI.Bluetooth_Printer_3inch_prof_ThermalAPI;
-import com.analogics.thermalprinter.AnalogicsThermalPrinter;
 import com.example.tvd.trm_discon_recon.activities.DateSelectActivity;
 import com.example.tvd.trm_discon_recon.activities.DateSelectActivity2;
 import com.example.tvd.trm_discon_recon.activities.SettingActivity;
@@ -42,22 +32,9 @@ import com.example.tvd.trm_discon_recon.service.BluetoothService;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
-import org.apache.commons.lang3.StringUtils;
 
-import java.io.File;
-import java.io.IOException;
 
-import static com.example.tvd.trm_discon_recon.service.BluetoothService.conn;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.ANALOGICS_PRINTER_CONNECTED;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.ANALOGICS_PRINTER_DISCONNECTED;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.ANALOGICS_PRINTER_PAIRED;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.APK_FILE_DOWNLOADED;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.APK_FILE_NOT_FOUND;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.BLUETOOTH_RESULT;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.CONNECTED;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCONNECTED;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.DLG_APK_UPDATE_SUCCESS;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.TURNED_OFF;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

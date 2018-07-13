@@ -61,6 +61,7 @@ public class ReconnectionEfficiency extends AppCompatActivity {
         Log.d("Debug", "RECON_EFFICIENCY_FROM_DATE" + from_date);
         Log.d("Debug", "RECON_EFFICIENCY_TO_DATE" + to_date);
 
+
         database = new Database(this);
         database.open();
         fcall = new FunctionCall();

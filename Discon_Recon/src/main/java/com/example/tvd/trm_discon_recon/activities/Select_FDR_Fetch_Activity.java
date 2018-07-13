@@ -68,18 +68,21 @@ public class Select_FDR_Fetch_Activity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!subdivision.getText().toString().equals(""))
+                if (fcall.isInternetOn(Select_FDR_Fetch_Activity.this))
                 {
-                    if (!show_date.getText().toString().equals(""))
+                    if (!subdivision.getText().toString().equals(""))
                     {
-                        SavePreferences("FDR_FETCH_SUB_DIVCODE", subdivision.getText().toString());
-                        SavePreferences("FDR_FETCH_DATE", date1);
-                        Intent intent = new Intent(Select_FDR_Fetch_Activity.this, TcDetails.class);
-                        startActivity(intent);
-                    }else
-                        Toast.makeText(Select_FDR_Fetch_Activity.this, "Please Select Date!!", Toast.LENGTH_SHORT).show();
+                        if (!show_date.getText().toString().equals(""))
+                        {
+                            SavePreferences("FDR_FETCH_SUB_DIVCODE", subdivision.getText().toString());
+                            SavePreferences("FDR_FETCH_DATE", date1);
+                            Intent intent = new Intent(Select_FDR_Fetch_Activity.this, TcDetails.class);
+                            startActivity(intent);
+                        }else
+                            Toast.makeText(Select_FDR_Fetch_Activity.this, "Please Select Date!!", Toast.LENGTH_SHORT).show();
 
-                }else Toast.makeText(Select_FDR_Fetch_Activity.this, "Please Enter Subdivision code!!", Toast.LENGTH_SHORT).show();
+                    }else Toast.makeText(Select_FDR_Fetch_Activity.this, "Please Enter Subdivision code!!", Toast.LENGTH_SHORT).show();
+                }else Toast.makeText(Select_FDR_Fetch_Activity.this, "Please Turn on Internet!!", Toast.LENGTH_SHORT).show();
 
             }
         });

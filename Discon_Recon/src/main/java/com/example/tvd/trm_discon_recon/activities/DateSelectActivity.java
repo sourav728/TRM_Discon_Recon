@@ -51,9 +51,9 @@ public class DateSelectActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_select);
 
-        tv_check_connection = (TextView) findViewById(R.id.tv_check_connection);
+       /* tv_check_connection = (TextView) findViewById(R.id.tv_check_connection);
         mNetworkReceiver = new NetworkChangeReceiver();
-        registerNetworkBroadcastForNougat();
+        registerNetworkBroadcastForNougat();*/
 
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar_text = toolbar.findViewById(R.id.toolbar_title);
@@ -100,19 +100,23 @@ public class DateSelectActivity extends AppCompatActivity {
         disconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!show_date.getText().toString().equals("")) {
-                    SavePreferences("DISCONNECTION_DATE", date1);
-                    Intent intent = new Intent(DateSelectActivity.this, DisconListActivity.class);
-                    startActivity(intent);
-                } else
-                    Toast.makeText(DateSelectActivity.this, "Please Select Disconnection Date!!", Toast.LENGTH_SHORT).show();
+                if (fcall.isInternetOn(DateSelectActivity.this))
+                {
+                    if (!show_date.getText().toString().equals("")) {
+                        SavePreferences("DISCONNECTION_DATE", date1);
+                        Intent intent = new Intent(DateSelectActivity.this, DisconListActivity.class);
+                        startActivity(intent);
+                    } else
+                        Toast.makeText(DateSelectActivity.this, "Please Select Disconnection Date!!", Toast.LENGTH_SHORT).show();
+                }else Toast.makeText(DateSelectActivity.this, "Please Connect To Internet!!", Toast.LENGTH_SHORT).show();
+
 
             }
         });
 
     }
 
-    public static void dialog2(boolean value) {
+/*    public static void dialog2(boolean value) {
         if (value) {
             tv_check_connection.setText("Online");
             tv_check_connection.setBackgroundColor(Color.parseColor("#558B2F"));
@@ -133,7 +137,7 @@ public class DateSelectActivity extends AppCompatActivity {
             tv_check_connection.setTextColor(Color.WHITE);
             disconnect.setEnabled(false);
         }
-    }
+    }*/
 
     public void DateDialog1() {
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
@@ -155,7 +159,7 @@ public class DateSelectActivity extends AppCompatActivity {
         dpdialog.show();
     }
 
-    private void registerNetworkBroadcastForNougat() {
+   /* private void registerNetworkBroadcastForNougat() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
         }
@@ -176,7 +180,7 @@ public class DateSelectActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         unregisterNetworkChanges();
-    }
+    }*/
 
     private void SavePreferences(String key, String value) {
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
