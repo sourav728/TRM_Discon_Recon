@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.adapter.TCCode_Adapter;
 import com.example.tvd.trm_discon_recon.invoke.SendingData;
+import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class TC_Details2 extends AppCompatActivity {
     String MRCODE = "", DATE = "", cur_reading = "";
     ProgressDialog progressdialog;
     AlertDialog tc_details_update_dialog;
+    FunctionCall fcall;
     //************************************************************************************************************
     private final Handler handler;
 
@@ -59,6 +61,7 @@ public class TC_Details2 extends AppCompatActivity {
                     case TC_CODE_NOTFOUND:
                         progressdialog.dismiss();
                         Toast.makeText(TC_Details2.this, "Data not Found!!", Toast.LENGTH_SHORT).show();
+                        finish();
                         break;
                     case TC_CODE_UPDATE:
                         progressdialog.dismiss();
@@ -81,8 +84,7 @@ public class TC_Details2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tc__details2);
-
-
+        fcall = new FunctionCall();
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         MRCODE = sharedPreferences.getString("TCMRCODE", "");
         DATE = sharedPreferences.getString("TCMRDATE", "");
@@ -102,7 +104,7 @@ public class TC_Details2 extends AppCompatActivity {
 
         SendingData.Search_Tccode search_tccode = sendingData.new Search_Tccode(handler, getSetValues,
                 arraylist, tcCode_adapter);
-        search_tccode.execute(MRCODE, DATE);
+        search_tccode.execute(MRCODE, fcall.Parse_Date5(DATE));
     }
 
     public void show_tc_details_update_dialog2(int id, final int position, ArrayList<GetSetValues> arrayList) {
@@ -152,13 +154,13 @@ public class TC_Details2 extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 cur_reading = current_reading.getText().toString();
-                                if (Double.parseDouble(getSetValues.getTcfr()) <= Double.parseDouble(cur_reading)) {
+                                if (Double.parseDouble(getSetValues.getTcir()) < Double.parseDouble(cur_reading)) {
                                     progressdialog = new ProgressDialog(TC_Details2.this, R.style.MyProgressDialogstyle);
                                     progressdialog.setTitle("Updating Tc details..");
                                     progressdialog.setMessage("Please Wait..");
                                     progressdialog.show();
                                     SendingData.Update_Tcdetails update_tcdetails = sendingData.new Update_Tcdetails(handler, getSetValues);
-                                    update_tcdetails.execute(MRCODE, getSetValues.getTc_code(), DATE, cur_reading);
+                                    update_tcdetails.execute(MRCODE, getSetValues.getTc_code(), fcall.Parse_Date5(DATE), cur_reading);
                                 } else
                                     Toast.makeText(TC_Details2.this, "Current reading should be greater than previous reading!!", Toast.LENGTH_SHORT).show();
 

@@ -69,7 +69,7 @@ public class Location extends FragmentActivity implements OnMapReadyCallback,
     private ArrayList<GetSetValues> arrayList = new ArrayList<>();
     GoogleApiClient mGoogleApiClient;
     android.location.Location mLastLocation;
-    String lati = "", longi = "", accid="",consname="";
+    String lati = "", longi = "", accid="",consname="",address="";
     Double double_lati, double_longi;
     ArrayList<Polyline> polylines;
     Polyline line;
@@ -78,13 +78,15 @@ public class Location extends FragmentActivity implements OnMapReadyCallback,
     Marker mCurrLocationMarker;
     LocationRequest mLocationRequest;
     private LatLng origin,destination;
-    TextView distance_text,duration_text,source_address,destination_address;
+    TextView distance_text,duration_text,source_address,destination_address,consumer_address;
     ImageView back;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
         back = (ImageView) findViewById(R.id.img_back);
+        consumer_address = findViewById(R.id.txt_address);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow(); // in Activity's onCreate() for instance
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -100,6 +102,13 @@ public class Location extends FragmentActivity implements OnMapReadyCallback,
         Bundle bundle = getIntent().getExtras();
         lati = bundle.getString("LATITUDE");
         longi = bundle.getString("LONGITUDE");
+        accid = bundle.getString("ACCOUNT_ID");
+        consname = bundle.getString("NAME");
+        address = bundle.getString("ADDRESS");
+        if (!address.equals(""))
+            consumer_address.setText(address);
+        else  consumer_address.setText("NA");
+
 
         getsetvalues = new GetSetValues();
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -215,21 +224,29 @@ public class Location extends FragmentActivity implements OnMapReadyCallback,
         }
 
 
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.loc1));
+         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.loc1));
         //mMap.addMarker(markerOptions).setTitle("" + latLng + "," + subLocality + "," + state + "," + country);
         // mMap.addMarker(new MarkerOptions().title(mrname).snippet("Mrcode:   " + mrcode).position(latLng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-
-        try {
-            double_lati = Double.parseDouble(lati);
-            Log.d("Debugg","Latitude"+double_lati);
-            double_longi = Double.parseDouble(longi);
-            Log.d("Debugg","Longitude"+double_longi);
-            mMap.addMarker(new MarkerOptions().position(new LatLng(double_lati, double_longi)));
-        }
-        catch (Exception e)
+        if (!lati.equals("")&& !longi.equals("")&& !lati.equals("NA") && !longi.equals("NA") && !lati.equals("0.0") && !longi.equals("0.0"))
         {
-            e.printStackTrace();
+            try {
+                double_lati = Double.parseDouble(lati);
+                Log.d("Debugg","Latitude"+double_lati);
+                double_longi = Double.parseDouble(longi);
+                Log.d("Debugg","Longitude"+double_longi);
+                mMap.addMarker(new MarkerOptions().title(accid).snippet(consname).position(new LatLng(double_lati, double_longi)));
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
+        else
+        {
+            Toast.makeText(this, "Location not yet updated!!", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+
 
         /*********FOR DISPLAYING MULTIPLE MARKER ON MAPS***************/
         /*for (int i=0;i<arrayList.size();i++)

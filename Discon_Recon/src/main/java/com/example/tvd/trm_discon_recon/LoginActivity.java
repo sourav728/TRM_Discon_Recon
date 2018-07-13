@@ -29,6 +29,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -44,7 +46,10 @@ import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.APK_FILE_DOWNLOADED;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.APK_FILE_NOT_FOUND;
@@ -60,7 +65,8 @@ public class LoginActivity extends AppCompatActivity {
     Button login;
     FunctionCall fcall;
     String getMrcode = "", getpassword = "";
-    EditText mrcode, password;
+    EditText password;
+    AutoCompleteTextView mrcode;
     LayoutInflater inflater;
     View layout;
     ProgressDialog progressdialog;
@@ -73,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText selected_date;
     int length;
     FTPAPI ftpapi;
-    String cur_version="";
+    String cur_version = "", username = "";
     Context context;
     private final Handler mhandler;
 
@@ -99,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
                         //end of call for new notification for apk*/
 
                         if (fcall.compare(cur_version, getsetvalues.getApp_version()))
-                        showdialog(DLG_APK_UPDATE_SUCCESS);
+                            showdialog(DLG_APK_UPDATE_SUCCESS);
                         else {
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -172,13 +178,13 @@ public class LoginActivity extends AppCompatActivity {
         try {
             packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             cur_version = packageInfo.versionName;
-            Log.d("Debug","Got_Current_Version"+cur_version);
+            Log.d("Debug", "Got_Current_Version" + cur_version);
             // SavePreferences("CURRENT_VERSION", current_version);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
 
-        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF",MODE_PRIVATE);
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         /*cur_version = sharedPreferences.getString("CURRENT_VERSION","");
         Log.d("Debug","current_version"+cur_version);*/
 
@@ -193,6 +199,14 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if (fcall.isInternetOn(LoginActivity.this)) {
+                    username = mrcode.getText().toString().trim();
+                    SharedPreferences ss = getSharedPreferences("loginSession_key", 0);
+                    Set<String> hs = ss.getStringSet("set", new HashSet<String>());
+                    hs.add(username);
+                    SharedPreferences.Editor edit = ss.edit();
+                    edit.clear();
+                    edit.putStringSet("set", hs);
+                    edit.commit();
                     /*SavePreferences("Selected_Date",date1);
                     Log.d("Debug","Selected Date"+selected_date.getText().toString());*/
 
@@ -204,11 +218,11 @@ public class LoginActivity extends AppCompatActivity {
                     //String DeviceID ="354016070557564";
                     //Device id for AAO
                     //User ID 10540038
-                   // String DeviceID = "866133033048564";
-                   /*Code: 54003892
-                   Date: 2018/06/13
-                   Password: 123123*/
-                   //String DeviceID = "352514083875934";
+                    // String DeviceID = "866133033048564";
+                    /*Code: 54003892
+                    Date: 2018/06/13
+                    Password: 123123*/
+                    //String DeviceID = "352514083875934";
                     TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                     if (ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
                         // TODO: Consider calling
@@ -246,10 +260,10 @@ public class LoginActivity extends AppCompatActivity {
         ftpapi = new FTPAPI();
         getsetvalues = new GetSetValues();
         sendingdata = new SendingData();
-        login = (Button) findViewById(R.id.login_btn);
+        login = findViewById(R.id.login_btn);
         fcall = new FunctionCall();
-        mrcode = (EditText) findViewById(R.id.edit_mrcode);
-        password = (EditText) findViewById(R.id.edit_password);
+        mrcode = findViewById(R.id.edit_mrcode);
+        password = findViewById(R.id.edit_password);
 
     }
 
@@ -272,11 +286,9 @@ public class LoginActivity extends AppCompatActivity {
         } else fcall.logStatus("Version_receiver Already running..");
     }
 
-    public void showdialog(int id)
-    {
+    public void showdialog(int id) {
         Dialog dialog = null;
-        switch (id)
-        {
+        switch (id) {
             case DLG_APK_UPDATE_SUCCESS:
                 AlertDialog.Builder appupdate = new AlertDialog.Builder(context);
                 appupdate.setTitle("App Update");
@@ -290,16 +302,27 @@ public class LoginActivity extends AppCompatActivity {
                         downloadApk.execute();
                     }
                 });
-               /* appupdate.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });*/
                 dialog = appupdate.create();
                 dialog.show();
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // todo get Session cache value in login box
+        SharedPreferences sss = getSharedPreferences("loginSession_key", 0);
+        Log.d("debug", "2.set = " + sss.getStringSet("set", new HashSet<String>()));
+        Log.d("debug", "LoginSession ->" + sss.getStringSet("set", new HashSet<String>()));
+        ArrayList<String> al = new ArrayList<>();
+        al.addAll(sss.getStringSet("set", new HashSet<String>()));
+        //Creating the instance of ArrayAdapter containing list of language names
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>
+                (this, android.R.layout.select_dialog_item, al);
+        //Getting the instance of AutoCompleteTextView
+        mrcode.setThreshold(1);//will start working from first character
+        mrcode.setAdapter(adapter);//setting the adapter data into the AutoCompleteTextView
     }
 
 }

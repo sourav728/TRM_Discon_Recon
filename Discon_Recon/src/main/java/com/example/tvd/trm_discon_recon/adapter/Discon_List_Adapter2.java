@@ -124,9 +124,17 @@ public class Discon_List_Adapter2 extends RecyclerView.Adapter<Discon_List_Adapt
                 case R.id.img_marker:
                     String lat = getSetValues.getDiscon_lat();
                     String lon = getSetValues.getDiscon_lon();
+                    String address = getSetValues.getDiscon_add1();
+                    String discon_id = getSetValues.getDiscon_acc_id();
+                    Log.d("Debug","discon_id:"+discon_id);
+                    String name = getSetValues.getDiscon_consumer_name();
+                    Log.d("Debug","name:"+name);
                     Intent intent = new Intent(context, Location.class);
                     intent.putExtra("LATITUDE",lat);
                     intent.putExtra("LONGITUDE", lon);
+                    intent.putExtra("ACCOUNT_ID",discon_id);
+                    intent.putExtra("NAME",name);
+                    intent.putExtra("ADDRESS",address);
                     context.startActivity(intent);
                     break;
                 case R.id.img_disconnect:

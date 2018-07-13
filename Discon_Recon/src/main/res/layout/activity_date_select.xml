@@ -48,6 +48,7 @@
             android:id="@+id/btn_disconnect"
             android:layout_width="220dp"
             android:layout_height="40dp"
+            android:enabled="false"
             android:layout_gravity="center"
             android:layout_marginTop="15dp"
             android:textAllCaps="false"
@@ -55,4 +56,11 @@
             android:text="Submit"
             android:textStyle="bold" />
     </LinearLayout>
+    <TextView
+        android:id="@+id/tv_check_connection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="155dp"
+        android:gravity="center" />
 </RelativeLayout>

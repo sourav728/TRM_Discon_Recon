@@ -44,14 +44,11 @@
         <Button
             android:id="@+id/btn_Search"
             android:layout_marginTop="10dp"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:background="@android:color/holo_blue_dark"
-            android:textColor="@android:color/white"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:textColor="@color/black"
+            android:background="@drawable/buttonpressed"
             android:layout_gravity="center"
-            android:shadowColor="@android:color/holo_blue_light"
             android:textAllCaps="false"
             android:text="Search" />
 

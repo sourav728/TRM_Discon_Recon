@@ -27,7 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TcCode"
+                android:text="TC CODE"
                 android:textColor="@color/black2"
                 android:textSize="17sp" />
 
@@ -55,7 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="MrCode"
+                android:text="MR CODE"
                 android:textColor="@color/black2"
                 android:textSize="17sp" />
 
@@ -83,7 +83,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Date"
+                android:text="DATE"
                 android:textColor="@color/black2"
                 android:textSize="17sp" />
 
@@ -111,7 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="TcFR"
+                android:text="TCFR"
                 android:textColor="@color/black2"
                 android:textSize="17sp" />
 
@@ -129,7 +129,8 @@
                 android:layout_weight="1"
                 android:background="@drawable/border_style"
                 android:inputType="number"
-                android:maxLines="5"
+                android:digits="0123456789."
+                android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textSize="17sp" />

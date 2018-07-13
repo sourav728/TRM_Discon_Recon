@@ -179,7 +179,7 @@ public class FeederDetails extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 cur_reading = current_reading.getText().toString();
-                                if (Double.parseDouble(getSetValues.getFdr_ir()) <= Double.parseDouble(cur_reading)) {
+                                if (Double.parseDouble(getSetValues.getFdr_ir()) < Double.parseDouble(cur_reading)) {
                                     progressDialog = new ProgressDialog(FeederDetails.this, R.style.MyProgressDialogstyle);
                                     progressDialog.setTitle("Updating Feeder details..");
                                     progressDialog.setMessage("Please Wait..");

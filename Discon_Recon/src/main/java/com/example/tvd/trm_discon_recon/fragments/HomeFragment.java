@@ -1,11 +1,17 @@
 package com.example.tvd.trm_discon_recon.fragments;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 
+import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 
@@ -18,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.example.tvd.trm_discon_recon.MainActivity;
 import com.example.tvd.trm_discon_recon.R;
@@ -34,6 +41,7 @@ import com.example.tvd.trm_discon_recon.activities.Select_FDR_Details_Activity;
 import com.example.tvd.trm_discon_recon.activities.Select_FDR_Fetch_Activity;
 import com.example.tvd.trm_discon_recon.activities.TcDetails;
 import com.example.tvd.trm_discon_recon.database.Database;
+import com.example.tvd.trm_discon_recon.receiver.NetworkChangeReceiver;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -45,6 +53,8 @@ public class HomeFragment extends Fragment {
     CardView cardView1,cardView2;
     String user_length="";
     Button office;
+    static TextView tv_check_connection;
+    private BroadcastReceiver mNetworkReceiver;
     public HomeFragment() {
 
     }
@@ -56,7 +66,9 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.home_fragment_layout2, container, false);
         getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         getActivity().setTitle("Home");
-
+        tv_check_connection = (TextView) view.findViewById(R.id.tv_check_connection);
+        mNetworkReceiver = new NetworkChangeReceiver();
+        registerNetworkBroadcastForNougat();
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MY_SHARED_PREF",MODE_PRIVATE);
         String user_role = sharedPreferences.getString("USER_ROLE","");
         Log.d("Debug","User_Role"+user_role);
@@ -176,11 +188,59 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    public static void dialog(boolean value)
+    {
+        if (value)
+        {
+            tv_check_connection.setText("Online");
+            tv_check_connection.setBackgroundColor(Color.parseColor("#558B2F"));
+            tv_check_connection.setTextColor(Color.WHITE);
+            Handler handler = new Handler();
+            Runnable delayrunnable = new Runnable() {
+                @Override
+                public void run() {
+                    tv_check_connection.setVisibility(View.GONE);
+                }
+            };
+            handler.postDelayed(delayrunnable, 3000);
+        }else {
+            tv_check_connection.setVisibility(View.VISIBLE);
+            tv_check_connection.setText("No Internet Connection!!");
+            tv_check_connection.setBackgroundColor(Color.RED);
+            tv_check_connection.setTextColor(Color.WHITE);
+        }
+    }
+
+    private void registerNetworkBroadcastForNougat() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            getActivity().registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            getActivity().registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+    }
+    protected void unregisterNetworkChanges()
+    {
+        try
+        {
+            getActivity().unregisterReceiver(mNetworkReceiver);
+        }
+        catch (IllegalArgumentException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterNetworkChanges();
+    }
+
     private void SavePreferences(String key, String value) {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(key, value);
         editor.commit();
     }
-
 }

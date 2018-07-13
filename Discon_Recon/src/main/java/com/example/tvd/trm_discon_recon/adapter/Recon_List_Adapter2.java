@@ -123,11 +123,14 @@ public class Recon_List_Adapter2 extends RecyclerView.Adapter<Recon_List_Adapter
                     String lon = getSetValues.getRecon_lon();
                     String accid = getSetValues.getRecon_acc_id();
                     String name = getSetValues.getRecon_consumer_name();
+                    String address = getSetValues.getRecon_add1();
 
                     Intent intent = new Intent(context, Location.class);
                     intent.putExtra("LATITUDE",lat);
                     intent.putExtra("LONGITUDE", lon);
-
+                    intent.putExtra("ACCOUNT_ID",accid);
+                    intent.putExtra("NAME",name);
+                    intent.putExtra("ADDRESS",address);
                     context.startActivity(intent);
                      break;
                 case R.id.img_reconnect:

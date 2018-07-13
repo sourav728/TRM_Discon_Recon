@@ -39,7 +39,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:textColorHint="#ffffff">
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/edit_mrcode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

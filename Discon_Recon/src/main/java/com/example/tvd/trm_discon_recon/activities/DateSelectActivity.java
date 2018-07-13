@@ -3,8 +3,14 @@ package com.example.tvd.trm_discon_recon.activities;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.os.Build;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +23,7 @@ import android.widget.Toast;
 
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.database.Database;
+import com.example.tvd.trm_discon_recon.receiver.NetworkChangeReceiver;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
@@ -28,18 +35,25 @@ public class DateSelectActivity extends AppCompatActivity {
     FunctionCall fcall;
     TextView show_date;
     private int day, month, year;
-    Button disconnect;
+    static Button disconnect;
     GetSetValues getSetValues;
     Database database;
-    String date_selected="";
+    String date_selected = "";
     private Calendar mcalender;
     private Toolbar toolbar;
     TextView toolbar_text;
+    static TextView tv_check_connection;
+    private BroadcastReceiver mNetworkReceiver;
+
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_select);
+
+        tv_check_connection = (TextView) findViewById(R.id.tv_check_connection);
+        mNetworkReceiver = new NetworkChangeReceiver();
+        registerNetworkBroadcastForNougat();
 
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar_text = toolbar.findViewById(R.id.toolbar_title);
@@ -54,7 +68,7 @@ public class DateSelectActivity extends AppCompatActivity {
         });
 
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
-        date_selected = sharedPreferences.getString("SELECTED_DATE","");
+        date_selected = sharedPreferences.getString("SELECTED_DATE", "");
 
         database = new Database(this);
         database.open();
@@ -86,20 +100,42 @@ public class DateSelectActivity extends AppCompatActivity {
         disconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!show_date.getText().toString().equals(""))
-                {
+                if (!show_date.getText().toString().equals("")) {
                     SavePreferences("DISCONNECTION_DATE", date1);
-                    Intent intent = new Intent(DateSelectActivity.this,DisconListActivity.class);
+                    Intent intent = new Intent(DateSelectActivity.this, DisconListActivity.class);
                     startActivity(intent);
-                }else Toast.makeText(DateSelectActivity.this, "Please Select Disconnection Date!!", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(DateSelectActivity.this, "Please Select Disconnection Date!!", Toast.LENGTH_SHORT).show();
 
             }
         });
 
     }
 
-    public void DateDialog1()
-    {
+    public static void dialog2(boolean value) {
+        if (value) {
+            tv_check_connection.setText("Online");
+            tv_check_connection.setBackgroundColor(Color.parseColor("#558B2F"));
+            tv_check_connection.setTextColor(Color.WHITE);
+            Handler handler = new Handler();
+            Runnable delayrunnable = new Runnable() {
+                @Override
+                public void run() {
+                    tv_check_connection.setVisibility(View.GONE);
+                }
+            };
+            handler.postDelayed(delayrunnable, 3000);
+            disconnect.setEnabled(true);
+        } else {
+            tv_check_connection.setVisibility(View.VISIBLE);
+            tv_check_connection.setText("No Internet Connection!!");
+            tv_check_connection.setBackgroundColor(Color.RED);
+            tv_check_connection.setTextColor(Color.WHITE);
+            disconnect.setEnabled(false);
+        }
+    }
+
+    public void DateDialog1() {
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -118,6 +154,30 @@ public class DateSelectActivity extends AppCompatActivity {
         dpdialog.getDatePicker().setMinDate(mcalender.getTimeInMillis());
         dpdialog.show();
     }
+
+    private void registerNetworkBroadcastForNougat() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            registerReceiver(mNetworkReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        }
+    }
+
+    protected void unregisterNetworkChanges() {
+        try {
+            unregisterReceiver(mNetworkReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterNetworkChanges();
+    }
+
     private void SavePreferences(String key, String value) {
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

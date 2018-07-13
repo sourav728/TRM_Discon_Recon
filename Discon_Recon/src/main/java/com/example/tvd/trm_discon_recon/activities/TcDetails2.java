@@ -64,6 +64,7 @@ public class TcDetails2 extends AppCompatActivity {
                 case TC_DETAILS_FAILURE:
                     progressDialog.dismiss();
                     Toast.makeText(TcDetails2.this, "Failure..", Toast.LENGTH_SHORT).show();
+                    finish();
                     break;
                 case TC_UPDATE_SUCCESS:
                     progressDialog.dismiss();
@@ -172,7 +173,7 @@ public class TcDetails2 extends AppCompatActivity {
                             @Override
                             public void onClick(View v) {
                                 cur_reading = current_reading.getText().toString();
-                                if (Double.parseDouble(getSetValues.getTcir()) <= Double.parseDouble(cur_reading)) {
+                                if (Double.parseDouble(getSetValues.getTcir()) < Double.parseDouble(cur_reading)) {
                                     progressDialog = new ProgressDialog(TcDetails2.this, R.style.MyProgressDialogstyle);
                                     progressDialog.setTitle("Updating Tc details..");
                                     progressDialog.setMessage("Please Wait..");
