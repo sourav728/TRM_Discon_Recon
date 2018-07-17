@@ -68,6 +68,7 @@ public class ConstantValues {
     public static final int TC_CODE_NOTUPDATE = 46;
 
     public static final int TC_DETAILS_UPDATE = 47;
-
+    public static final int SERVER_DATE_GOT = 48;
+    public static final int SEVER_DATE_GOT_FAILURE = 49;
 
 }

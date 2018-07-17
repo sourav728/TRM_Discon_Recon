@@ -30,6 +30,7 @@ public class DateSelectActivity7 extends AppCompatActivity {
     TextView toolbar_text;
     EditText subdivision;
     Button submit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,10 +53,6 @@ public class DateSelectActivity7 extends AppCompatActivity {
         subdivision = findViewById(R.id.edit_subdivision);
         submit = findViewById(R.id.btn_submit);
 
-        mcalender = Calendar.getInstance();
-        day = mcalender.get(Calendar.DAY_OF_MONTH);
-        year = mcalender.get(Calendar.YEAR);
-        month = mcalender.get(Calendar.MONTH);
 
         date = (ImageView) findViewById(R.id.img_fromdate);
         date.setOnClickListener(new View.OnClickListener() {
@@ -68,21 +65,20 @@ public class DateSelectActivity7 extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (fcall.isInternetOn(DateSelectActivity7.this))
-                {
-                    if (!subdivision.getText().toString().equals(""))
-                    {
-                        if (!show_date.getText().toString().equals(""))
-                        {
+                if (fcall.isInternetOn(DateSelectActivity7.this)) {
+                    if (!subdivision.getText().toString().equals("")) {
+                        if (!show_date.getText().toString().equals("")) {
                             SavePreferences("TCMRCODE", subdivision.getText().toString());
                             SavePreferences("TCMRDATE", date1);
-                            Intent intent = new Intent(DateSelectActivity7.this,TC_Details2.class );
+                            Intent intent = new Intent(DateSelectActivity7.this, TC_Details2.class);
                             startActivity(intent);
-                        }else
+                        } else
                             Toast.makeText(DateSelectActivity7.this, "Please Select Date!!", Toast.LENGTH_SHORT).show();
 
-                    }else Toast.makeText(DateSelectActivity7.this, "Please Enter Subdivision code!!", Toast.LENGTH_SHORT).show();
-                }else Toast.makeText(DateSelectActivity7.this, "Please Turn on Internet!!", Toast.LENGTH_SHORT).show();
+                    } else
+                        Toast.makeText(DateSelectActivity7.this, "Please Enter Subdivision code!!", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(DateSelectActivity7.this, "Please Turn on Internet!!", Toast.LENGTH_SHORT).show();
 
 
             }
@@ -90,6 +86,10 @@ public class DateSelectActivity7 extends AppCompatActivity {
     }
 
     public void DateDialog1() {
+        mcalender = Calendar.getInstance();
+        day = mcalender.get(Calendar.DAY_OF_MONTH);
+        year = mcalender.get(Calendar.YEAR);
+        month = mcalender.get(Calendar.MONTH);
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -102,6 +102,8 @@ public class DateSelectActivity7 extends AppCompatActivity {
         DatePickerDialog dpdialog = new DatePickerDialog(this, listener, year, month, day);
         //it will show dates upto current date
         dpdialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+      /* mcalender.add(Calendar.MONTH, -1);
+        dpdialog.getDatePicker().setMinDate(mcalender.getTimeInMillis());*/
         //below code will set calender min date to 30 days before from system date
        /* mcalender.add(Calendar.DATE, -30);
         dpdialog.getDatePicker().setMinDate(mcalender.getTimeInMillis());*/

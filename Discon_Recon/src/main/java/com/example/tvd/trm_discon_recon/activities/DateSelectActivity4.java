@@ -56,10 +56,7 @@ public class DateSelectActivity4 extends AppCompatActivity {
         img_from = (ImageView) findViewById(R.id.img_fromdate);
         img_to = (ImageView) findViewById(R.id.img_todate);
 
-        mcalender = Calendar.getInstance();
-        day = mcalender.get(Calendar.DAY_OF_MONTH);
-        year = mcalender.get(Calendar.YEAR);
-        month = mcalender.get(Calendar.MONTH);
+
 
         img_from.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +94,11 @@ public class DateSelectActivity4 extends AppCompatActivity {
     }
 
     public void DateDialog1() {
+        mcalender = Calendar.getInstance();
+        day = mcalender.get(Calendar.DAY_OF_MONTH);
+        year = mcalender.get(Calendar.YEAR);
+        month = mcalender.get(Calendar.MONTH);
+
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -110,12 +112,17 @@ public class DateSelectActivity4 extends AppCompatActivity {
         //it will show dates upto current date
         dpdialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         //below code will set calender min date to 30 days before from system date
-        mcalender.add(Calendar.DATE, -30);
+        mcalender.add(Calendar.MONTH, -1);
         dpdialog.getDatePicker().setMinDate(mcalender.getTimeInMillis());
         dpdialog.show();
     }
 
     public void DateDialog2() {
+        mcalender = Calendar.getInstance();
+        day = mcalender.get(Calendar.DAY_OF_MONTH);
+        year = mcalender.get(Calendar.YEAR);
+        month = mcalender.get(Calendar.MONTH);
+
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -129,7 +136,7 @@ public class DateSelectActivity4 extends AppCompatActivity {
         //it will show dates upto current date
         dpdialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         //below code will set calender min date to 30 days before from system date
-        mcalender.add(Calendar.DATE, -30);
+        mcalender.add(Calendar.MONTH, -1);
         dpdialog.getDatePicker().setMinDate(mcalender.getTimeInMillis());
         dpdialog.show();
     }

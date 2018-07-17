@@ -143,6 +143,7 @@ public class TcDetails2 extends AppCompatActivity {
                 View view = inflater.inflate(R.layout.tc_details_update_layout, null);
                 dialog.setView(view);
                 final TextView tc_code = view.findViewById(R.id.txt_tccode);
+                final TextView tc_ir = view.findViewById(R.id.txt_tc_ir);
                 final EditText current_reading = view.findViewById(R.id.edit_current_reading);
                 final Button cancel_button = view.findViewById(R.id.dialog_negative_btn);
                 final Button update_button = view.findViewById(R.id.dialog_positive_btn);
@@ -153,7 +154,8 @@ public class TcDetails2 extends AppCompatActivity {
                     public void onShow(DialogInterface dialog) {
                         tc_code.setText(getSetValues.getTc_code());
                         current_reading.setText(getSetValues.getTcfr());
-                      /*  current_reading.addTextChangedListener(new TextWatcher() {
+                        tc_ir.setText(getSetValues.getTcir());
+                       /* current_reading.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                                 update_button.setEnabled(!TextUtils.isEmpty(s.toString().trim()));

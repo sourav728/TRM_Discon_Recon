@@ -11,13 +11,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 
+
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +46,8 @@ public class TC_Details2 extends AppCompatActivity {
     ProgressDialog progressdialog;
     AlertDialog tc_details_update_dialog;
     FunctionCall fcall;
+    private Toolbar toolbar;
+    TextView toolbar_text;
     //************************************************************************************************************
     private final Handler handler;
 
@@ -84,6 +86,18 @@ public class TC_Details2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tc__details2);
+
+        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        toolbar_text = toolbar.findViewById(R.id.toolbar_title);
+        toolbar_text.setText("Feeder List");
+        toolbar.setNavigationIcon(R.drawable.back);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         fcall = new FunctionCall();
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         MRCODE = sharedPreferences.getString("TCMRCODE", "");
@@ -121,6 +135,7 @@ public class TC_Details2 extends AppCompatActivity {
                 final TextView tc_code = view.findViewById(R.id.txt_tccode);
                 final TextView mr_code = view.findViewById(R.id.txt_mrcode);
                 final TextView date = view.findViewById(R.id.txt_date);
+                final TextView tc_ir = view.findViewById(R.id.txt_ir);
 
                 final EditText current_reading = view.findViewById(R.id.edit_current_reading);
                 final Button cancel_button = view.findViewById(R.id.dialog_negative_btn);
@@ -133,6 +148,7 @@ public class TC_Details2 extends AppCompatActivity {
                         tc_code.setText(getSetValues.getTc_code());
                         mr_code.setText(MRCODE);
                         date.setText(DATE);
+                        tc_ir.setText(getSetValues.getTcir());
                         current_reading.setText(getSetValues.getTcfr());
                        /* current_reading.addTextChangedListener(new TextWatcher() {
                             @Override

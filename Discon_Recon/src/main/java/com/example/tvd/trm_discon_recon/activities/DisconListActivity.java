@@ -201,8 +201,8 @@ public class DisconListActivity extends AppCompatActivity{
         progressDialog.show();
         SendingData.Discon_List discon_list = sendingData.new Discon_List(mhandler, getsetvalues, arraylist);
         /****************MRCode and Date is hardcoaded******************/
-        discon_list.execute(login_mr_code, disconnection_date);
-        //discon_list.execute("54003714","2018/06/13");
+         discon_list.execute(login_mr_code, disconnection_date);
+       // discon_list.execute("54003714","2018/06/13");
     }
 
     public void show_disconnection_dialog(int id, final int position, ArrayList<GetSetValues> arrayList) {

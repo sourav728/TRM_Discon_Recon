@@ -146,4 +146,9 @@ public class Database {
                 "group by REDATE)t2 on t1.ReDate1=t2.ReDate2",null);
         return c9;
     }
+   /* public void delete_data()
+    {
+        String sql = "DELETE FROM DISCON WHERE DIS_DATE <= date('now', '-30 days')";
+        sdb.execSQL(sql);
+    }*/
 }

@@ -52,10 +52,6 @@ public class Select_FDR_Fetch_Activity extends AppCompatActivity {
         subdivision = findViewById(R.id.edit_subdivision);
         submit = findViewById(R.id.btn_submit);
 
-        mcalender = Calendar.getInstance();
-        day = mcalender.get(Calendar.DAY_OF_MONTH);
-        year = mcalender.get(Calendar.YEAR);
-        month = mcalender.get(Calendar.MONTH);
 
         date = (ImageView) findViewById(R.id.img_fromdate);
         date.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +85,10 @@ public class Select_FDR_Fetch_Activity extends AppCompatActivity {
     }
 
     public void DateDialog1() {
+        mcalender = Calendar.getInstance();
+        day = mcalender.get(Calendar.DAY_OF_MONTH);
+        year = mcalender.get(Calendar.YEAR);
+        month = mcalender.get(Calendar.MONTH);
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -101,8 +101,7 @@ public class Select_FDR_Fetch_Activity extends AppCompatActivity {
         DatePickerDialog dpdialog = new DatePickerDialog(this, listener, year, month, day);
         //it will show dates upto current date
         dpdialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-        //below code will set calender min date to 30 days before from system date
-       /* mcalender.add(Calendar.DATE, -30);
+       /* mcalender.add(Calendar.MONTH, -1);
         dpdialog.getDatePicker().setMinDate(mcalender.getTimeInMillis());*/
         dpdialog.show();
     }

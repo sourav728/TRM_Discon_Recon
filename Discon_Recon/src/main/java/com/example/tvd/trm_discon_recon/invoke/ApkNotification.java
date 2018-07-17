@@ -69,7 +69,7 @@ public class ApkNotification extends BroadcastReceiver {
         }
 
         if (functionCalls.checkInternetConnection(context)) {
-            functionCalls.logStatus("Checking for newer version of Smart Billing application...");
+            functionCalls.logStatus("Checking for newer version of Discon_Recon application...");
             SendingData.Login mrLogin = sendingData.new Login(handler, getSetValues);
             mrLogin.execute(settings.getString("MRCODE", ""), settings.getString("DEVICE_ID", ""), settings.getString("PASSWORD", ""));
         } else functionCalls.logStatus("No Internet Connection...");

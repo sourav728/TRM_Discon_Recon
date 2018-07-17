@@ -97,23 +97,30 @@ public class DisconnectionReportActivity extends AppCompatActivity {
 
         stk.addView(tbrow0);
 
-        try
-        {
-            Cursor c1 = database.get_report(fcall.Parse_Date5(from_date), fcall.Parse_Date5(to_date));
-            Log.d("Debug", "After Parse discon_from_date" + fcall.Parse_Date5(from_date));
-            Log.d("Debug", "After Parse discon_to_date" + fcall.Parse_Date5(to_date));
-            if (c1.getCount() > 0) {
+        try {
+            Cursor c2 = database.check_discon_accid();
+            int count = 0;
+            while (c2.moveToNext()) {
+                //checking whether any acc id is reconnected or not
+                String FLAG = String.valueOf(c2.getString(c2.getColumnIndex("FLAG")));
+                if (FLAG.equals("Y"))
+                    count++;
+            }
+            if (count > 0) {
+                Cursor c1 = database.get_report(fcall.Parse_Date5(from_date), fcall.Parse_Date5(to_date));
+                Log.d("Debug", "After Parse discon_from_date" + fcall.Parse_Date5(from_date));
+                Log.d("Debug", "After Parse discon_to_date" + fcall.Parse_Date5(to_date));
                 while (c1.moveToNext()) {
                     String dis_date = String.valueOf(c1.getString(c1.getColumnIndex("DisDate1")));
                     Log.d("Debug", "Dis_Date " + dis_date);
                     String tot_cnt = String.valueOf(c1.getString(c1.getColumnIndex("tot_cnt")));
-                    Log.d("Debug","Tot_count "+tot_cnt);
+                    Log.d("Debug", "Tot_count " + tot_cnt);
                     String tot_amt = String.valueOf(c1.getString(c1.getColumnIndex("tot_amt")));
-                    Log.d("Debug","Tot_amt " + tot_amt);
+                    Log.d("Debug", "Tot_amt " + tot_amt);
                     String dis_cnt = String.valueOf(c1.getString(c1.getColumnIndex("Dis_cnt")));
-                    Log.d("Debug","Dis_cnt "+dis_cnt);
+                    Log.d("Debug", "Dis_cnt " + dis_cnt);
                     String dis_amt = String.valueOf(c1.getString(c1.getColumnIndex("Dis_Amt")));
-                    Log.d("Debug","Dis_amt "+dis_amt);
+                    Log.d("Debug", "Dis_amt " + dis_amt);
 
                     percentage = (100 * (Double.parseDouble(dis_cnt)) / Double.parseDouble(tot_cnt));
                     //Below code will rounding off to 2 digits
@@ -163,9 +170,7 @@ public class DisconnectionReportActivity extends AppCompatActivity {
                 Toast.makeText(DisconnectionReportActivity.this, "Disconnection data is not available!!", Toast.LENGTH_SHORT).show();
                 finish();
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

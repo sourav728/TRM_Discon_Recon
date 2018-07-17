@@ -78,7 +78,7 @@
                         android:layout_weight="1.5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="FDRIR"/>
+                        android:text="FDR IR"/>
                     <TextView
                         android:layout_weight="2.1"
                         android:layout_width="match_parent"
@@ -105,7 +105,7 @@
                         android:layout_weight="1.2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="FDRFR"/>
+                        android:text="FDR FR"/>
                     <TextView
                         android:layout_weight="1.7"
                         android:layout_width="match_parent"
@@ -133,7 +133,7 @@
                         android:layout_weight="1.2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="FDRMF"/>
+                        android:text="FDR MF"/>
                     <TextView
                         android:layout_weight="1.7"
                         android:layout_width="match_parent"

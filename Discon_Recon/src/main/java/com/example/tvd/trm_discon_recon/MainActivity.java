@@ -1,7 +1,6 @@
 package com.example.tvd.trm_discon_recon;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
@@ -26,16 +25,9 @@ import com.example.tvd.trm_discon_recon.activities.DateSelectActivity2;
 import com.example.tvd.trm_discon_recon.activities.SettingActivity;
 import com.example.tvd.trm_discon_recon.database.Database;
 import com.example.tvd.trm_discon_recon.fragments.HomeFragment;
-import com.example.tvd.trm_discon_recon.ftp.FTPAPI;
 import com.example.tvd.trm_discon_recon.invoke.SendingData;
-import com.example.tvd.trm_discon_recon.service.BluetoothService;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
-
-
-
-
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     TextView mrname,mrcode,logout;
@@ -56,6 +48,10 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         database = new Database(this);
         database.open();
+
+        //todo for deleting database records less than 3 days
+       // database.delete_data();
+
         progress = new ProgressDialog(MainActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();

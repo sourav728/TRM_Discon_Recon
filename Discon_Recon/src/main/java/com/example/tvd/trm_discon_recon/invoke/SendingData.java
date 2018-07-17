@@ -498,9 +498,9 @@ public class SendingData {
        @Override
        protected String doInBackground(String... params) {
             HashMap<String,String>datamap = new HashMap<>();
-            datamap.put("SUB_DIVCODE",params[0]);
+            datamap.put("SUBDIVCODE",params[0]);
             datamap.put("DATE",params[1]);
-            datamap.put("FDCRCODE",params[2]);
+            datamap.put("FDRCODE",params[2]);
             try {
                 response = UrlPostConnection("http://bc_service2.hescomtrm.com/ReadFile.asmx/TC_DETAILS",datamap);
             }

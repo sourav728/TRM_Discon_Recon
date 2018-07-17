@@ -149,6 +149,7 @@ public class FeederDetails extends AppCompatActivity {
                 View view = inflater.inflate(R.layout.feeder_details_update_layout, null);
                 dialog.setView(view);
                 final TextView fdr_code = view.findViewById(R.id.txt_fdr_code);
+                final TextView fdr_ir = view.findViewById(R.id.txt_fdr_ir);
                 final EditText current_reading = view.findViewById(R.id.edit_current_reading);
                 final Button cancel_button = view.findViewById(R.id.dialog_negative_btn);
                 final Button update_button = view.findViewById(R.id.dialog_positive_btn);
@@ -159,6 +160,7 @@ public class FeederDetails extends AppCompatActivity {
                     public void onShow(DialogInterface dialog) {
                         fdr_code.setText(getSetValues.getFdr_code());
                         current_reading.setText(getSetValues.getFdr_fr());
+                        fdr_ir.setText(getSetValues.getFdr_ir());
                        /* current_reading.addTextChangedListener(new TextWatcher() {
                             @Override
                             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

@@ -44,7 +44,9 @@ import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_MEMO_
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_MEMO_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_FAILURE;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_GOT;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_SUCCESS;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.SEVER_DATE_GOT_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_CODE_FOUND;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_CODE_NOTFOUND;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_CODE_NOTUPDATE;
@@ -207,8 +209,8 @@ public class ReceivingData {
                 if (jsonObject != null) {
                     String serverdate = jsonObject.getString("message");
                     getSetValues.setServer_date(serverdate.substring(1, serverdate.length() - 1));
-                    handler.sendEmptyMessage(SERVER_DATE_SUCCESS);
-                } else handler.sendEmptyMessage(SERVER_DATE_FAILURE);
+                    handler.sendEmptyMessage(SERVER_DATE_GOT);
+                } else handler.sendEmptyMessage(SEVER_DATE_GOT_FAILURE);
             }
         } catch (JSONException e) {
             e.printStackTrace();

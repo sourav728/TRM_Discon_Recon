@@ -77,11 +77,6 @@ public class DateSelectActivity extends AppCompatActivity {
         getSetValues = new GetSetValues();
 
 
-        mcalender = Calendar.getInstance();
-        day = mcalender.get(Calendar.DAY_OF_MONTH);
-        year = mcalender.get(Calendar.YEAR);
-        month = mcalender.get(Calendar.MONTH);
-
         show_date = (TextView) findViewById(R.id.txt_date);
         fcall = new FunctionCall();
         disconnect = (Button) findViewById(R.id.btn_disconnect);
@@ -100,15 +95,15 @@ public class DateSelectActivity extends AppCompatActivity {
         disconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (fcall.isInternetOn(DateSelectActivity.this))
-                {
+                if (fcall.isInternetOn(DateSelectActivity.this)) {
                     if (!show_date.getText().toString().equals("")) {
                         SavePreferences("DISCONNECTION_DATE", date1);
                         Intent intent = new Intent(DateSelectActivity.this, DisconListActivity.class);
                         startActivity(intent);
                     } else
                         Toast.makeText(DateSelectActivity.this, "Please Select Disconnection Date!!", Toast.LENGTH_SHORT).show();
-                }else Toast.makeText(DateSelectActivity.this, "Please Connect To Internet!!", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(DateSelectActivity.this, "Please Connect To Internet!!", Toast.LENGTH_SHORT).show();
 
 
             }
@@ -140,6 +135,12 @@ public class DateSelectActivity extends AppCompatActivity {
     }*/
 
     public void DateDialog1() {
+
+        mcalender = Calendar.getInstance();
+        day = mcalender.get(Calendar.DAY_OF_MONTH);
+        year = mcalender.get(Calendar.YEAR);
+        month = mcalender.get(Calendar.MONTH);
+
         DatePickerDialog.OnDateSetListener listener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -154,7 +155,7 @@ public class DateSelectActivity extends AppCompatActivity {
         //it will show dates upto current date
         dpdialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         //below code will set calender min date to 30 days before from system date
-        mcalender.add(Calendar.DATE, -30);
+        mcalender.add(Calendar.MONTH, -1);
         dpdialog.getDatePicker().setMinDate(mcalender.getTimeInMillis());
         dpdialog.show();
     }

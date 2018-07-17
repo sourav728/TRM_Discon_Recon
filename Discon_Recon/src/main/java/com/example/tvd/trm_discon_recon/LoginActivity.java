@@ -81,6 +81,7 @@ public class LoginActivity extends AppCompatActivity {
     FTPAPI ftpapi;
     String cur_version = "", username = "";
     Context context;
+    SendingData sendingData;
     private final Handler mhandler;
 
     {
@@ -99,11 +100,6 @@ public class LoginActivity extends AppCompatActivity {
                         SavePreferences("PASSWORD", getsetvalues.getMrpassword());
                         SavePreferences("APP_VERSION", getsetvalues.getApp_version());
                         start_version_check();
-                       /* //call for new app version update
-                        SendingData.Login login = sendingdata.new Login();
-                        login.execute(getsetvalues.getMrcode(), getsetvalues.getMr_device_id(), getsetvalues.getMrpassword());
-                        //end of call for new notification for apk*/
-
                         if (fcall.compare(cur_version, getsetvalues.getApp_version()))
                             showdialog(DLG_APK_UPDATE_SUCCESS);
                         else {
@@ -173,6 +169,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         context = this;
+        sendingData = new SendingData();
 
         PackageInfo packageInfo;
         try {
@@ -197,6 +194,8 @@ public class LoginActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //todo for checking server date
+
 
                 if (fcall.isInternetOn(LoginActivity.this)) {
                     username = mrcode.getText().toString().trim();

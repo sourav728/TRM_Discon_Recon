@@ -87,10 +87,21 @@ public class ReconnectionReportActivity extends AppCompatActivity {
         tbrow0.addView(tv4);
 
         try {
-            Cursor c1 = database.get_recon_report(fcall.Parse_Date5(from_date), fcall.Parse_Date5(to_date));
-            Log.d("Debug", "After Parse recon_from_date" + fcall.Parse_Date5(from_date));
-            Log.d("Debug", "After Parse recon_to_date" + fcall.Parse_Date5(to_date));
-            if (c1.getCount() > 0) {
+            //getting all recon data
+            Cursor c2 = database.check_recon_accid();
+            int count=0;
+            while (c2.moveToNext())
+            {
+                //checking whether any acc is reconnected or not
+                String FLAG = String.valueOf(c2.getString(c2.getColumnIndex("FLAG")));
+                if (FLAG.equals("Y"))
+                   count++;
+            }
+            if (count>0)
+            {
+                Cursor c1 = database.get_recon_report(fcall.Parse_Date5(from_date), fcall.Parse_Date5(to_date));
+                Log.d("Debug", "After Parse recon_from_date" + fcall.Parse_Date5(from_date));
+                Log.d("Debug", "After Parse recon_to_date" + fcall.Parse_Date5(to_date));
                 while (c1.moveToNext()) {
                     String recon_date = String.valueOf(c1.getString(c1.getColumnIndex("ReDate1")));
                     String tot_cnt = String.valueOf(c1.getString(c1.getColumnIndex("tot_cnt")));
@@ -132,6 +143,7 @@ public class ReconnectionReportActivity extends AppCompatActivity {
                 Toast.makeText(ReconnectionReportActivity.this, "Reconnection data is not available!!", Toast.LENGTH_SHORT).show();
                 finish();
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }

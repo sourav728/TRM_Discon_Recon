@@ -285,6 +285,11 @@ public class FunctionCall {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a", Locale.US);
         return sdf.format(new Date());
     }
+    public String system_date()
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        return sdf.format(new Date());
+    }
 
     public void showprogressdialog(String Message, ProgressDialog dialog) {
         dialog.setTitle("Downloading");
