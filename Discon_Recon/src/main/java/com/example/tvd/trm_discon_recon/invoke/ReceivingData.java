@@ -553,6 +553,7 @@ public class ReceivingData {
                     String TCCODE = jsonObject.getString("TCCODE");
                     String TCIR = jsonObject.getString("TCIR");
                     String TCFR = jsonObject.getString("TCFR");
+                    String TCMF = jsonObject.getString("TCMF");
 
                     if (!TCCODE.equals(""))
                         getSetValues.setTc_code(TCCODE);
@@ -563,6 +564,9 @@ public class ReceivingData {
                     if (!TCFR.equals(""))
                         getSetValues.setTcfr(TCFR);
                     else getSetValues.setTcfr("NA");
+                    if (!TCMF.equals(""))
+                        getSetValues.setTcmf(TCMF);
+                    else getSetValues.setTcmf("NA");
                     arrayList.add(getSetValues);
                     tcCode_adapter.notifyDataSetChanged();
                 }

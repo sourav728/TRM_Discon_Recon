@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +49,7 @@ public class TC_Details2 extends AppCompatActivity {
     FunctionCall fcall;
     private Toolbar toolbar;
     TextView toolbar_text;
+    private SearchView searchView;
     //************************************************************************************************************
     private final Handler handler;
 
@@ -69,6 +71,10 @@ public class TC_Details2 extends AppCompatActivity {
                         progressdialog.dismiss();
                         Toast.makeText(TC_Details2.this, "Updated..", Toast.LENGTH_SHORT).show();
                         tc_details_update_dialog.dismiss();
+                        finish();
+                        overridePendingTransition(0, 0);
+                        startActivity(getIntent());
+                        overridePendingTransition(0, 0);
                         break;
                     case TC_CODE_NOTUPDATE:
                         progressdialog.dismiss();
@@ -98,6 +104,22 @@ public class TC_Details2 extends AppCompatActivity {
                 finish();
             }
         });
+
+        searchView = toolbar.findViewById(R.id.search_view);
+        searchView.setQueryHint("Enter Tc Code..");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                tcCode_adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
         fcall = new FunctionCall();
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         MRCODE = sharedPreferences.getString("TCMRCODE", "");

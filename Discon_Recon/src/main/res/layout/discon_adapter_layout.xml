@@ -49,6 +49,29 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
+                        android:layout_weight="2.1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Name"/>
+                    <TextView
+                        android:layout_weight="2.9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="1dp"
+                        android:textStyle="bold"
+                        android:text=":"/>
+                    <TextView
+                        android:id="@+id/txt_cons_name"
+                        android:layout_weight="1.2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAlignment="viewStart"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
                         android:layout_weight="1.5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -97,7 +120,7 @@
                         android:id="@+id/img_disconnect"
                         android:layout_weight="1.9"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="30dp"
                         android:src="@drawable/disconnection"/>
 
                 </LinearLayout>
@@ -109,7 +132,7 @@
                         android:layout_weight="1.2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="PrevRead"/>
+                        android:text="Prev Read"/>
                     <TextView
                         android:layout_weight="1.7"
                         android:layout_width="match_parent"

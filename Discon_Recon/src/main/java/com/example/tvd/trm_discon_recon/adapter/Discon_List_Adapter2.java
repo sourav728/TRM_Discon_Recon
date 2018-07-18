@@ -47,6 +47,7 @@ public class Discon_List_Adapter2 extends RecyclerView.Adapter<Discon_List_Adapt
     @Override
     public void onBindViewHolder(Discon_List_Adapter2.Discon_Holder holder, int position) {
         GetSetValues getSetValues = arraylist.get(position);
+        holder.conname.setText(getSetValues.getDiscon_consumer_name());
         holder.accountid.setText(getSetValues.getDiscon_acc_id());
         Log.d("Holder","Acc id"+getSetValues.getDiscon_acc_id());
         //here %s%s meaning first string will set on first then space and then second string
@@ -76,6 +77,7 @@ public class Discon_List_Adapter2 extends RecyclerView.Adapter<Discon_List_Adapt
                     ArrayList<GetSetValues> filterlist = new ArrayList<>();
                     for (int i = 0; i < filteredList.size(); i++) {
                         GetSetValues getSetValues = filteredList.get(i);
+                        //todo searching based on discon_acc_id
                         if (getSetValues.getDiscon_acc_id().contains(search)) {
                             filterlist.add(getSetValues);
                         }
@@ -96,7 +98,7 @@ public class Discon_List_Adapter2 extends RecyclerView.Adapter<Discon_List_Adapt
     }
 
     public class Discon_Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView accountid, arrears, prevraed, disconnected;
+        TextView accountid, arrears, prevraed, disconnected,conname;
         ImageView marker,disconnection;
         LinearLayout lin;
         public Discon_Holder(View itemView) {
@@ -106,6 +108,7 @@ public class Discon_List_Adapter2 extends RecyclerView.Adapter<Discon_List_Adapt
             arrears =  itemView.findViewById(R.id.txt_arrears);
             prevraed =  itemView.findViewById(R.id.txt_prevread);
             disconnected = itemView.findViewById(R.id.txt_disconnected);
+            conname = itemView.findViewById(R.id.txt_cons_name);
             marker = itemView.findViewById(R.id.img_marker);
             marker.setOnClickListener(this);
             disconnection = itemView.findViewById(R.id.img_disconnect);

@@ -25,6 +25,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,7 +49,7 @@ import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_SUCC
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_SUCCESS;
 
-public class DisconListActivity extends AppCompatActivity{
+public class DisconListActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     GetSetValues getsetvalues;
     RecyclerView recyclerview;
@@ -64,12 +65,12 @@ public class DisconListActivity extends AppCompatActivity{
     Database database;
     Cursor c1, c2, c3;
     RoleAdapter roleAdapter1;
-    String selected_role = "", disconnection_date = "", reading = "", count = "",login_mr_code="";
+    String selected_role = "", disconnection_date = "", reading = "", count = "", login_mr_code = "";
     int dialog_position;
     TextView total_count, discon_count, remaining;
     private Toolbar toolbar;
     TextView toolbar_text;
-    private  SearchView searchView;
+    private SearchView searchView;
     private final Handler mhandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -144,7 +145,7 @@ public class DisconListActivity extends AppCompatActivity{
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar_text = toolbar.findViewById(R.id.toolbar_title);
         searchView = toolbar.findViewById(R.id.search_view);
-
+        searchView.setQueryHint("Enter Account ID..");
 
         toolbar_text.setText("Disconnection List");
         toolbar.setNavigationIcon(R.drawable.back);
@@ -173,7 +174,7 @@ public class DisconListActivity extends AppCompatActivity{
         database.open();
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         disconnection_date = sharedPreferences.getString("DISCONNECTION_DATE", "");
-        login_mr_code = sharedPreferences.getString("MRCODE","");
+        login_mr_code = sharedPreferences.getString("MRCODE", "");
         Log.d("Debug", "Got Disconnection Date" + disconnection_date);
 
 
@@ -201,8 +202,8 @@ public class DisconListActivity extends AppCompatActivity{
         progressDialog.show();
         SendingData.Discon_List discon_list = sendingData.new Discon_List(mhandler, getsetvalues, arraylist);
         /****************MRCode and Date is hardcoaded******************/
-         discon_list.execute(login_mr_code, disconnection_date);
-       // discon_list.execute("54003714","2018/06/13");
+        discon_list.execute(login_mr_code, disconnection_date);
+        // discon_list.execute("54003714","2018/06/13");
     }
 
     public void show_disconnection_dialog(int id, final int position, ArrayList<GetSetValues> arrayList) {
@@ -216,20 +217,20 @@ public class DisconListActivity extends AppCompatActivity{
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View view = inflater.inflate(R.layout.discon_layout, null);
                 dialog.setView(view);
-                final TextView accno =  view.findViewById(R.id.txt_account_no);
-                final TextView arrears =  view.findViewById(R.id.txt_arrears);
-                final TextView prevread =  view.findViewById(R.id.txt_prevread);
-                final TextView name =  view.findViewById(R.id.txt_name);
-                final TextView address =  view.findViewById(R.id.txt_address);
-                final TextView discon_date =  view.findViewById(R.id.txt_discon_date);
+                final TextView accno = view.findViewById(R.id.txt_account_no);
+                final TextView arrears = view.findViewById(R.id.txt_arrears);
+                final TextView prevread = view.findViewById(R.id.txt_prevread);
+                final TextView name = view.findViewById(R.id.txt_name);
+                final TextView address = view.findViewById(R.id.txt_address);
+                final TextView discon_date = view.findViewById(R.id.txt_discon_date);
+                final LinearLayout show_hide = view.findViewById(R.id.lin_show_hide);
+                final EditText curread = view.findViewById(R.id.edit_curread);
+                final EditText comments = view.findViewById(R.id.edit_comment);
 
-                final EditText curread =  view.findViewById(R.id.edit_curread);
-                final EditText comments =  view.findViewById(R.id.edit_comment);
+                final Button cancel_button = view.findViewById(R.id.dialog_negative_btn);
+                final Button disconnect_button = view.findViewById(R.id.dialog_positive_btn);
 
-                final Button cancel_button =  view.findViewById(R.id.dialog_negative_btn);
-                final Button disconnect_button =  view.findViewById(R.id.dialog_positive_btn);
-
-                final Spinner remark =  view.findViewById(R.id.spiner_remark);
+                final Spinner remark = view.findViewById(R.id.spiner_remark);
                 arrayList3 = new ArrayList<>();
                 roleAdapter1 = new RoleAdapter(arrayList3, this);
                 remark.setAdapter(roleAdapter1);
@@ -254,6 +255,10 @@ public class DisconListActivity extends AppCompatActivity{
                                 TextView role = (TextView) view.findViewById(R.id.spinner_txt);
                                 role.setBackgroundDrawable(null);
                                 selected_role = role.getText().toString();
+                                //todo I have to remove comments for the below lines for Amount Paid option
+                               /* if (!selected_role.equals("Amount Paid"))
+                                    show_hide.setVisibility(View.GONE);
+                                else show_hide.setVisibility(View.VISIBLE);*/
                                 // Toast.makeText(getActivity(), "Selected Role" + selected_role, Toast.LENGTH_SHORT).show();
                             }
 
@@ -291,21 +296,20 @@ public class DisconListActivity extends AppCompatActivity{
                             public void onClick(View v) {
                                 if (!TextUtils.isEmpty(curread.getText())) {
                                     if (!selected_role.equals("--SELECT--")) {
+                                        show_hide.setVisibility(View.VISIBLE);
                                         reading = curread.getText().toString();
                                         if (Double.parseDouble(getSetValues.getDiscon_prevread()) <= Double.parseDouble(reading)) {
-                                            if (!comments.getText().toString().equals(""))
-                                            {
+                                            if (!comments.getText().toString().equals("")) {
                                                 progressDialog = new ProgressDialog(DisconListActivity.this, R.style.MyProgressDialogstyle);
                                                 progressDialog.setTitle("Updating Disconnection");
                                                 progressDialog.setMessage("Please Wait..");
                                                 progressDialog.show();
                                                 SendingData.Disconnect_Update disconnect_update = sendingData.new Disconnect_Update(mhandler, getSetValues);
-                                                disconnect_update.execute(getSetValues.getDiscon_acc_id(), disconnection_date, reading, selected_role,comments.getText().toString());
-                                            }else Toast.makeText(DisconListActivity.this, "Please Enter Comments!!", Toast.LENGTH_SHORT).show();
-
-                                        } else {
+                                                disconnect_update.execute(getSetValues.getDiscon_acc_id(), disconnection_date, reading, selected_role, comments.getText().toString());
+                                            } else
+                                                Toast.makeText(DisconListActivity.this, "Please Enter Comments!!", Toast.LENGTH_SHORT).show();
+                                        } else
                                             functionCall.setEdittext_error(curread, "Current Reading should be greater than Previous Reading!!");
-                                        }
                                     } else
                                         Toast.makeText(DisconListActivity.this, "Please Select Remark!!", Toast.LENGTH_SHORT).show();
 
@@ -341,8 +345,8 @@ public class DisconListActivity extends AppCompatActivity{
                 Log.d("Debug", "ARREARS" + getsetvalues.getArrears());
                 String dis_date = getsetvalues.getDis_date();
 
-                dis_date = dis_date.substring(0,dis_date.indexOf(" "));
-                Log.d("Debug","Dis_Date"+dis_date);
+                dis_date = dis_date.substring(0, dis_date.indexOf(" "));
+                Log.d("Debug", "Dis_Date" + dis_date);
                 cv.put("DIS_DATE", dis_date);
                 cv.put("PREVREAD", getsetvalues.getPrev_read());
                 cv.put("CONSUMER_NAME", getsetvalues.getConsumer_name());
@@ -366,7 +370,7 @@ public class DisconListActivity extends AppCompatActivity{
     public void show() {
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         recyclerview.setHasFixedSize(true);
-        discon_list_adapter = new Discon_List_Adapter2(this,arrayList1, DisconListActivity.this);
+        discon_list_adapter = new Discon_List_Adapter2(this, arrayList1, DisconListActivity.this);
         recyclerview.setAdapter(discon_list_adapter);
 
         Cursor cursor = database.get_Discon_Data();
@@ -418,35 +422,15 @@ public class DisconListActivity extends AppCompatActivity{
     public void update_db_values() {
         database.update_Discon_Data(dialog_position, reading, selected_role).moveToNext();
         finish();
-        overridePendingTransition(0,0);
+        overridePendingTransition(0, 0);
         startActivity(getIntent());
-        overridePendingTransition(0,0);
+        overridePendingTransition(0, 0);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-      /*  MenuInflater mi = getMenuInflater();
-        mi.inflate(R.menu.search,menu);
-        MenuItem search = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView)MenuItemCompat.getActionView(search);
-        searchView.setQueryHint(Html.fromHtml("<font color = #212121>" + "Search by Account ID.." + "</font>"));
-        search(searchView);*/
         return super.onCreateOptionsMenu(menu);
     }
 
-    private void search(SearchView searchView) {
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                discon_list_adapter.getFilter().filter(newText);
-                return false;
-            }
-        });
-    }
 
 }

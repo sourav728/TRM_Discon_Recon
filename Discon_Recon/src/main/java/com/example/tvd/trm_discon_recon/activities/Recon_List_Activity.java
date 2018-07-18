@@ -141,9 +141,7 @@ public class Recon_List_Activity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar_text = toolbar.findViewById(R.id.toolbar_title);
         toolbar_text.setText("Reconnection List");
-        searchView = toolbar.findViewById(R.id.search_view);
         toolbar.setNavigationIcon(R.drawable.back);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,6 +149,8 @@ public class Recon_List_Activity extends AppCompatActivity {
             }
         });
 
+        searchView = toolbar.findViewById(R.id.search_view);
+        searchView.setQueryHint("Enter Account ID..");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
         <include android:id="@+id/my_toolbar"
-            layout="@layout/toolbar"/>
+            layout="@layout/toolbar2"/>
         <include android:id="@+id/layout_first"
             layout="@layout/feeder_details_header" />
         <android.support.v7.widget.RecyclerView

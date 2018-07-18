@@ -1,11 +1,14 @@
 package com.example.tvd.trm_discon_recon.activities;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,6 +24,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.support.v7.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +56,7 @@ public class FeederDetails extends AppCompatActivity {
     TextView toolbar_text, date, display_subdivision;
     String fdr_details_date = "", subdivision = "", parsed_date = "", cur_reading = "";
     AlertDialog feeder_details_update_dialog;
+    private SearchView searchView;
     private Feeder_details_Adapter feeder_details_adapter;
     private final Handler mhandler = new Handler(new Handler.Callback() {
         @Override
@@ -70,10 +75,10 @@ public class FeederDetails extends AppCompatActivity {
                     progressDialog.dismiss();
                     Toast.makeText(FeederDetails.this, "Updated successfully..", Toast.LENGTH_SHORT).show();
                     feeder_details_update_dialog.dismiss();
-                   /* finish();
+                    finish();
                     overridePendingTransition(0,0);
                     startActivity(getIntent());
-                    overridePendingTransition(0,0);*/
+                    overridePendingTransition(0,0);
                     break;
                 case FDR_UPDATE_FAILURE:
                     progressDialog.dismiss();
@@ -86,6 +91,8 @@ public class FeederDetails extends AppCompatActivity {
         }
     });
 
+    @TargetApi(Build.VERSION_CODES.O)
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,12 +114,27 @@ public class FeederDetails extends AppCompatActivity {
             }
         });
 
+        searchView = toolbar.findViewById(R.id.search_view);
+        searchView.setQueryHint("Enter FDR Code..");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                feeder_details_adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
         date = findViewById(R.id.txt_date);
         display_subdivision = findViewById(R.id.txt_subdiv);
 
         date.setText(fdr_details_date);
         display_subdivision.setText(subdivision);
-
 
 
         sendingData = new SendingData();

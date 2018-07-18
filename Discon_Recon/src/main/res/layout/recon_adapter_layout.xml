@@ -49,6 +49,30 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
+                        android:layout_weight="2.7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Name"/>
+                    <TextView
+                        android:layout_weight="3.7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:textStyle="bold"
+                        android:text=":"/>
+                    <TextView
+                        android:id="@+id/txt_name"
+                        android:layout_weight="1.2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
+                        android:textAlignment="viewStart"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
                         android:layout_weight="1.3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -57,6 +81,7 @@
                         android:layout_weight="1.8"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
                         android:textStyle="bold"
                         android:text=":"/>
                     <TextView
@@ -64,6 +89,7 @@
                         android:layout_weight="1.2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
                         android:textAlignment="viewStart"/>
                     <ImageView
                         android:id="@+id/img_location"
@@ -80,11 +106,12 @@
                         android:layout_weight="1.3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Re_date"/>
+                        android:text="Re Date"/>
                     <TextView
                         android:layout_weight="1.8"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
                         android:textStyle="bold"
                         android:text=":"/>
                     <TextView
@@ -92,6 +119,7 @@
                         android:layout_weight="1.2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
                         android:textAlignment="viewStart"/>
                     <ImageView
                         android:id="@+id/img_reconnect"
@@ -109,11 +137,12 @@
                         android:layout_weight="1.3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="PrevRead"/>
+                        android:text="Prev Read"/>
                     <TextView
                         android:layout_weight="1.8"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
                         android:textStyle="bold"
                         android:text=":"/>
                     <TextView
@@ -121,6 +150,7 @@
                         android:layout_weight="1.2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="2dp"
                         android:textAlignment="viewStart"/>
                     <TextView
                         android:id="@+id/txt_reconnected"

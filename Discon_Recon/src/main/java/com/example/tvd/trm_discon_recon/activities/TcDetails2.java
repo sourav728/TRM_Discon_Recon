@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -53,6 +54,7 @@ public class TcDetails2 extends AppCompatActivity {
     private TcDetailsAdapter tcDetailsAdapter;
     String cur_reading = "";
     String fdr_fetch_subdiv_code = "", fdr_fetch_date = "", fdr_type = "";
+    private SearchView searchView;
     private final Handler mhandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -70,10 +72,10 @@ public class TcDetails2 extends AppCompatActivity {
                     progressDialog.dismiss();
                     Toast.makeText(TcDetails2.this, "Updated successfully..", Toast.LENGTH_SHORT).show();
                     tc_details_update_dialog.dismiss();
-                   /* finish();
+                    finish();
                     overridePendingTransition(0,0);
                     startActivity(getIntent());
-                    overridePendingTransition(0,0);*/
+                    overridePendingTransition(0,0);
                     break;
                 case TC_UPDATE_FAILURE:
                     progressDialog.dismiss();
@@ -100,6 +102,20 @@ public class TcDetails2 extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        searchView = toolbar.findViewById(R.id.search_view);
+        searchView.setQueryHint("Enter Tc Code..");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                tcDetailsAdapter.getFilter().filter(newText);
+                return false;
             }
         });
 

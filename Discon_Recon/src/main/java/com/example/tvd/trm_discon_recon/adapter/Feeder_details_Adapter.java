@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.example.tvd.trm_discon_recon.R;
@@ -15,8 +17,9 @@ import java.util.ArrayList;
 
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.FEEDER_DETAILS_UPDATE_DIALOG;
 
-public class Feeder_details_Adapter extends RecyclerView.Adapter<Feeder_details_Adapter.FeederHolder> {
+public class Feeder_details_Adapter extends RecyclerView.Adapter<Feeder_details_Adapter.FeederHolder> implements Filterable{
     private ArrayList<GetSetValues> arrayList ;
+    private ArrayList<GetSetValues>filteredList;
     private Context context;
     private GetSetValues getSetValues;
     private FeederDetails feederDetails;
@@ -26,6 +29,7 @@ public class Feeder_details_Adapter extends RecyclerView.Adapter<Feeder_details_
         this.context = context;
         this.getSetValues = getSetValues;
         this.feederDetails = feederDetails;
+        this.filteredList = arrayList;
     }
     @Override
     public Feeder_details_Adapter.FeederHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -45,6 +49,38 @@ public class Feeder_details_Adapter extends RecyclerView.Adapter<Feeder_details_
     @Override
     public int getItemCount() {
         return arrayList.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String search=constraint.toString();
+                if (search.isEmpty())
+                    arrayList = filteredList;
+                else {
+                    ArrayList<GetSetValues> filterlist = new ArrayList<>();
+                    for (int i = 0; i < filteredList.size(); i++) {
+                        GetSetValues getSetValues = filteredList.get(i);
+                        //todo searching based on fdrcode
+                        if (getSetValues.getFdr_code().contains(search)) {
+                            filterlist.add(getSetValues);
+                        }
+                    }
+                    arrayList = filterlist;
+                }
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = arrayList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                arrayList = (ArrayList<GetSetValues>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class FeederHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

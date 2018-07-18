@@ -46,6 +46,7 @@ public class Recon_List_Adapter2 extends RecyclerView.Adapter<Recon_List_Adapter
     @Override
     public void onBindViewHolder(Recon_List_Adapter2.Recon_Holder holder, int position) {
         GetSetValues getSetValues = arraylist.get(position);
+        holder.name.setText(getSetValues.getRecon_consumer_name());
         holder.accountid.setText(getSetValues.getRecon_acc_id());
         Log.d("Debug","Recon_Acc id"+getSetValues.getRecon_acc_id());
         //here %s%s meaning first string will set on first then space and then second string
@@ -94,7 +95,7 @@ public class Recon_List_Adapter2 extends RecyclerView.Adapter<Recon_List_Adapter
     }
 
     public class Recon_Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView accountid, prevraed, reconnected, re_date;
+        TextView accountid, prevraed, reconnected, re_date,name;
         LinearLayout lin;
         ImageView reconnect, location;
         public Recon_Holder(View itemView) {
@@ -103,6 +104,8 @@ public class Recon_List_Adapter2 extends RecyclerView.Adapter<Recon_List_Adapter
             accountid = (TextView) itemView.findViewById(R.id.txt_account_id);
             prevraed = (TextView) itemView.findViewById(R.id.txt_prevread);
             reconnected = (TextView) itemView.findViewById(R.id.txt_reconnected);
+            name = itemView.findViewById(R.id.txt_name);
+
             re_date = itemView.findViewById(R.id.txt_redate);
             reconnect = itemView.findViewById(R.id.img_reconnect);
             reconnect.setOnClickListener(this);

@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.NotificationCompat;
@@ -31,6 +32,7 @@ public class ApkNotification extends BroadcastReceiver {
     Context Notification_context;
     SharedPreferences settings;
     LoginActivity loginActivity;
+    String server_apk_version="";
     private static Handler handler = null;
     {
         handler = new Handler() {
@@ -56,7 +58,8 @@ public class ApkNotification extends BroadcastReceiver {
         getSetValues = new GetSetValues();
         sendingData = new SendingData();
         settings = context.getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
-
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MY_SHARED_PREF",MODE_PRIVATE);
+        server_apk_version = sharedPreferences.getString("APP_VERSION","");
         functionCalls.logStatus("Apk Notification Current Time: "+functionCalls.currentRecpttime());
 
         PackageInfo pInfo = null;
@@ -87,9 +90,10 @@ public class ApkNotification extends BroadcastReceiver {
         //build notification
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.mipmap.app_icon)
+                        .setSmallIcon(R.drawable.app_update)
+                        .setLargeIcon(BitmapFactory.decodeResource(context.getResources(),R.mipmap.app_icon))
                         .setContentTitle("Disconnection Reconnection")
-                        .setContentText("New version Available!!")
+                        .setContentText("New version Available"+" "+server_apk_version)
                         .setDefaults(Notification.DEFAULT_ALL) // must requires VIBRATE permission
                         .setPriority(NotificationCompat.PRIORITY_HIGH) //must give priority to High, Max which will considered as heads-up notification
                         .setAutoCancel(true);

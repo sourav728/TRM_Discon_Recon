@@ -56,7 +56,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio6/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_print_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio6/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_update_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -67,7 +67,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="101010" />
-                            <entry key="outputName" value="print" />
+                            <entry key="outputName" value="app_update" />
                             <entry key="sourceFile" value="C:\Users\TVD" />
                           </map>
                         </option>

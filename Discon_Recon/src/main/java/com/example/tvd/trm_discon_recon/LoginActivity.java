@@ -63,7 +63,7 @@ import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE
 
 public class LoginActivity extends AppCompatActivity {
     Button login;
-    FunctionCall fcall;
+    static FunctionCall fcall;
     String getMrcode = "", getpassword = "";
     EditText password;
     AutoCompleteTextView mrcode;
@@ -78,9 +78,9 @@ public class LoginActivity extends AppCompatActivity {
     private int day, month, year;
     EditText selected_date;
     int length;
-    FTPAPI ftpapi;
+    static FTPAPI ftpapi;
     String cur_version = "", username = "";
-    Context context;
+    static Context context;
     SendingData sendingData;
     private final Handler mhandler;
 
