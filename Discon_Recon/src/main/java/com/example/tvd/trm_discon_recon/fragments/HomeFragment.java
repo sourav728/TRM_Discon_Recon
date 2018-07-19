@@ -56,9 +56,7 @@ public class HomeFragment extends Fragment {
     static TextView tv_check_connection;
     private BroadcastReceiver mNetworkReceiver;
     public HomeFragment() {
-
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,13 +90,13 @@ public class HomeFragment extends Fragment {
         if (user_role.equals("MR"))
         {
             cardView1.setVisibility(View.VISIBLE);
-            //cardView2.setVisibility(View.VISIBLE);
+            cardView2.setVisibility(View.VISIBLE);
             office.setVisibility(View.GONE);
 
         }
         else {
             cardView1.setVisibility(View.GONE);
-            //cardView2.setVisibility(View.GONE);
+            cardView2.setVisibility(View.GONE);
             office.setVisibility(View.VISIBLE);
         }
 

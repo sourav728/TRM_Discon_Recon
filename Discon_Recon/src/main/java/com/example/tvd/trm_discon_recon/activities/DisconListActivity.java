@@ -50,6 +50,7 @@ import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_SUCCESS;
 
 public class DisconListActivity extends AppCompatActivity {
+
     ProgressDialog progressDialog;
     GetSetValues getsetvalues;
     RecyclerView recyclerview;
@@ -205,6 +206,7 @@ public class DisconListActivity extends AppCompatActivity {
         discon_list.execute(login_mr_code, disconnection_date);
         // discon_list.execute("54003714","2018/06/13");
     }
+
 
     public void show_disconnection_dialog(int id, final int position, ArrayList<GetSetValues> arrayList) {
         final AlertDialog alertDialog;

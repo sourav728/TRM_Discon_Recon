@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -63,7 +65,7 @@ public class SettingActivity extends AppCompatActivity {
         subdiv_code = sharedPreferences.getString("SUBDIVCODE", "");
         device_id = sharedPreferences.getString("DEVICE_ID", "");
         subdiv_name = sharedPreferences.getString("SUBDIVNAME", "");
-        current_version = sharedPreferences.getString("CURRENT_VERSION","");
+       // current_version = sharedPreferences.getString("CURRENT_VERSION","");
         selected_printer = sharedPreferences.getString("PRINTER", "");
 
         set_mrname.setText(mrname);
@@ -71,10 +73,21 @@ public class SettingActivity extends AppCompatActivity {
         set_suvdiv_code.setText(subdiv_code);
         set_subdiv_name.setText(subdiv_name);
         set_device_id.setText(device_id);
-        set_app_version.setText(current_version);
+        //set_app_version.setText(current_version);
         if (!selected_printer.equals(""))
         set_bt_printer.setText(selected_printer);
         else set_bt_printer.setText("NA");
+
+        PackageInfo packageInfo;
+        try {
+            packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            current_version = packageInfo.versionName;
+            set_app_version.setText(current_version);
+            // SavePreferences("CURRENT_VERSION", current_version);
+
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         fcall = new FunctionCall();
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
