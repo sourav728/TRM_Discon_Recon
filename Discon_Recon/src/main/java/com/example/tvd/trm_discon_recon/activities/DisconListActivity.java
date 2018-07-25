@@ -225,7 +225,8 @@ public class DisconListActivity extends AppCompatActivity {
                 final TextView name = view.findViewById(R.id.txt_name);
                 final TextView address = view.findViewById(R.id.txt_address);
                 final TextView discon_date = view.findViewById(R.id.txt_discon_date);
-                final LinearLayout show_hide = view.findViewById(R.id.lin_show_hide);
+
+                //final LinearLayout show_hide = view.findViewById(R.id.lin_show_hide);
                 final EditText curread = view.findViewById(R.id.edit_curread);
                 final EditText comments = view.findViewById(R.id.edit_comment);
 
@@ -298,7 +299,7 @@ public class DisconListActivity extends AppCompatActivity {
                             public void onClick(View v) {
                                 if (!TextUtils.isEmpty(curread.getText())) {
                                     if (!selected_role.equals("--SELECT--")) {
-                                        show_hide.setVisibility(View.VISIBLE);
+                                        //show_hide.setVisibility(View.VISIBLE);
                                         reading = curread.getText().toString();
                                         if (Double.parseDouble(getSetValues.getDiscon_prevread()) <= Double.parseDouble(reading)) {
                                             if (!comments.getText().toString().equals("")) {

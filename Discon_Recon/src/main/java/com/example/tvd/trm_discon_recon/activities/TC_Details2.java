@@ -95,7 +95,7 @@ public class TC_Details2 extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar_text = toolbar.findViewById(R.id.toolbar_title);
-        toolbar_text.setText("Feeder List");
+        toolbar_text.setText("TC List");
         toolbar.setNavigationIcon(R.drawable.back);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
