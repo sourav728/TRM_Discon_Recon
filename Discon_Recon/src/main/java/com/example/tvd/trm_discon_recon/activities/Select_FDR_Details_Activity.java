@@ -1,11 +1,8 @@
 package com.example.tvd.trm_discon_recon.activities;
 
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -19,20 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tvd.trm_discon_recon.R;
-import com.example.tvd.trm_discon_recon.invoke.SendingData;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 
 import java.util.Calendar;
-import java.util.Date;
-
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.FEEDER_DETAILS_FAILURE;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.FEEDER_DETAILS_SUCCESS;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_FAILURE;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_LIST_FAILURE;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_LIST_SUCCESS;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_SUCCESS;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_FAILURE;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_SUCCESS;
 
 public class Select_FDR_Details_Activity extends AppCompatActivity {
     ImageView date;
@@ -43,15 +29,16 @@ public class Select_FDR_Details_Activity extends AppCompatActivity {
     private Calendar mcalender;
     private Toolbar toolbar;
     TextView toolbar_text;
-    EditText subdivision;
     Button submit;
+    String MRCODE = "", SUBDIV = "";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select__fdr__details_);
-        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+
+        toolbar = findViewById(R.id.my_toolbar);
         toolbar_text = toolbar.findViewById(R.id.toolbar_title);
         toolbar_text.setText("Select Date");
         toolbar.setNavigationIcon(R.drawable.back);
@@ -63,13 +50,18 @@ public class Select_FDR_Details_Activity extends AppCompatActivity {
             }
         });
 
-        show_date = (TextView) findViewById(R.id.txt_date);
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+        MRCODE = sharedPreferences.getString("MRCODE", "");
+        Log.d("Debug", "MRCODE" + MRCODE);
+        SUBDIV = MRCODE.substring(0, 6);
+        Log.d("Debug", "SUBDIV" + SUBDIV);
+
+        show_date = findViewById(R.id.txt_date);
         fcall = new FunctionCall();
-        subdivision = findViewById(R.id.edit_subdivision);
         submit = findViewById(R.id.btn_submit);
 
 
-        date = (ImageView) findViewById(R.id.img_fromdate);
+        date = findViewById(R.id.img_fromdate);
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,16 +73,13 @@ public class Select_FDR_Details_Activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (fcall.isInternetOn(Select_FDR_Details_Activity.this)) {
-                    if (!subdivision.getText().toString().equals("")) {
-                        if (!show_date.getText().toString().equals("")) {
-                            SavePreferences("SUB_DIVCODE", subdivision.getText().toString());
-                            SavePreferences("FDR_DETAILS_DATE", date1);
-                            Intent intent = new Intent(Select_FDR_Details_Activity.this, FeederDetails.class);
-                            startActivity(intent);
-                        } else
-                            Toast.makeText(Select_FDR_Details_Activity.this, "Please Select Date!! ", Toast.LENGTH_SHORT).show();
+                    if (!show_date.getText().toString().equals("")) {
+                        SavePreferences("SUB_DIVCODE", SUBDIV);
+                        SavePreferences("FDR_DETAILS_DATE", date1);
+                        Intent intent = new Intent(Select_FDR_Details_Activity.this, FeederDetails.class);
+                        startActivity(intent);
                     } else
-                        Toast.makeText(Select_FDR_Details_Activity.this, "Please Enter Subdivision code!!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Select_FDR_Details_Activity.this, "Please Select Date!! ", Toast.LENGTH_SHORT).show();
                 } else
                     Toast.makeText(Select_FDR_Details_Activity.this, "Please Turn on Internet!!", Toast.LENGTH_SHORT).show();
 
@@ -115,11 +104,7 @@ public class Select_FDR_Details_Activity extends AppCompatActivity {
             }
         };
         DatePickerDialog dpdialog = new DatePickerDialog(this, listener, year, month, day);
-        //it will show dates upto current date
         dpdialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-        //below code will set calender min date to 30 days before from system date
-       /* mcalender.add(Calendar.MONTH, -1);
-        dpdialog.getDatePicker().setMinDate(mcalender.getTimeInMillis());*/
         dpdialog.show();
     }
 

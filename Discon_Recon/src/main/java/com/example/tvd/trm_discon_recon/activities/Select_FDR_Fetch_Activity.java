@@ -6,10 +6,10 @@ import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,21 +21,22 @@ import java.util.Calendar;
 
 public class Select_FDR_Fetch_Activity extends AppCompatActivity {
     ImageView date;
-    String dd, date1, date2;
+    String dd, date1;
     FunctionCall fcall;
     TextView show_date;
     private int day, month, year;
     private Calendar mcalender;
     private Toolbar toolbar;
     TextView toolbar_text;
-    EditText subdivision;
     Button submit;
+    String MRCODE = "", SUBDIV = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select__fdr__fetch_);
 
-        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        toolbar = findViewById(R.id.my_toolbar);
         toolbar_text = toolbar.findViewById(R.id.toolbar_title);
         toolbar_text.setText("Select Date");
         toolbar.setNavigationIcon(R.drawable.back);
@@ -46,14 +47,17 @@ public class Select_FDR_Fetch_Activity extends AppCompatActivity {
                 finish();
             }
         });
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+        MRCODE = sharedPreferences.getString("MRCODE", "");
+        Log.d("Debug", "MRCODE" + MRCODE);
+        SUBDIV = MRCODE.substring(0, 6);
+        Log.d("Debug", "SUBDIV" + SUBDIV);
 
-        show_date = (TextView) findViewById(R.id.txt_date);
+        show_date = findViewById(R.id.txt_date);
         fcall = new FunctionCall();
-        subdivision = findViewById(R.id.edit_subdivision);
         submit = findViewById(R.id.btn_submit);
 
-
-        date = (ImageView) findViewById(R.id.img_fromdate);
+        date = findViewById(R.id.img_fromdate);
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,21 +68,18 @@ public class Select_FDR_Fetch_Activity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (fcall.isInternetOn(Select_FDR_Fetch_Activity.this))
-                {
-                    if (!subdivision.getText().toString().equals(""))
-                    {
-                        if (!show_date.getText().toString().equals(""))
-                        {
-                            SavePreferences("FDR_FETCH_SUB_DIVCODE", subdivision.getText().toString());
-                            SavePreferences("FDR_FETCH_DATE", date1);
-                            Intent intent = new Intent(Select_FDR_Fetch_Activity.this, TcDetails.class);
-                            startActivity(intent);
-                        }else
-                            Toast.makeText(Select_FDR_Fetch_Activity.this, "Please Select Date!!", Toast.LENGTH_SHORT).show();
+                if (fcall.isInternetOn(Select_FDR_Fetch_Activity.this)) {
 
-                    }else Toast.makeText(Select_FDR_Fetch_Activity.this, "Please Enter Subdivision code!!", Toast.LENGTH_SHORT).show();
-                }else Toast.makeText(Select_FDR_Fetch_Activity.this, "Please Turn on Internet!!", Toast.LENGTH_SHORT).show();
+                    if (!show_date.getText().toString().equals("")) {
+                        SavePreferences("FDR_FETCH_SUB_DIVCODE", SUBDIV);
+                        SavePreferences("FDR_FETCH_DATE", date1);
+                        Intent intent = new Intent(Select_FDR_Fetch_Activity.this, TcDetails.class);
+                        startActivity(intent);
+                    } else
+                        Toast.makeText(Select_FDR_Fetch_Activity.this, "Please Select Date!!", Toast.LENGTH_SHORT).show();
+
+                } else
+                    Toast.makeText(Select_FDR_Fetch_Activity.this, "Please Turn on Internet!!", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -99,10 +100,7 @@ public class Select_FDR_Fetch_Activity extends AppCompatActivity {
             }
         };
         DatePickerDialog dpdialog = new DatePickerDialog(this, listener, year, month, day);
-        //it will show dates upto current date
         dpdialog.getDatePicker().setMaxDate(System.currentTimeMillis());
-       /* mcalender.add(Calendar.MONTH, -1);
-        dpdialog.getDatePicker().setMinDate(mcalender.getTimeInMillis());*/
         dpdialog.show();
     }
 

@@ -7,10 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
-
 import java.util.ArrayList;
 
 public class RoleAdapter2 extends BaseAdapter {

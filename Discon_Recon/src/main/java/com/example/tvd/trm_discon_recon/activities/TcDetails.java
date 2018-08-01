@@ -26,8 +26,6 @@ import java.util.ArrayList;
 
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.FDR_FETCH_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.FDR_FETCH_SUCCESS;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.FDR_UPDATE_FAILURE;
-
 
 public class TcDetails extends AppCompatActivity {
     Spinner fdr_spinner;
@@ -40,7 +38,7 @@ public class TcDetails extends AppCompatActivity {
     FunctionCall fcall;
     private Toolbar toolbar;
     Button search;
-    TextView toolbar_text;
+    TextView toolbar_text, Date, display_subdivision;
     ProgressDialog progressDialog;
     String main_role = "";
     private final Handler mhandler = new Handler(new Handler.Callback() {
@@ -66,7 +64,7 @@ public class TcDetails extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tc_details);
 
-        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        toolbar = findViewById(R.id.my_toolbar);
         toolbar_text = toolbar.findViewById(R.id.toolbar_title);
         toolbar_text.setText("Feeder List");
         toolbar.setNavigationIcon(R.drawable.back);
@@ -86,6 +84,11 @@ public class TcDetails extends AppCompatActivity {
         fcall = new FunctionCall();
         fdr_spinner = findViewById(R.id.spinner);
         submit = findViewById(R.id.btn_Search);
+        Date = findViewById(R.id.txt_date);
+        display_subdivision = findViewById(R.id.txt_subdiv);
+        Date.setText(fdr_fetch_date);
+        display_subdivision.setText(fdr_fetch_subdiv_code);
+
 
         sendingData = new SendingData();
         getSetValues = new GetSetValues();
@@ -99,7 +102,7 @@ public class TcDetails extends AppCompatActivity {
         fdr_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                TextView tvrole2 = (TextView) view.findViewById(R.id.spinner_txt);
+                TextView tvrole2 = view.findViewById(R.id.spinner_txt);
                 String role = tvrole2.getText().toString();
                 main_role = role;
             }

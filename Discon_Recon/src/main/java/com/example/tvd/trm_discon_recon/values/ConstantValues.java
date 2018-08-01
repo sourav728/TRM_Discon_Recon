@@ -21,7 +21,7 @@ public class ConstantValues {
     public static final int DISCON_FAILURE = 6;
     public static final int CONNECTION_TIME_OUT = 7;
     public static final int DISCONNECTION_DIALOG = 8;
-    public static final int SERVER_DATE_SUCCESS =9;
+    public static final int SERVER_DATE_SUCCESS = 9;
     public static final int SERVER_DATE_FAILURE = 10;
 
     public static final int RECON_LIST_SUCCESS = 11;
@@ -49,7 +49,7 @@ public class ConstantValues {
 
     public static final int DLG_PRINT = 30;
     public static final int DLG_APK_UPDATE_SUCCESS = 31;
-    public static  final int DOWNLOAD_FILE_DELETE_CONNECTION_ERROR = 32;
+    public static final int DOWNLOAD_FILE_DELETE_CONNECTION_ERROR = 32;
     public static final int APK_FILE_DOWNLOADED = 33;
     public static final int APK_FILE_NOT_FOUND = 34;
     public static final int DOWNLOAD_FILE_DELETED = 35;
@@ -70,5 +70,15 @@ public class ConstantValues {
     public static final int TC_DETAILS_UPDATE = 47;
     public static final int SERVER_DATE_GOT = 48;
     public static final int SEVER_DATE_GOT_FAILURE = 49;
+    public static final int DTC_DETAILS_UPDATE_DIALOG = 50;
+
+    public static final int TC_MAPPING_SUCCESS = 51;
+    public static final int TC_MAPPING_FAILURE = 52;
+
+    public static final int MRCODE_SUCCESS = 53;
+    public static final int MRCODE_FAILURE = 54;
+
+    public static final int DATE_FROM_SERVER = 55;
+    public static final int DATE_IS_NOT_COMING_SERVER = 56;
 
 }

@@ -43,7 +43,7 @@ public class RoleAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView = inflater.inflate(R.layout.spinner_items, null);
-        TextView tv_role = (TextView) convertView.findViewById(R.id.spinner_txt);
+        TextView tv_role = convertView.findViewById(R.id.spinner_txt);
         tv_role.setText(arraylist.get(position).getRemark());
         return convertView;
     }

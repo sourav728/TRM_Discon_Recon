@@ -23,6 +23,7 @@ public class TcDetailsAdapter extends RecyclerView.Adapter<TcDetailsAdapter.TcHo
     private Context context;
     private GetSetValues getSetValues;
     private TcDetails2 tcDetails2;
+
     public TcDetailsAdapter(ArrayList<GetSetValues>arrayList,Context context,GetSetValues getSetValues, TcDetails2 tcDetails2)
     {
         this.arrayList = arrayList;
@@ -44,6 +45,7 @@ public class TcDetailsAdapter extends RecyclerView.Adapter<TcDetailsAdapter.TcHo
         holder.tcir.setText(getSetValues.getTcir());
         holder.tcfr.setText(getSetValues.getTcfr());
         holder.tcmf.setText(getSetValues.getTcmf());
+        holder.tcname.setText(getSetValues.getTcname());
     }
 
     @Override
@@ -84,7 +86,7 @@ public class TcDetailsAdapter extends RecyclerView.Adapter<TcDetailsAdapter.TcHo
     }
 
     public class TcHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView tccode,tcir,tcfr,tcmf;
+        TextView tccode,tcir,tcfr,tcmf,tcname;
         public TcHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
@@ -92,6 +94,7 @@ public class TcDetailsAdapter extends RecyclerView.Adapter<TcDetailsAdapter.TcHo
             tcir = itemView.findViewById(R.id.txt_tcir);
             tcfr = itemView.findViewById(R.id.txt_tcfr);
             tcmf = itemView.findViewById(R.id.txt_tcmf);
+            tcname = itemView.findViewById(R.id.txt_tcname);
         }
 
         @Override

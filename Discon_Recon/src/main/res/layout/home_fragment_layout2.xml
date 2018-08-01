@@ -3,10 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <android.support.v7.widget.CardView
             android:id="@+id/card1"
             android:layout_width="match_parent"
@@ -24,8 +26,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:background="@color/light_pink"
-                    android:text="DISCONNECTION RECONNECTION"
                     android:gravity="center"
+                    android:text="DISCONNECTION RECONNECTION"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
 
@@ -105,11 +107,11 @@
 
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <RelativeLayout
                             android:id="@+id/relative_dis_rep"
@@ -142,11 +144,11 @@
 
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
 
                         <RelativeLayout
@@ -202,8 +204,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
                     android:background="@color/blue"
-                    android:text="FEEDER AND TC"
                     android:gravity="center"
+                    android:text="FEEDER AND TC"
                     android:textColor="@color/white"
                     android:textStyle="bold" />
 
@@ -214,11 +216,11 @@
                     android:padding="15dp">
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <RelativeLayout
                             android:id="@+id/relative_dis_eff"
@@ -250,11 +252,11 @@
 
 
                     <LinearLayout
-                        android:visibility="gone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <RelativeLayout
                             android:id="@+id/relative_re_eff"
@@ -314,7 +316,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:text="Feeder"
+                            android:text="Feeder   Reading "
                             android:textAllCaps="false"
                             android:textColor="@color/grey" />
 
@@ -351,7 +353,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:text="Tc Subdivwise"
+                            android:text="TC Reading Subdivwise"
                             android:textAllCaps="false"
                             android:textColor="@color/grey" />
 
@@ -387,7 +389,42 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:gravity="center"
-                            android:text="Tc MRWise"
+                            android:text="TC Reading MRWise"
+                            android:textAllCaps="false"
+                            android:textColor="@color/grey" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+
+                        <RelativeLayout
+                            android:id="@+id/relativetc3"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="10dp"
+                            android:background="@drawable/circleshape"
+                            android:gravity="center"
+                            android:padding="10dp">
+
+                            <ImageView
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:src="@drawable/discon_report" />
+
+                        </RelativeLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="DTC To MR Mapping"
                             android:textAllCaps="false"
                             android:textColor="@color/grey" />
 
@@ -399,15 +436,16 @@
             </LinearLayout>
 
         </android.support.v7.widget.CardView>
+
         <Button
-            android:layout_marginTop="100dp"
             android:id="@+id/btn_office"
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_gravity="center"
-            android:textAllCaps="false"
+            android:layout_marginTop="100dp"
             android:background="@drawable/mybuton"
-            android:text="Reconnection_List"/>
+            android:text="Reconnection_List"
+            android:textAllCaps="false" />
     </LinearLayout>
 
     <TextView

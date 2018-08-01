@@ -48,12 +48,12 @@ public class TcDetails2 extends AppCompatActivity {
     SendingData sendingData;
     FunctionCall functionCall;
     private Toolbar toolbar;
-    TextView toolbar_text, date;
+    TextView toolbar_text, Date, display_subdivision;
     String fdr_details_date = "", subdivision = "", parsed_date = "";
     AlertDialog tc_details_update_dialog;
     private TcDetailsAdapter tcDetailsAdapter;
     String cur_reading = "";
-    String fdr_fetch_subdiv_code = "", fdr_fetch_date = "", fdr_type = "";
+    String fdr_fetch_subdiv_code = "", fdr_fetch_date = "", fdr_type = "", feeder = "";
     private SearchView searchView;
     private final Handler mhandler = new Handler(new Handler.Callback() {
         @Override
@@ -73,9 +73,9 @@ public class TcDetails2 extends AppCompatActivity {
                     Toast.makeText(TcDetails2.this, "Updated successfully..", Toast.LENGTH_SHORT).show();
                     tc_details_update_dialog.dismiss();
                     finish();
-                    overridePendingTransition(0,0);
+                    overridePendingTransition(0, 0);
                     startActivity(getIntent());
-                    overridePendingTransition(0,0);
+                    overridePendingTransition(0, 0);
                     break;
                 case TC_UPDATE_FAILURE:
                     progressDialog.dismiss();
@@ -93,7 +93,7 @@ public class TcDetails2 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tc_details2);
 
-        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        toolbar = findViewById(R.id.my_toolbar);
         toolbar_text = toolbar.findViewById(R.id.toolbar_title);
         toolbar_text.setText("TC Details");
         toolbar.setNavigationIcon(R.drawable.back);
@@ -122,13 +122,19 @@ public class TcDetails2 extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         fdr_fetch_subdiv_code = sharedPreferences.getString("FDR_FETCH_SUB_DIVCODE", "");
         fdr_fetch_date = sharedPreferences.getString("FDR_FETCH_DATE", "");
-        fdr_type = sharedPreferences.getString("FEEDER_TYPE", "");
+        feeder = sharedPreferences.getString("FEEDER_TYPE", "");
+        fdr_type = feeder.substring(0, 11);
 
         sendingData = new SendingData();
         functionCall = new FunctionCall();
         getsetvalues = new GetSetValues();
 
-        recyclerview = (RecyclerView) findViewById(R.id.feeder_details_recyclerview);
+        Date = findViewById(R.id.txt_date);
+        display_subdivision = findViewById(R.id.txt_subdiv);
+        Date.setText(fdr_fetch_date);
+        display_subdivision.setText(fdr_fetch_subdiv_code);
+
+        recyclerview = findViewById(R.id.feeder_details_recyclerview);
         arraylist = new ArrayList<>();
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         recyclerview.setHasFixedSize(true);
@@ -148,7 +154,6 @@ public class TcDetails2 extends AppCompatActivity {
     }
 
     public void show_tc_details_update_dialog(int id, final int position, ArrayList<GetSetValues> arrayList) {
-        final AlertDialog alertDialog;
         final GetSetValues getSetValues = arrayList.get(position);
         switch (id) {
             case TC_DETAILS_UPDATE_DIALOG:
@@ -158,6 +163,7 @@ public class TcDetails2 extends AppCompatActivity {
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View view = inflater.inflate(R.layout.tc_details_update_layout, null);
                 dialog.setView(view);
+                final TextView tc_name = view.findViewById(R.id.txt_tcname);
                 final TextView tc_code = view.findViewById(R.id.txt_tccode);
                 final TextView tc_ir = view.findViewById(R.id.txt_tc_ir);
                 final EditText current_reading = view.findViewById(R.id.edit_current_reading);
@@ -168,6 +174,7 @@ public class TcDetails2 extends AppCompatActivity {
                 tc_details_update_dialog.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface dialog) {
+                        tc_name.setText(getSetValues.getTcname());
                         tc_code.setText(getSetValues.getTc_code());
                         current_reading.setText(getSetValues.getTcfr());
                         tc_ir.setText(getSetValues.getTcir());

@@ -4,9 +4,11 @@ import android.os.Handler;
 
 import com.example.tvd.trm_discon_recon.adapter.Feeder_details_Adapter;
 import com.example.tvd.trm_discon_recon.adapter.Recon_Memo_Adapter;
-import com.example.tvd.trm_discon_recon.adapter.RoleAdapter;
 import com.example.tvd.trm_discon_recon.adapter.RoleAdapter2;
+import com.example.tvd.trm_discon_recon.adapter.RoleAdapter3;
+import com.example.tvd.trm_discon_recon.adapter.RoleAdapter4;
 import com.example.tvd.trm_discon_recon.adapter.TCCode_Adapter;
+import com.example.tvd.trm_discon_recon.adapter.TCDetailsAdapter2;
 import com.example.tvd.trm_discon_recon.adapter.TcDetailsAdapter;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
@@ -23,6 +25,9 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 
+
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.DATE_FROM_SERVER;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.DATE_IS_NOT_COMING_SERVER;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_LIST_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCON_LIST_SUCCESS;
@@ -35,6 +40,8 @@ import static com.example.tvd.trm_discon_recon.values.ConstantValues.FEEDER_DETA
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.FEEDER_DETAILS_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.LOGIN_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.LOGIN_SUCCESS;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.MRCODE_FAILURE;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.MRCODE_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.PRINT_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.PRINT_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_FAILURE;
@@ -43,9 +50,7 @@ import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_LIST_
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_MEMO_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_MEMO_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.RECON_SUCCESS;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_GOT;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.SEVER_DATE_GOT_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_CODE_FOUND;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_CODE_NOTFOUND;
@@ -53,6 +58,8 @@ import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_CODE_NOT
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_CODE_UPDATE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_DETAILS_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_DETAILS_SUCCESS;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_MAPPING_FAILURE;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_MAPPING_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_UPDATE_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_UPDATE_SUCCESS;
 
@@ -174,7 +181,6 @@ public class ReceivingData {
                         getSetValues.setMtr_read(MTR_READ);
                     else getSetValues.setMtr_read("NA");
                     arrayList.add(getSetValues);
-                    //discon_list_adapter.notifyDataSetChanged();
                 }
                 handler.sendEmptyMessage(DISCON_LIST_SUCCESS);
             } else handler.sendEmptyMessage(DISCON_LIST_FAILURE);
@@ -209,8 +215,8 @@ public class ReceivingData {
                 if (jsonObject != null) {
                     String serverdate = jsonObject.getString("message");
                     getSetValues.setServer_date(serverdate.substring(1, serverdate.length() - 1));
-                    handler.sendEmptyMessage(SERVER_DATE_GOT);
-                } else handler.sendEmptyMessage(SEVER_DATE_GOT_FAILURE);
+                    handler.sendEmptyMessage(DATE_FROM_SERVER);
+                } else handler.sendEmptyMessage(DATE_IS_NOT_COMING_SERVER);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -265,7 +271,6 @@ public class ReceivingData {
                     else getSetValues.setMtr_read("NA");
 
                     arrayList.add(getSetValues);
-                    //discon_list_adapter.notifyDataSetChanged();
                 }
                 handler.sendEmptyMessage(RECON_LIST_SUCCESS);
             } else handler.sendEmptyMessage(RECON_LIST_FAILURE);
@@ -344,11 +349,11 @@ public class ReceivingData {
             handler.sendEmptyMessage(FDR_UPDATE_FAILURE);
         }
     }
+
     //Get FDR Status
-    public void get_fdr_fetch(String result, Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues>arrayList, RoleAdapter2 roleAdapter)
-    {
+    public void get_fdr_fetch(String result, Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues> arrayList, RoleAdapter2 roleAdapter) {
         result = parseServerXML(result);
-        functionCall.logStatus("Feeder Details:"+ result);
+        functionCall.logStatus("Feeder Details:" + result);
         JSONArray jsonArray;
         try {
             jsonArray = new JSONArray(result);
@@ -442,6 +447,7 @@ public class ReceivingData {
             handler.sendEmptyMessage(RECON_MEMO_FAILURE);
         }
     }
+
     //print update status
     public void get_print_update_status(String result, Handler handler) {
         result = parseServerXML(result);
@@ -471,6 +477,7 @@ public class ReceivingData {
                     String TCIR = jsonObject.getString("TCIR");
                     String TCFR = jsonObject.getString("TCFR");
                     String TCMF = jsonObject.getString("TCMF");
+                    String TCNAME = jsonObject.getString("DTCNAME");
 
                     if (!TCCODE.equals(""))
                         getSetValues.setTc_code(TCCODE);
@@ -484,6 +491,9 @@ public class ReceivingData {
                     if (!TCMF.equals(""))
                         getSetValues.setTcmf(TCMF);
                     else getSetValues.setTcmf("NA");
+                    if (!TCNAME.equals(""))
+                        getSetValues.setTcname(TCNAME);
+                    else getSetValues.setTcname("NA");
                     arrayList.add(getSetValues);
                     tcDetailsAdapter.notifyDataSetChanged();
                 }
@@ -512,35 +522,9 @@ public class ReceivingData {
         }
     }
 
-   /* //Get FDR Status based on MR
-    public void get_fdr_fetch_basedon_MR(String result, Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues>arrayList, RoleAdapter2 roleAdapter)
-    {
-        result = parseServerXML(result);
-        functionCall.logStatus("Feeder Details Based on MR:"+ result);
-        JSONArray jsonArray;
-        try {
-            jsonArray = new JSONArray(result);
-            if (jsonArray.length() > 0) {
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    getSetValues = new GetSetValues();
-                    String TCCODE = jsonObject.getString("TCCODE");
-                    getSetValues.setFeeder_code(TCCODE);
-                    arrayList.add(getSetValues);
-                    roleAdapter.notifyDataSetChanged();
-                }
-                handler.sendEmptyMessage(TC_FETCH_BASED_ON_MR_SUCCESS);
-            } else handler.sendEmptyMessage(TC_FETCH_BASED_ON_MR_FAILURE);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            functionCall.logStatus("JSON Exception Failure!!");
-            handler.sendEmptyMessage(TC_FETCH_BASED_ON_MR_FAILURE);
-        }
-    }*/
 
     //get tccode status
-    public void get_tc_code(String result, Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues> arrayList,
-                            TCCode_Adapter tcCode_adapter) {
+    public void get_tc_code(String result, Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues> arrayList, TCCode_Adapter tcCode_adapter) {
         result = parseServerXML(result);
         functionCall.logStatus("TC Details:" + result);
         JSONArray jsonArray;
@@ -578,6 +562,7 @@ public class ReceivingData {
             handler.sendEmptyMessage(TC_CODE_NOTFOUND);
         }
     }
+
     //tc update status
     public void get_tc_update(String result, Handler handler, GetSetValues getSetValues) {
         result = parseServerXML(result);
@@ -592,4 +577,106 @@ public class ReceivingData {
         }
     }
 
+    // get Feeder name
+    public void get_fdr_name(String result, Handler handler, GetSetValues getSetValues, ArrayList arrayList, RoleAdapter3 roleAdapter3) {
+        result = parseServerXML(result);
+        JSONArray jsonArray;
+        try {
+            jsonArray = new JSONArray(result);
+            if (jsonArray.length() > 0) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    getSetValues = new GetSetValues();
+                    String FEEDER_NAME = jsonObject.getString("FDRNAME");
+                    getSetValues.setFeeder_name(FEEDER_NAME);
+                    arrayList.add(getSetValues);
+                    roleAdapter3.notifyDataSetChanged();
+                }
+                handler.sendEmptyMessage(FDR_FETCH_SUCCESS);
+            } else handler.sendEmptyMessage(FDR_FETCH_FAILURE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            functionCall.logStatus("JSON Exception Failure!!");
+            handler.sendEmptyMessage(FDR_FETCH_FAILURE);
+        }
+    }
+
+    // get tc details
+    public void get_tc_details(String result, Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues> arrayList,
+                               TCDetailsAdapter2 tcDetailsAdapter2) {
+        result = parseServerXML(result);
+        functionCall.logStatus("TC Details:" + result);
+        JSONArray jsonArray;
+        try {
+            jsonArray = new JSONArray(result);
+            if (jsonArray.length() > 0) {
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    getSetValues = new GetSetValues();
+                    String DTCNAME = jsonObject.getString("DTCNAME");
+                    String DTCCODE = jsonObject.getString("DTC CODE");
+                    String DTC_DATE = jsonObject.getString("DATE");
+                    String DTC_MRCODE = jsonObject.getString("MRCODE");
+
+                    if (!DTCNAME.equals(""))
+                        getSetValues.setDTCNAME(DTCNAME);
+                    else getSetValues.setDTCNAME("NA");
+                    if (!DTCCODE.equals(""))
+                        getSetValues.setDTCCODE(DTCCODE);
+                    else getSetValues.setDTCCODE("NA");
+                    if (!DTC_DATE.equals(""))
+                        getSetValues.setDTC_DATE(DTC_DATE);
+                    else getSetValues.setDTC_DATE("NA");
+                    if (!DTC_MRCODE.equals(""))
+                        getSetValues.setDTC_MRCODE(DTC_MRCODE);
+                    else getSetValues.setDTC_MRCODE("NA");
+                    arrayList.add(getSetValues);
+                    tcDetailsAdapter2.notifyDataSetChanged();
+                }
+                handler.sendEmptyMessage(TC_DETAILS_SUCCESS);
+            } else handler.sendEmptyMessage(TC_DETAILS_FAILURE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            functionCall.logStatus("JSON Exception Failure!!");
+            handler.sendEmptyMessage(TC_DETAILS_FAILURE);
+        }
+    }
+
+    //dtc update status
+    public void get_DTC_update(String result, Handler handler, GetSetValues getSetValues, ArrayList<GetSetValues> arrayList) {
+        result = parseServerXML(result);
+        try {
+            JSONObject jsonObject = new JSONObject(result);
+            if (StringUtils.startsWithIgnoreCase(jsonObject.getString("message"), "Success"))
+                handler.sendEmptyMessage(TC_MAPPING_SUCCESS);
+            else handler.sendEmptyMessage(TC_MAPPING_FAILURE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            handler.sendEmptyMessage(TC_MAPPING_FAILURE);
+        }
+    }
+
+    // get Feeder name
+    public void get_mrcode(String result, Handler handler, GetSetValues getSetValues, ArrayList mr_arrayList, RoleAdapter4 roleAdapter4) {
+        result = parseServerXML(result);
+        JSONArray jsonArray;
+        try {
+            jsonArray = new JSONArray(result);
+            if (jsonArray.length() > 0) {
+                for (int i = 2; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    getSetValues = new GetSetValues();
+                    String MRCODE = jsonObject.getString("MRCODE");
+                    getSetValues.setMRCODE(MRCODE);
+                    mr_arrayList.add(getSetValues);
+                    roleAdapter4.notifyDataSetChanged();
+                }
+                handler.sendEmptyMessage(MRCODE_SUCCESS);
+            } else handler.sendEmptyMessage(MRCODE_FAILURE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            functionCall.logStatus("JSON Exception Failure!!");
+            handler.sendEmptyMessage(MRCODE_FAILURE);
+        }
+    }
 }

@@ -2,11 +2,12 @@ package com.example.tvd.trm_discon_recon;
 
 
 import android.Manifest;
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -32,34 +33,30 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.tvd.trm_discon_recon.fragments.HomeFragment;
+import com.example.tvd.trm_discon_recon.database.Database;
 import com.example.tvd.trm_discon_recon.ftp.FTPAPI;
 import com.example.tvd.trm_discon_recon.invoke.ApkNotification;
+import com.example.tvd.trm_discon_recon.invoke.ChangeDateNotification;
 import com.example.tvd.trm_discon_recon.invoke.SendingData;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.APK_FILE_DOWNLOADED;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.APK_FILE_NOT_FOUND;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.CONNECTION_TIME_OUT;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.DLG_APK_UPDATE_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.DLG_APK_UPDATE_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.LOGIN_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.LOGIN_SUCCESS;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_FAILURE;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.SERVER_DATE_SUCCESS;
 
 public class LoginActivity extends AppCompatActivity {
     Button login;
@@ -82,87 +79,86 @@ public class LoginActivity extends AppCompatActivity {
     String cur_version = "", username = "";
     static Context context;
     SendingData sendingData;
-    private final Handler mhandler;
+    Database database;
+    private final Handler mhandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(Message msg) {
+            switch (msg.what) {
+                case LOGIN_SUCCESS:
+                    progressdialog.dismiss();
+                    SavePreferences("MRCODE", getsetvalues.getMrcode());
+                    SavePreferences("MRNAME", getsetvalues.getMrname());
+                    SavePreferences("SUBDIVCODE", getsetvalues.getSubdivcode());
+                    SavePreferences("USER_ROLE", getsetvalues.getUser_role());
+                    SavePreferences("DEVICE_ID", getsetvalues.getMr_device_id());
+                    SavePreferences("SUBDIVNAME", getsetvalues.getMr_subdiv_name());
+                    SavePreferences("PASSWORD", getsetvalues.getMrpassword());
+                    SavePreferences("APP_VERSION", getsetvalues.getApp_version());
+                    database.delete_data();
+                    start_version_check();
+                    check_date();
 
-    {
-        mhandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                switch (msg.what) {
-                    case LOGIN_SUCCESS:
-                        progressdialog.dismiss();
-                        SavePreferences("MRCODE", getsetvalues.getMrcode());
-                        SavePreferences("MRNAME", getsetvalues.getMrname());
-                        SavePreferences("SUBDIVCODE", getsetvalues.getSubdivcode());
-                        SavePreferences("USER_ROLE", getsetvalues.getUser_role());
-                        SavePreferences("DEVICE_ID", getsetvalues.getMr_device_id());
-                        SavePreferences("SUBDIVNAME", getsetvalues.getMr_subdiv_name());
-                        SavePreferences("PASSWORD", getsetvalues.getMrpassword());
-                        SavePreferences("APP_VERSION", getsetvalues.getApp_version());
-                        start_version_check();
-                        if (fcall.compare(cur_version, getsetvalues.getApp_version()))
-                            showdialog(DLG_APK_UPDATE_SUCCESS);
-                        else {
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                            //Below code is for custom toast message
-                            inflater = getLayoutInflater();
-                            layout = inflater.inflate(R.layout.toast1,
-                                    (ViewGroup) findViewById(R.id.toast_layout));
-                            ImageView imageView = (ImageView) layout.findViewById(R.id.image);
-                            imageView.setImageResource(R.drawable.tick);
-                            TextView textView = (TextView) layout.findViewById(R.id.text);
-                            textView.setText("Success");
-                            textView.setTextSize(20);
-                            Toast toast = new Toast(getApplicationContext());
-                            toast.setGravity(Gravity.BOTTOM, 0, 0);
-                            toast.setDuration(Toast.LENGTH_SHORT);
-                            toast.setView(layout);
-                            toast.show();
-                        }
-
-                        //end of custom toast coding
-                        break;
-                    case LOGIN_FAILURE:
-                        progressdialog.dismiss();
-                        //below code is for custom toast
+                    if (fcall.compare(cur_version, getsetvalues.getApp_version()))
+                        showdialog(DLG_APK_UPDATE_SUCCESS);
+                    else {
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                        //Below code is for custom toast message
                         inflater = getLayoutInflater();
-                        layout = inflater.inflate(R.layout.toast,
-                                (ViewGroup) findViewById(R.id.toast_layout));
-                        ImageView imageView1 = (ImageView) layout.findViewById(R.id.image);
-                        imageView1.setImageResource(R.drawable.invalid);
-                        TextView textView1 = (TextView) layout.findViewById(R.id.text);
-                        textView1.setText("Invalid Credentials!!");
-                        textView1.setTextSize(20);
-                        Toast toast1 = new Toast(getApplicationContext());
-                        toast1.setGravity(Gravity.BOTTOM, 0, 0);
-                        toast1.setDuration(Toast.LENGTH_SHORT);
-                        toast1.setView(layout);
-                        toast1.show();
-                        //end of custom toast code
-                        mrcode.setText("");
-                        password.setText("");
-                        mrcode.requestFocus();
-                        break;
+                        layout = inflater.inflate(R.layout.toast1, (ViewGroup) findViewById(R.id.toast_layout));
+                        ImageView imageView = (ImageView) layout.findViewById(R.id.image);
+                        imageView.setImageResource(R.drawable.tick);
+                        TextView textView = (TextView) layout.findViewById(R.id.text);
+                        textView.setText("Success");
+                        textView.setTextSize(20);
+                        Toast toast = new Toast(getApplicationContext());
+                        toast.setGravity(Gravity.BOTTOM, 0, 0);
+                        toast.setDuration(Toast.LENGTH_SHORT);
+                        toast.setView(layout);
+                        toast.show();
+                    }
 
-                    case APK_FILE_DOWNLOADED:
-                        progressdialog.dismiss();
-                        fcall.updateApp(LoginActivity.this, new File(fcall.filepath("ApkFolder") +
-                                File.separator + "Discon_Recon_" + getsetvalues.getApp_version() + ".apk"));
-                        break;
-                    case APK_FILE_NOT_FOUND:
-                        progressdialog.dismiss();
-                        Toast.makeText(LoginActivity.this, "Apk FIle not FOund!!", Toast.LENGTH_SHORT).show();
-                        break;
-                    case DLG_APK_UPDATE_FAILURE:
-                        Toast.makeText(LoginActivity.this, "Apk Update Failure", Toast.LENGTH_SHORT).show();
-                        break;
-                }
-                super.handleMessage(msg);
+                    //end of custom toast coding
+                    break;
+                case LOGIN_FAILURE:
+                    progressdialog.dismiss();
+                    //below code is for custom toast
+                    inflater = getLayoutInflater();
+                    layout = inflater.inflate(R.layout.toast, (ViewGroup) findViewById(R.id.toast_layout));
+                    ImageView imageView1 = (ImageView) layout.findViewById(R.id.image);
+                    imageView1.setImageResource(R.drawable.invalid);
+                    TextView textView1 = (TextView) layout.findViewById(R.id.text);
+                    textView1.setText("Invalid Credentials!!");
+                    textView1.setTextSize(20);
+                    Toast toast1 = new Toast(getApplicationContext());
+                    toast1.setGravity(Gravity.BOTTOM, 0, 0);
+                    toast1.setDuration(Toast.LENGTH_SHORT);
+                    toast1.setView(layout);
+                    toast1.show();
+                    //end of custom toast code
+                    mrcode.setText("");
+                    password.setText("");
+                    mrcode.requestFocus();
+                    break;
+
+                case APK_FILE_DOWNLOADED:
+                    progressdialog.dismiss();
+                    fcall.updateApp(LoginActivity.this, new File(fcall.filepath("ApkFolder") +
+                            File.separator + "Discon_Recon_" + getsetvalues.getApp_version() + ".apk"));
+                    break;
+                case APK_FILE_NOT_FOUND:
+                    progressdialog.dismiss();
+                    Toast.makeText(LoginActivity.this, "Apk FIle not FOund!!", Toast.LENGTH_SHORT).show();
+                    break;
+                case DLG_APK_UPDATE_FAILURE:
+                    Toast.makeText(LoginActivity.this, "Apk Update Failure", Toast.LENGTH_SHORT).show();
+                    break;
             }
-        };
-    }
+            return false;
+        }
+    });
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,7 +166,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         context = this;
         sendingData = new SendingData();
-
+        database = new Database(this);
+        database.open();
         PackageInfo packageInfo;
         try {
             packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -196,7 +193,6 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //todo for checking server date
 
-
                 if (fcall.isInternetOn(LoginActivity.this)) {
                     username = mrcode.getText().toString().trim();
                     SharedPreferences ss = getSharedPreferences("loginSession_key", 0);
@@ -214,7 +210,7 @@ public class LoginActivity extends AppCompatActivity {
                     // String DeviceID ="863697039938021";
                     //Device ID for MR
                     //User ID 54003799
-                    //String DeviceID ="354016070557564";
+                    String DeviceID ="354016070557564";
                     //Device id for AAO
                     //User ID 10540038
                     // String DeviceID = "866133033048564";
@@ -233,8 +229,8 @@ public class LoginActivity extends AppCompatActivity {
                         // for ActivityCompat#requestPermissions for more details.
                         return;
                     }
-                    String DeviceID = telephonyManager.getDeviceId();
-                    Log.d("Debug", "Device ID" + DeviceID);
+                  /*  String DeviceID = telephonyManager.getDeviceId();
+                    Log.d("Debug", "Device ID" + DeviceID);*/
                     getpassword = password.getText().toString();
                     if (mrcode.getText().length() <= 0) {
                         mrcode.setError("Please Enter MR code!!");
@@ -285,6 +281,20 @@ public class LoginActivity extends AppCompatActivity {
         } else fcall.logStatus("Version_receiver Already running..");
     }
 
+    public void check_date()
+    {
+        fcall.logStatus("Date Comparison Started..");
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getApplicationContext(), ChangeDateNotification.class);
+        boolean alarmRunning = (PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_NO_CREATE) != null);
+        if (!alarmRunning) {
+            fcall.logStatus("Date Checking Started..");
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), (10000), pendingIntent);
+        } else fcall.logStatus("Date Checking is Already running..");
+
+    }
+
     public void showdialog(int id) {
         Dialog dialog = null;
         switch (id) {
@@ -317,11 +327,13 @@ public class LoginActivity extends AppCompatActivity {
         ArrayList<String> al = new ArrayList<>();
         al.addAll(sss.getStringSet("set", new HashSet<String>()));
         //Creating the instance of ArrayAdapter containing list of language names
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                (this, android.R.layout.select_dialog_item, al);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.select_dialog_item, al);
         //Getting the instance of AutoCompleteTextView
         mrcode.setThreshold(1);//will start working from first character
         mrcode.setAdapter(adapter);//setting the adapter data into the AutoCompleteTextView
+
+
     }
+
 
 }

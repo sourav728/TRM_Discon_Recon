@@ -15,30 +15,23 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.support.v7.widget.SearchView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.adapter.Feeder_details_Adapter;
-import com.example.tvd.trm_discon_recon.adapter.RoleAdapter;
 import com.example.tvd.trm_discon_recon.invoke.SendingData;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
 import java.util.ArrayList;
 
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.DISCONNECTION_DIALOG;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.FDR_UPDATE_FAILURE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.FDR_UPDATE_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.FEEDER_DETAILS_FAILURE;
@@ -76,9 +69,9 @@ public class FeederDetails extends AppCompatActivity {
                     Toast.makeText(FeederDetails.this, "Updated successfully..", Toast.LENGTH_SHORT).show();
                     feeder_details_update_dialog.dismiss();
                     finish();
-                    overridePendingTransition(0,0);
+                    overridePendingTransition(0, 0);
                     startActivity(getIntent());
-                    overridePendingTransition(0,0);
+                    overridePendingTransition(0, 0);
                     break;
                 case FDR_UPDATE_FAILURE:
                     progressDialog.dismiss();
@@ -103,7 +96,7 @@ public class FeederDetails extends AppCompatActivity {
         fdr_details_date = sharedPreferences.getString("FDR_DETAILS_DATE", "");
         subdivision = sharedPreferences.getString("SUB_DIVCODE", "");
 
-        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        toolbar = findViewById(R.id.my_toolbar);
         toolbar_text = toolbar.findViewById(R.id.toolbar_title);
         toolbar_text.setText("Feeder Details");
         toolbar.setNavigationIcon(R.drawable.back);
@@ -141,7 +134,7 @@ public class FeederDetails extends AppCompatActivity {
         functionCall = new FunctionCall();
         getsetvalues = new GetSetValues();
 
-        recyclerview = (RecyclerView) findViewById(R.id.feeder_details_recyclerview);
+        recyclerview = findViewById(R.id.feeder_details_recyclerview);
         arrayList = new ArrayList<>();
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         recyclerview.setHasFixedSize(true);
@@ -211,7 +204,8 @@ public class FeederDetails extends AppCompatActivity {
                                     SendingData.FDR_Fr_Update fdr_fr_update = sendingData.new FDR_Fr_Update(mhandler, getSetValues);
                                     fdr_fr_update.execute(getSetValues.getFdr_code(), parsed_date, current_reading.getText().toString());
                                 } else
-                                    Toast.makeText(FeederDetails.this, "Current Reading should be greater than Previous Reading!!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(FeederDetails.this, "Current Reading should be greater than Previous Reading!!",
+                                            Toast.LENGTH_SHORT).show();
 
                             }
                         });

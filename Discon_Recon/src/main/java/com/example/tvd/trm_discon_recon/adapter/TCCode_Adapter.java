@@ -9,16 +9,18 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.activities.TC_Details2;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
+
 import java.util.ArrayList;
 
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_DETAILS_UPDATE;
 
-public class TCCode_Adapter extends RecyclerView.Adapter<TCCode_Adapter.TcHolder> implements Filterable{
-    private ArrayList<GetSetValues> arraylist ;
-    private ArrayList<GetSetValues>filteredList;
+public class TCCode_Adapter extends RecyclerView.Adapter<TCCode_Adapter.TcHolder> implements Filterable {
+    private ArrayList<GetSetValues> arraylist;
+    private ArrayList<GetSetValues> filteredList;
     private Context context;
     private GetSetValues getSetValues = new GetSetValues();
     private TC_Details2 tc_details2;
@@ -55,7 +57,7 @@ public class TCCode_Adapter extends RecyclerView.Adapter<TCCode_Adapter.TcHolder
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-                String search=constraint.toString();
+                String search = constraint.toString();
                 if (search.isEmpty())
                     arraylist = filteredList;
                 else {
@@ -82,8 +84,9 @@ public class TCCode_Adapter extends RecyclerView.Adapter<TCCode_Adapter.TcHolder
         };
     }
 
-    public class TcHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        TextView tccode,tcir,tcfr,tcmf;
+    public class TcHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView tccode, tcir, tcfr, tcmf;
+
         public TcHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);

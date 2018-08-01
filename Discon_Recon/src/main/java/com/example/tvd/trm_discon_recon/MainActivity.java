@@ -6,7 +6,6 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
@@ -28,10 +27,10 @@ import com.example.tvd.trm_discon_recon.fragments.HomeFragment;
 import com.example.tvd.trm_discon_recon.invoke.SendingData;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    TextView mrname,mrcode,logout;
-    String Mrname="", Mrcode="",selected_date2="";
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    TextView mrname, mrcode, logout;
+    String Mrname = "", Mrcode = "", selected_date2 = "";
     FunctionCall fcall;
     GetSetValues getSetValues;
     SendingData sendingData;
@@ -39,18 +38,19 @@ public class MainActivity extends AppCompatActivity
     private BluetoothAdapter mBluetoothAdapter;
     private static final int REQUEST_ENABLE_BT = 1;
     ProgressDialog progress;
-    String user_role="";
+    String user_role = "";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         database = new Database(this);
         database.open();
 
         //todo for deleting database records less than 3 days
-       // database.delete_data();
+        // database.delete_data();
 
         progress = new ProgressDialog(MainActivity.this, AlertDialog.THEME_DEVICE_DEFAULT_DARK);
 
@@ -65,39 +65,36 @@ public class MainActivity extends AppCompatActivity
         getSetValues = new GetSetValues();
         sendingData = new SendingData();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF",MODE_PRIVATE);
-        Mrname = sharedPreferences.getString("MRNAME","");
-        Mrcode = sharedPreferences.getString("MRCODE","");
-        user_role = sharedPreferences.getString("USER_ROLE","");
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+        Mrname = sharedPreferences.getString("MRNAME", "");
+        Mrcode = sharedPreferences.getString("MRCODE", "");
+        user_role = sharedPreferences.getString("USER_ROLE", "");
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         Menu menu = navigationView.getMenu();
         MenuItem disconnect = menu.findItem(R.id.nav_disconnect);
         MenuItem reconnect = menu.findItem(R.id.nav_reconnect);
-        if (user_role.equals("MR"))
-        {
+        if (user_role.equals("MR")) {
             disconnect.setVisible(true);
             reconnect.setVisible(true);
-        }
-        else {
+        } else {
             disconnect.setVisible(false);
             reconnect.setVisible(false);
         }
         View view = navigationView.getHeaderView(0);
-        mrname = (TextView) view.findViewById(R.id.nav_mrname);
-        mrcode = (TextView) view.findViewById(R.id.nav_mrcode);
+        mrname = view.findViewById(R.id.nav_mrname);
+        mrcode = view.findViewById(R.id.nav_mrcode);
         mrname.setText(Mrname);
         mrcode.setText(Mrcode);
-        NavigationView logout_view = (NavigationView) findViewById(R.id.nav_view2);
+        NavigationView logout_view = findViewById(R.id.nav_view2);
         logout_view.setNavigationItemSelectedListener(this);
 
 
@@ -106,7 +103,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -119,7 +116,7 @@ public class MainActivity extends AppCompatActivity
         getMenuInflater().inflate(R.menu.main, menu);
         MenuItem item = menu.findItem(R.id.action_settings);
         if (user_role.equals("MR"))
-        item.setVisible(false);
+            item.setVisible(false);
         else item.setVisible(true);
         return true;
     }
@@ -143,17 +140,16 @@ public class MainActivity extends AppCompatActivity
         Fragment fragment;
         int id = item.getItemId();
         replaceFragment(id);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-    private void replaceFragment(int id)
-    {
+
+    private void replaceFragment(int id) {
         Fragment fragment = null;
         if (id == R.id.nav_home) {
             fragment = new HomeFragment();
-        }else if (id == R.id.nav_logout)
-        {
+        } else if (id == R.id.nav_logout) {
             SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
@@ -163,12 +159,10 @@ public class MainActivity extends AppCompatActivity
             intent.setFlags(intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
             finish();
-        }else if (id == R.id.nav_disconnect){
+        } else if (id == R.id.nav_disconnect) {
             Intent intent = new Intent(MainActivity.this, DateSelectActivity.class);
             startActivity(intent);
-        }
-        else if (id == R.id.nav_reconnect)
-        {
+        } else if (id == R.id.nav_reconnect) {
             Intent intent = new Intent(MainActivity.this, DateSelectActivity2.class);
             startActivity(intent);
         }
@@ -179,8 +173,8 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
-    public Database get_discon_Database()
-    {
+
+    public Database get_discon_Database() {
         return this.database;
     }
 

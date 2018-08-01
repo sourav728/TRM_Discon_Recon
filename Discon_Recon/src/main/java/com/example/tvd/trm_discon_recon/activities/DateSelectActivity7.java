@@ -48,13 +48,13 @@ public class DateSelectActivity7 extends AppCompatActivity {
             }
         });
 
-        show_date = (TextView) findViewById(R.id.txt_date);
+        show_date = findViewById(R.id.txt_date);
         fcall = new FunctionCall();
         subdivision = findViewById(R.id.edit_subdivision);
         submit = findViewById(R.id.btn_submit);
 
 
-        date = (ImageView) findViewById(R.id.img_fromdate);
+        date = findViewById(R.id.img_fromdate);
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,7 +95,7 @@ public class DateSelectActivity7 extends AppCompatActivity {
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
 
                 dd = (year + "-" + (month + 1) + "-" + dayOfMonth);
-                date1 = fcall.Parse_Date3(dd);
+                date1 = fcall.Parse_Date8(dd);
                 show_date.setText(date1);
             }
         };

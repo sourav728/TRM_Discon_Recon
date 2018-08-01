@@ -35,6 +35,7 @@ public class FunctionCall {
         CheckInternetConnection cd = new CheckInternetConnection(context.getApplicationContext());
         return cd.isConnectingToInternet();
     }
+
     /***********CHECKING INTERNET IS ON OR NOT****************/
     public final boolean isInternetOn(Activity activity) {
         ConnectivityManager connect = (ConnectivityManager) activity.getSystemService(activity.getBaseContext().CONNECTIVITY_SERVICE);
@@ -52,7 +53,7 @@ public class FunctionCall {
 
     @SuppressLint("DefaultLocale")
     public String convertdateview(String date, String format, String separation) {
-        String s1, s2, s3, s4, s5="";
+        String s1, s2, s3, s4, s5 = "";
         if (date.length() == 10) {
             s1 = date.substring(0, 2);
             s2 = date.substring(3, 5);
@@ -70,9 +71,9 @@ public class FunctionCall {
                 s2 = date.substring(3, 4);
                 s3 = date.substring(5, 9);
                 if (format.equals("DD") || format.equals("dd")) {
-                    s5 = s1 + separation + "0"+s2 + separation + s3;
+                    s5 = s1 + separation + "0" + s2 + separation + s3;
                 } else {
-                    s5 = s3 + separation + "0"+s2 + separation + s1;
+                    s5 = s3 + separation + "0" + s2 + separation + s1;
                 }
             } catch (NumberFormatException e) {
                 e.printStackTrace();
@@ -80,9 +81,9 @@ public class FunctionCall {
                 s2 = date.substring(2, 4);
                 s3 = date.substring(5, 9);
                 if (format.equals("DD") || format.equals("dd")) {
-                    s5 = "0"+s1 + separation + s2 + separation + s3;
+                    s5 = "0" + s1 + separation + s2 + separation + s3;
                 } else {
-                    s5 = s3 + separation + s2 + separation + "0"+s1;
+                    s5 = s3 + separation + s2 + separation + "0" + s1;
                 }
             }
         } else if (date.length() == 8) {
@@ -90,13 +91,14 @@ public class FunctionCall {
             s2 = date.substring(2, 3);
             s3 = date.substring(4, 8);
             if (format.equals("DD") || format.equals("dd")) {
-                s5 = "0"+s1 + separation + "0"+s2 + separation + s3;
+                s5 = "0" + s1 + separation + "0" + s2 + separation + s3;
             } else {
-                s5 = s3 + separation + "0"+s2 + separation + "0"+s1;
+                s5 = s3 + separation + "0" + s2 + separation + "0" + s1;
             }
         }
         return s5;
     }
+
     public void setEdittext_error(EditText editText, String error_msg) {
         editText.setError(error_msg);
         editText.requestFocus();
@@ -153,6 +155,7 @@ public class FunctionCall {
         }
         return str;
     }
+
     public String Parse_Date5(String time) {
         String input = "yyyy/MM/dd";
         String output = "dd-MM-yyyy";
@@ -169,8 +172,8 @@ public class FunctionCall {
         }
         return str;
     }
-    public String Parse_Date6(String time)
-    {
+
+    public String Parse_Date6(String time) {
         String input = "yyyy/MM/dd";
         String output = "yyyyMM";
         SimpleDateFormat inputFormat = new SimpleDateFormat(input, Locale.getDefault());
@@ -203,6 +206,41 @@ public class FunctionCall {
         }
         return str;
     }
+
+    public String Parse_Date8(String time) {
+        String input = "yyyy-MM-d";
+        String output = "yyyy-MM-dd";
+        SimpleDateFormat inputFormat = new SimpleDateFormat(input);
+        SimpleDateFormat outputFormat = new SimpleDateFormat(output);
+
+        Date date = null;
+        String str = null;
+        try {
+            date = inputFormat.parse(time);
+            str = outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
+    public String Parse_Date9(String time) {
+        String input = "yyyy-MM-dd";
+        String output = "dd-MM-yyyy";
+        SimpleDateFormat inputFormat = new SimpleDateFormat(input, Locale.getDefault());
+        SimpleDateFormat outputFormat = new SimpleDateFormat(output, Locale.getDefault());
+
+        Date date;
+        String str = null;
+        try {
+            date = inputFormat.parse(time);
+            str = outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
     public void showtoast(Context context, String Message) {
         Toast.makeText(context, Message, Toast.LENGTH_SHORT).show();
     }
@@ -216,6 +254,7 @@ public class FunctionCall {
         }
         return date1;
     }
+
     public File filestorepath(String value, String file) {
         File dir = new File(android.os.Environment.getExternalStorageDirectory(), Appfoldername()
                 + File.separator + value);
@@ -224,9 +263,11 @@ public class FunctionCall {
         }
         return new File(dir, File.separator + file);
     }
+
     private String Appfoldername() {
         return "Discon_Recon";
     }
+
     public String filepath(String value) {
         File dir = new File(android.os.Environment.getExternalStorageDirectory(), Appfoldername()
                 + File.separator + value);
@@ -235,7 +276,6 @@ public class FunctionCall {
         }
         return dir.toString();
     }
-
 
 
     public String space(String s, int len) {
@@ -262,6 +302,7 @@ public class FunctionCall {
         msg = String.format("%" + len + "s", msg);
         return msg;
     }
+
     public boolean compare(String v1, String v2) {
         String s1 = normalisedVersion(v1);
         String s2 = normalisedVersion(v2);
@@ -269,6 +310,7 @@ public class FunctionCall {
         String cmpStr = cmp < 0 ? "<" : cmp > 0 ? ">" : "==";
         return cmpStr.equals("<");
     }
+
     public String normalisedVersion(String version) {
         return normalisedVersion(version, ".", 4);
     }
@@ -281,12 +323,13 @@ public class FunctionCall {
         }
         return sb.toString();
     }
+
     public String currentRecpttime() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a", Locale.US);
         return sdf.format(new Date());
     }
-    public String system_date()
-    {
+
+    public String system_date() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
         return sdf.format(new Date());
     }
@@ -310,6 +353,7 @@ public class FunctionCall {
         objIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         context.startActivity(objIntent);
     }
+
     public void splitString(String msg, int lineSize, ArrayList<String> arrayList) {
         arrayList.clear();
         Pattern p = Pattern.compile("\\b.{0," + (lineSize - 1) + "}\\b\\W?");
@@ -317,5 +361,9 @@ public class FunctionCall {
         while (m.find()) {
             arrayList.add(m.group().trim());
         }
+    }
+    public String currentDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        return sdf.format(new Date());
     }
 }

@@ -1,22 +1,98 @@
 package com.example.tvd.trm_discon_recon.values;
 
 public class GetSetValues {
-    private String mrcode="",mrname="",subdivcode="",acc_id="",arrears="",dis_date="",prev_read="",server_date="", login_date="",
-                   consumer_name="",add1="",lati="",longi="",mtr_read="",user_role="", mrpassword="",app_version="";
-    private String discon_id="",discon_acc_id="",discon_arrears="",discon_date="",discon_prevread="",discon_consumer_name="",
-                   discon_add1="",discon_lat="",discon_lon="",discon_mtr_read="",discon_flag="",remark="";
-    private String recon_id="",recon_acc_id="",recon_arrears="",recon_date="",recon_prevread="",recon_consumer_name="",
-            recon_add1="",recon_lat="",recon_lon="",recon_mtr_read="",recon_flag="",recon_remark="",re_date="";
-    private String mr_device_id="",mr_subdiv_name="";
-    private String selected_discon_date="";
-    private String fdr_code="",fdr_ir="",fdr_fr="",fdr_mf="";
-    private String feeder_code="";
-    private String recon_memo_acc_id="";
-    private String recon_memo_rrno="";
-    private String reoon_memo_tariff="";
-    private String recon_memo_so="";
-    private String recon_memo_prev_read="";
-    private String tc_code="",tcir="",tcfr="",tcmf="";
+    private String mrcode = "", mrname = "", subdivcode = "", acc_id = "", arrears = "", dis_date = "", prev_read = "", server_date = "", login_date = "",
+            consumer_name = "", add1 = "", lati = "", longi = "", mtr_read = "", user_role = "", mrpassword = "", app_version = "";
+    private String discon_id = "", discon_acc_id = "", discon_arrears = "", discon_date = "", discon_prevread = "", discon_consumer_name = "",
+            discon_add1 = "", discon_lat = "", discon_lon = "", discon_mtr_read = "", discon_flag = "", remark = "";
+    private String recon_id = "", recon_acc_id = "", recon_arrears = "", recon_date = "", recon_prevread = "", recon_consumer_name = "",
+            recon_add1 = "", recon_lat = "", recon_lon = "", recon_mtr_read = "", recon_flag = "", recon_remark = "", re_date = "";
+    private String mr_device_id = "", mr_subdiv_name = "";
+    private String selected_discon_date = "";
+    private String fdr_code = "", fdr_ir = "", fdr_fr = "", fdr_mf = "";
+    private String feeder_code = "";
+    private String recon_memo_acc_id = "";
+    private String recon_memo_rrno = "";
+    private String reoon_memo_tariff = "";
+    private String recon_memo_so = "";
+    private String recon_memo_prev_read = "";
+    private String tc_code = "";
+    private String tcir = "";
+    private String tcfr = "";
+    private String tcmf = "";
+
+    public String getTcname() {
+        return tcname;
+    }
+
+    public void setTcname(String tcname) {
+        this.tcname = tcname;
+    }
+
+    private String tcname = "" ;
+    private String DTCNAME = "", DTCCODE = "", DTC_DATE = "", feeder_name = "";
+    private String recon_memo_customer_name = "";
+    private String recon_memo_add1 = "";
+    private String recon_memo_mtr_read = "";
+    private String recon_memo_arrears = "";
+    private String recon_memo_dr_fee = "";
+    private String recon_memo_reconnection_date = "";
+    private String recon_memo_subdiv = "";
+
+
+    public String getMRCODE() {
+        return MRCODE;
+    }
+
+    public void setMRCODE(String MRCODE) {
+        this.MRCODE = MRCODE;
+    }
+
+    private String MRCODE = "";
+
+    public String getDTCNAME() {
+        return DTCNAME;
+    }
+
+    public void setDTCNAME(String DTCNAME) {
+        this.DTCNAME = DTCNAME;
+    }
+
+    public String getDTCCODE() {
+        return DTCCODE;
+    }
+
+    public void setDTCCODE(String DTCCODE) {
+        this.DTCCODE = DTCCODE;
+    }
+
+    public String getDTC_DATE() {
+        return DTC_DATE;
+    }
+
+    public void setDTC_DATE(String DTC_DATE) {
+        this.DTC_DATE = DTC_DATE;
+    }
+
+    public String getDTC_MRCODE() {
+        return DTC_MRCODE;
+    }
+
+    public void setDTC_MRCODE(String DTC_MRCODE) {
+        this.DTC_MRCODE = DTC_MRCODE;
+    }
+
+    private String DTC_MRCODE = "";
+
+    public String getFeeder_name() {
+        return feeder_name;
+    }
+
+    public void setFeeder_name(String feeder_name) {
+        this.feeder_name = feeder_name;
+    }
+
+
     public String getTc_code() {
         return tc_code;
     }
@@ -81,14 +157,6 @@ public class GetSetValues {
         this.mr_subdiv_name = mr_subdiv_name;
     }
 
-    private String recon_memo_customer_name="";
-    private String recon_memo_add1="";
-    private String recon_memo_mtr_read="";
-    private String recon_memo_arrears="";
-    private String recon_memo_dr_fee="";
-    private String recon_memo_reconnection_date="";
-    private String recon_memo_subdiv="";
-
     public String getRecon_memo_readdate() {
         return recon_memo_readdate;
     }
@@ -97,7 +165,7 @@ public class GetSetValues {
         this.recon_memo_readdate = recon_memo_readdate;
     }
 
-    private String recon_memo_readdate="";
+    private String recon_memo_readdate = "";
 
 
     public String getRecon_memo_mrcode() {
@@ -108,7 +176,8 @@ public class GetSetValues {
         this.recon_memo_mrcode = recon_memo_mrcode;
     }
 
-    private String recon_memo_mrcode="";
+    private String recon_memo_mrcode = "";
+
     public String getMrcode() {
         return mrcode;
     }

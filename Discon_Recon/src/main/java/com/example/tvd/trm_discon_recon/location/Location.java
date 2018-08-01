@@ -85,7 +85,7 @@ public class Location extends FragmentActivity implements OnMapReadyCallback,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
-        back = (ImageView) findViewById(R.id.img_back);
+        back =  findViewById(R.id.img_back);
         consumer_address = findViewById(R.id.txt_address);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -153,11 +153,11 @@ public class Location extends FragmentActivity implements OnMapReadyCallback,
 
     public void init_persistent_bottomsheet() {
         View persistentbottomSheet = coordinatorLayout.findViewById(R.id.bottomsheet);
-        iv_trigger = (ImageView) persistentbottomSheet.findViewById(R.id.iv_fab);
-        distance_text = (TextView) persistentbottomSheet.findViewById(R.id.txt_distance);
-        duration_text = (TextView) persistentbottomSheet.findViewById(R.id.txt_duration);
-        source_address = (TextView) persistentbottomSheet.findViewById(R.id.txt_source_address);
-        destination_address = (TextView) persistentbottomSheet.findViewById(R.id.txt_destination_address);
+        iv_trigger =  persistentbottomSheet.findViewById(R.id.iv_fab);
+        distance_text =  persistentbottomSheet.findViewById(R.id.txt_distance);
+        duration_text =  persistentbottomSheet.findViewById(R.id.txt_duration);
+        source_address =  persistentbottomSheet.findViewById(R.id.txt_source_address);
+        destination_address =  persistentbottomSheet.findViewById(R.id.txt_destination_address);
 
         final BottomSheetBehavior behavior = BottomSheetBehavior.from(persistentbottomSheet);
         iv_trigger.setOnClickListener(new View.OnClickListener() {

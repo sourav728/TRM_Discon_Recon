@@ -96,14 +96,14 @@ public class Recon_List_Activity extends AppCompatActivity {
                     break;
 
                 case SERVER_DATE_SUCCESS:
-                    Date server_date = functionCall.selectiondate(functionCall.convertdateview(getsetvalues.getServer_date(), "dd", "/"));
+                  /*  Date server_date = functionCall.selectiondate(functionCall.convertdateview(getsetvalues.getServer_date(), "dd", "/"));
                     Log.d("Debug", "Server_date" + server_date);
                     Date selected_date = functionCall.selectiondate(functionCall.convertdateview(functionCall.Parse_Date2(reconnection_date), "dd", "/"));
                     Log.d("Debug", "Got_Selected_date" + selected_date);
 
-                    /**********Current Date is hardcoaded here later i have to pass selected_date in if condition******************/
-                    /**************************************************/
-                    /*************************************************/
+                    *//**********Current Date is hardcoaded here later i have to pass selected_date in if condition******************//*
+                    *//**************************************************//*
+                    *//*************************************************//*
 
                     Date selected_date1 = functionCall.selectiondate(functionCall.convertdateview(functionCall.Parse_Date2("2018/06/26"), "dd", "/"));
                     Log.d("Debug", "Hardcoaded" + selected_date1);
@@ -116,13 +116,13 @@ public class Recon_List_Activity extends AppCompatActivity {
                         progressDialog.setMessage("Please Wait..");
                         progressDialog.show();
                         SendingData.Recon_List recon_list = sendingData.new Recon_List(mhandler, getsetvalues, arraylist);
-                        /*******Below Mrcode and date is hardcoaded*******/
+                        *//*******Below Mrcode and date is hardcoaded*******//*
                         recon_list.execute(login_mr_code, reconnection_date);
                     } else {
                         Log.d("Debug", "Date Not Matching..");
-                        /*****************Database should be cleared if user enter 30 days more than the system date**************/
+                        *//*****************Database should be cleared if user enter 30 days more than the system date**************//*
                         //database.delete_table();
-                    }
+                    }*/
                     break;
                 case SERVER_DATE_FAILURE:
                     Log.d("Debug", "Server Date Failure!!");

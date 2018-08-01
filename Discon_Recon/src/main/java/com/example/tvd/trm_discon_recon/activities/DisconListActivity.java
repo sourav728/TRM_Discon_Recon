@@ -1,5 +1,6 @@
 package com.example.tvd.trm_discon_recon.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -102,17 +103,13 @@ public class DisconListActivity extends AppCompatActivity {
                     discon_dialog.dismiss();
                     break;
                 case SERVER_DATE_SUCCESS:
-                    Date server_date = functionCall.selectiondate(functionCall.convertdateview(getsetvalues.getServer_date(), "dd", "/"));
+                    /*Date server_date = functionCall.selectiondate(functionCall.convertdateview(getsetvalues.getServer_date(), "dd", "/"));
                     Log.d("Debug", "Server_date" + server_date);
                     Date selected_date = functionCall.selectiondate(functionCall.convertdateview(functionCall.Parse_Date2(disconnection_date), "dd", "/"));
-                    Log.d("Debug", "Got_Selected_date" + selected_date);
-
-                    /**********Current Date is hardcoaded here later i have to pass selected_date in if condition******************/
-                    /**************************************************/
-                    /*************************************************/
+                    //Log.d("Debug", "Got_Selected_date" + selected_date);
 
                     Date selected_date1 = functionCall.selectiondate(functionCall.convertdateview(functionCall.Parse_Date2("2018/06/26"), "dd", "/"));
-                    Log.d("Debug", "Hardcoaded" + selected_date1);
+                    Log.d("Debug", "Hardcoaded" + selected_date1);*/
 
                    /* if (server_date.equals(selected_date1)) {
                         Log.d("Debug", "Date Matching..");
@@ -143,7 +140,7 @@ public class DisconListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_discon_list);
         setSupportActionBar(toolbar);
 
-        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        toolbar = findViewById(R.id.my_toolbar);
         toolbar_text = toolbar.findViewById(R.id.toolbar_title);
         searchView = toolbar.findViewById(R.id.search_view);
         searchView.setQueryHint("Enter Account ID..");
@@ -179,15 +176,15 @@ public class DisconListActivity extends AppCompatActivity {
         Log.d("Debug", "Got Disconnection Date" + disconnection_date);
 
 
-        total_count = (TextView) findViewById(R.id.txt_total_count);
-        discon_count = (TextView) findViewById(R.id.txt_discon_count);
-        remaining = (TextView) findViewById(R.id.txt_remaining);
+        total_count = findViewById(R.id.txt_total_count);
+        discon_count =  findViewById(R.id.txt_discon_count);
+        remaining = findViewById(R.id.txt_remaining);
 
         pdialog = new ProgressDialog(this);
         sendingData = new SendingData();
         functionCall = new FunctionCall();
         getsetvalues = new GetSetValues();
-        recyclerview = (RecyclerView) findViewById(R.id.discon_recyclerview);
+        recyclerview = findViewById(R.id.discon_recyclerview);
 
         arraylist = new ArrayList<>();
         arrayList1 = new ArrayList<>();
@@ -203,13 +200,12 @@ public class DisconListActivity extends AppCompatActivity {
         progressDialog.show();
         SendingData.Discon_List discon_list = sendingData.new Discon_List(mhandler, getsetvalues, arraylist);
         /****************MRCode and Date is hardcoaded******************/
-        discon_list.execute(login_mr_code, disconnection_date);
-        // discon_list.execute("54003714","2018/06/13");
+       // discon_list.execute(login_mr_code, disconnection_date);
+         discon_list.execute("54003714","2018/06/13");
     }
 
 
     public void show_disconnection_dialog(int id, final int position, ArrayList<GetSetValues> arrayList) {
-        final AlertDialog alertDialog;
         final GetSetValues getSetValues = arrayList.get(position);
         switch (id) {
             case DISCONNECTION_DIALOG:
@@ -217,7 +213,7 @@ public class DisconListActivity extends AppCompatActivity {
                 dialog.setTitle("Disconnection");
                 dialog.setCancelable(false);
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View view = inflater.inflate(R.layout.discon_layout, null);
+                @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.discon_layout, null);
                 dialog.setView(view);
                 final TextView accno = view.findViewById(R.id.txt_account_no);
                 final TextView arrears = view.findViewById(R.id.txt_arrears);
