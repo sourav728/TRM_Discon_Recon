@@ -25,7 +25,6 @@ import android.widget.Toast;
 import com.example.tvd.trm_discon_recon.R;
 import com.example.tvd.trm_discon_recon.adapter.TCCode_Adapter;
 import com.example.tvd.trm_discon_recon.invoke.SendingData;
-import com.example.tvd.trm_discon_recon.location.ClassGPS;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
@@ -36,6 +35,7 @@ import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_CODE_NOT
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_CODE_NOTUPDATE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_CODE_UPDATE;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.TC_DETAILS_UPDATE;
+
 
 public class TC_Details2 extends AppCompatActivity {
     SendingData sendingData;
@@ -48,53 +48,54 @@ public class TC_Details2 extends AppCompatActivity {
     AlertDialog tc_details_update_dialog;
     FunctionCall fcall;
     private Toolbar toolbar;
-    TextView toolbar_text, Date, mrcode;
+    TextView toolbar_text;
     private SearchView searchView;
-    ClassGPS classGPS;
-    String gps_lat = "", gps_long = "";
     //************************************************************************************************************
-    private final Handler handler = new Handler(new Handler.Callback() {
-        @Override
-        public boolean handleMessage(Message msg) {
-            switch (msg.what) {
-                case TC_CODE_FOUND:
-                    progressdialog.dismiss();
-                    Toast.makeText(TC_Details2.this, "Success", Toast.LENGTH_SHORT).show();
-                    break;
-                case TC_CODE_NOTFOUND:
-                    progressdialog.dismiss();
-                    Toast.makeText(TC_Details2.this, "Data not Found!!", Toast.LENGTH_SHORT).show();
-                    finish();
-                    break;
-                case TC_CODE_UPDATE:
-                    progressdialog.dismiss();
-                    Toast.makeText(TC_Details2.this, "Updated..", Toast.LENGTH_SHORT).show();
-                    tc_details_update_dialog.dismiss();
-                    finish();
-                    overridePendingTransition(0, 0);
-                    startActivity(getIntent());
-                    overridePendingTransition(0, 0);
-                    break;
-                case TC_CODE_NOTUPDATE:
-                    progressdialog.dismiss();
-                    Toast.makeText(TC_Details2.this, "Update Failure!!", Toast.LENGTH_SHORT).show();
-                    tc_details_update_dialog.dismiss();
-                    break;
+    private final Handler handler;
 
+    {
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+                switch (msg.what) {
+                    case TC_CODE_FOUND:
+                        progressdialog.dismiss();
+                        Toast.makeText(TC_Details2.this, "Success", Toast.LENGTH_SHORT).show();
+                        break;
+                    case TC_CODE_NOTFOUND:
+                        progressdialog.dismiss();
+                        Toast.makeText(TC_Details2.this, "Data not Found!!", Toast.LENGTH_SHORT).show();
+                        finish();
+                        break;
+                    case TC_CODE_UPDATE:
+                        progressdialog.dismiss();
+                        Toast.makeText(TC_Details2.this, "Updated..", Toast.LENGTH_SHORT).show();
+                        tc_details_update_dialog.dismiss();
+                        finish();
+                        overridePendingTransition(0, 0);
+                        startActivity(getIntent());
+                        overridePendingTransition(0, 0);
+                        break;
+                    case TC_CODE_NOTUPDATE:
+                        progressdialog.dismiss();
+                        Toast.makeText(TC_Details2.this, "Update Failure!!", Toast.LENGTH_SHORT).show();
+                        tc_details_update_dialog.dismiss();
+                        break;
+
+                }
+                super.handleMessage(msg);
             }
-            return false;
-        }
-    });
-
+        };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tc__details2);
 
-        toolbar = findViewById(R.id.my_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.my_toolbar);
         toolbar_text = toolbar.findViewById(R.id.toolbar_title);
-        toolbar_text.setText("TC Details");
+        toolbar_text.setText("TC List");
         toolbar.setNavigationIcon(R.drawable.back);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -118,20 +119,14 @@ public class TC_Details2 extends AppCompatActivity {
                 return false;
             }
         });
-        classGPS = new ClassGPS(this);
+
         fcall = new FunctionCall();
         SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
         MRCODE = sharedPreferences.getString("TCMRCODE", "");
         DATE = sharedPreferences.getString("TCMRDATE", "");
 
-        Date = findViewById(R.id.txt_date);
-        mrcode = findViewById(R.id.txt_subdiv);
-        Date.setText(DATE);
-        mrcode.setText(MRCODE);
-
-
         sendingData = new SendingData();
-        recyclerview = findViewById(R.id.tccode_recyclerview);
+        recyclerview = (RecyclerView) findViewById(R.id.tccode_recyclerview);
         arraylist = new ArrayList<>();
         recyclerview.setLayoutManager(new LinearLayoutManager(this));
         recyclerview.setHasFixedSize(true);
@@ -143,17 +138,9 @@ public class TC_Details2 extends AppCompatActivity {
         tcCode_adapter = new TCCode_Adapter(this, arraylist, TC_Details2.this);
         recyclerview.setAdapter(tcCode_adapter);
 
-        SendingData.Search_Tccode search_tccode = sendingData.new Search_Tccode(handler, getSetValues, arraylist, tcCode_adapter);
-        search_tccode.execute(MRCODE, DATE);
-    }
-
-    private void GPSlocation() {
-        if (classGPS.canGetLocation()) {
-            double latitude = classGPS.getLatitude();
-            double longitude = classGPS.getLongitude();
-            gps_lat = "" + latitude;
-            gps_long = "" + longitude;
-        }
+        SendingData.Search_Tccode search_tccode = sendingData.new Search_Tccode(handler, getSetValues,
+                arraylist, tcCode_adapter);
+        search_tccode.execute(MRCODE, fcall.Parse_Date5(DATE));
     }
 
     public void show_tc_details_update_dialog2(int id, final int position, ArrayList<GetSetValues> arrayList) {
@@ -204,7 +191,6 @@ public class TC_Details2 extends AppCompatActivity {
                         update_button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                GPSlocation();
                                 cur_reading = current_reading.getText().toString();
                                 if (Double.parseDouble(getSetValues.getTcir()) < Double.parseDouble(cur_reading)) {
                                     progressdialog = new ProgressDialog(TC_Details2.this, R.style.MyProgressDialogstyle);
@@ -212,7 +198,7 @@ public class TC_Details2 extends AppCompatActivity {
                                     progressdialog.setMessage("Please Wait..");
                                     progressdialog.show();
                                     SendingData.Update_Tcdetails update_tcdetails = sendingData.new Update_Tcdetails(handler, getSetValues);
-                                    update_tcdetails.execute(MRCODE, getSetValues.getTc_code(), fcall.Parse_Date9(DATE), cur_reading, gps_lat, gps_long);
+                                    update_tcdetails.execute(MRCODE, getSetValues.getTc_code(), fcall.Parse_Date5(DATE), cur_reading);
                                 } else
                                     Toast.makeText(TC_Details2.this, "Current reading should be greater than previous reading!!", Toast.LENGTH_SHORT).show();
 

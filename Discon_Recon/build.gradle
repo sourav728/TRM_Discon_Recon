@@ -5,6 +5,11 @@ def versionMinor = 1
 def versionPatch = 5
 def code = 0
 
+
+/*Key Store Password-123456
+Key Alias - key
+Key Password-123456*/
+
 android {
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
