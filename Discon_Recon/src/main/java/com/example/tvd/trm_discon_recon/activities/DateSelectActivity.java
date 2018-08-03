@@ -152,7 +152,6 @@ public class DateSelectActivity extends AppCompatActivity {
             }
         };
         DatePickerDialog dpdialog = new DatePickerDialog(this, listener, year, month, day);
-        //it will show dates upto current date
         dpdialog.getDatePicker().setMaxDate(System.currentTimeMillis());
         //below code will set calender min date to 30 days before from system date
         mcalender.add(Calendar.MONTH, -1);

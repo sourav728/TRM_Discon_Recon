@@ -25,11 +25,13 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -43,6 +45,7 @@ import com.example.tvd.trm_discon_recon.ftp.FTPAPI;
 import com.example.tvd.trm_discon_recon.invoke.ApkNotification;
 import com.example.tvd.trm_discon_recon.invoke.ChangeDateNotification;
 import com.example.tvd.trm_discon_recon.invoke.SendingData;
+import com.example.tvd.trm_discon_recon.service.Apk_Update_Service;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
@@ -95,8 +98,8 @@ public class LoginActivity extends AppCompatActivity {
                     SavePreferences("PASSWORD", getsetvalues.getMrpassword());
                     SavePreferences("APP_VERSION", getsetvalues.getApp_version());
                     database.delete_data();
-                    start_version_check();
-                    check_date();
+                   /* start_version_check();
+                    check_date();*/
 
                     if (fcall.compare(cur_version, getsetvalues.getApp_version()))
                         showdialog(DLG_APK_UPDATE_SUCCESS);
@@ -188,67 +191,85 @@ public class LoginActivity extends AppCompatActivity {
         }
         initialize();
 
+        password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE)
+                {
+                    if (fcall.isInternetOn(LoginActivity.this))
+                        check_login();
+                    else Toast.makeText(LoginActivity.this, "Please Connect to Internet!!", Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+        });
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //todo for checking server date
 
                 if (fcall.isInternetOn(LoginActivity.this)) {
-                    username = mrcode.getText().toString().trim();
-                    SharedPreferences ss = getSharedPreferences("loginSession_key", 0);
-                    Set<String> hs = ss.getStringSet("set", new HashSet<String>());
-                    hs.add(username);
-                    SharedPreferences.Editor edit = ss.edit();
-                    edit.clear();
-                    edit.putStringSet("set", hs);
-                    edit.commit();
-                    /*SavePreferences("Selected_Date",date1);
-                    Log.d("Debug","Selected Date"+selected_date.getText().toString());*/
-
-                    getMrcode = mrcode.getText().toString();
-
-                    // String DeviceID ="863697039938021";
-                    //Device ID for MR
-                    //User ID 54003799
-                    String DeviceID ="354016070557564";
-                    //Device id for AAO
-                    //User ID 10540038
-                    // String DeviceID = "866133033048564";
-                    /*Code: 54003892
-                    Date: 2018/06/13
-                    Password: 123123*/
-                    //String DeviceID = "352514083875934";
-                    TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-                    if (ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
-                    }
-                  /*  String DeviceID = telephonyManager.getDeviceId();
-                    Log.d("Debug", "Device ID" + DeviceID);*/
-                    getpassword = password.getText().toString();
-                    if (mrcode.getText().length() <= 0) {
-                        mrcode.setError("Please Enter MR code!!");
-                    } else if (password.getText().length() <= 0) {
-                        password.setError("Please Enter password!!");
-                    } else {
-                        progressdialog = new ProgressDialog(LoginActivity.this, R.style.MyProgressDialogstyle);
-                        progressdialog.setTitle("Connecting To Server");
-                        progressdialog.setMessage("Please Wait..");
-                        progressdialog.show();
-                        SendingData.Login login = sendingdata.new Login(mhandler, getsetvalues);
-                        login.execute(getMrcode, DeviceID, getpassword);
-                    }
+                    check_login();
                 } else
                     Toast.makeText(LoginActivity.this, "Please Connect to Internet!!", Toast.LENGTH_SHORT).show();
             }
         });
 
+    }
+
+    private void check_login()
+    {
+        username = mrcode.getText().toString().trim();
+        SharedPreferences ss = getSharedPreferences("loginSession_key", 0);
+        Set<String> hs = ss.getStringSet("set", new HashSet<String>());
+        hs.add(username);
+        SharedPreferences.Editor edit = ss.edit();
+        edit.clear();
+        edit.putStringSet("set", hs);
+        edit.commit();
+        /*SavePreferences("Selected_Date",date1);
+        Log.d("Debug","Selected Date"+selected_date.getText().toString());*/
+
+        getMrcode = mrcode.getText().toString();
+
+        // String DeviceID ="863697039938021";
+        //Device ID for MR
+        //User ID 54003799
+        String DeviceID ="354016070557564";
+        //Device id for AAO
+        //User ID 10540038
+        // String DeviceID = "866133033048564";
+                    /*Code: 54003892
+                    Date: 2018/06/13
+                    Password: 123123*/
+        //String DeviceID = "352514083875934";
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (ActivityCompat.checkSelfPermission(LoginActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        /*  String DeviceID = telephonyManager.getDeviceId();
+         Log.d("Debug", "Device ID" + DeviceID);*/
+        getpassword = password.getText().toString();
+        if (mrcode.getText().length() <= 0) {
+            mrcode.setError("Please Enter MR code!!");
+        } else if (password.getText().length() <= 0) {
+            password.setError("Please Enter password!!");
+        } else {
+            progressdialog = new ProgressDialog(LoginActivity.this, R.style.MyProgressDialogstyle);
+            progressdialog.setTitle("Connecting To Server");
+            progressdialog.setMessage("Please Wait..");
+            progressdialog.show();
+            SendingData.Login login = sendingdata.new Login(mhandler, getsetvalues);
+            login.execute(getMrcode, DeviceID, getpassword);
+        }
     }
 
     public void initialize() {
@@ -269,7 +290,7 @@ public class LoginActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    private void start_version_check() {
+    /*private void start_version_check() {
         fcall.logStatus("Version_receiver Checking..");
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(getApplicationContext(), ApkNotification.class);
@@ -293,7 +314,7 @@ public class LoginActivity extends AppCompatActivity {
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), (10000), pendingIntent);
         } else fcall.logStatus("Date Checking is Already running..");
 
-    }
+    }*/
 
     public void showdialog(int id) {
         Dialog dialog = null;
@@ -333,7 +354,22 @@ public class LoginActivity extends AppCompatActivity {
         mrcode.setAdapter(adapter);//setting the adapter data into the AutoCompleteTextView
 
 
+        if (!isMyServiceRunning(Apk_Update_Service.class)) {
+            fcall.logStatus("MR Service not running");
+            Intent service = new Intent(LoginActivity.this, Apk_Update_Service.class);
+            startService(service);
+        } else fcall.logStatus("MR Service Running in background");
     }
 
-
+    public boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        if (manager != null) {
+            for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+                if (serviceClass.getName().equals(service.service.getClassName())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

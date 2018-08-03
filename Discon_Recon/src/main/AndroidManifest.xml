@@ -107,7 +107,7 @@
 
         <receiver android:name=".invoke.ApkNotification" />
         <receiver android:name=".invoke.ChangeDateNotification" />
-
+        <receiver android:name=".invoke.CrashNotification"/>
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -140,7 +140,14 @@
         <activity
             android:name=".activities.TC_MAPPING"
             android:screenOrientation="portrait" />
+        <receiver android:name=".invoke.WakeUpReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
 
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </receiver>
+        <service android:name=".service.Apk_Update_Service"/>
     </application>
 
 </manifest>

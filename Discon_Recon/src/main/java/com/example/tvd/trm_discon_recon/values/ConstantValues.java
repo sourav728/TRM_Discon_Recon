@@ -13,6 +13,11 @@ public class ConstantValues {
     public static String FTP_PASS = "TrmFTp1$";
     public static final int FTP_PORT = 21;
 
+    public static final String FTP_HOST1 = "45.114.246.216";
+    public static final String FTP_USER1 = "TVDDEMO1";
+    public static final String FTP_PASS1 = "123123";
+    public static final int FTP_PORT1 = 21;
+
     public static final int LOGIN_SUCCESS = 1;
     public static final int LOGIN_FAILURE = 2;
     public static final int DISCON_LIST_SUCCESS = 3;
@@ -80,5 +85,8 @@ public class ConstantValues {
 
     public static final int DATE_FROM_SERVER = 55;
     public static final int DATE_IS_NOT_COMING_SERVER = 56;
+
+    public static final int CRASH_REPORT_UPLOAD_SUCCESS = 57;
+    public static final int CRASH_REPORT_UPLOAD_FAILURE = 58;
 
 }

@@ -1,7 +1,11 @@
 package com.example.tvd.trm_discon_recon.ftp;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 
@@ -11,19 +15,26 @@ import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.APK_FILE_DOWNLOADED;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.APK_FILE_NOT_FOUND;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.DOWNLOAD_FILE_DELETED;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.DOWNLOAD_FILE_DELETE_CONNECTION_ERROR;
-import static com.example.tvd.trm_discon_recon.values.ConstantValues.DOWNLOAD_FILE_NOT_DELETED;
+
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.CRASH_REPORT_UPLOAD_FAILURE;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.CRASH_REPORT_UPLOAD_SUCCESS;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.FTP_HOST;
+
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.FTP_HOST1;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.FTP_PASS;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.FTP_PASS1;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.FTP_PORT;
+
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.FTP_PORT1;
 import static com.example.tvd.trm_discon_recon.values.ConstantValues.FTP_USER;
+import static com.example.tvd.trm_discon_recon.values.ConstantValues.FTP_USER1;
 
 public class FTPAPI {
     FunctionCall fcall = new FunctionCall();
@@ -139,95 +150,94 @@ public class FTPAPI {
         }
     }
 
-    public class Deletedownloadedfile extends AsyncTask<String, String, String> {
-        boolean deletedownfile = false, filedeleted = false;
-        Handler handler;
+    //For Sending App Crash Report To FTP
 
-        public Deletedownloadedfile(Handler handler) {
+    @SuppressLint("StaticFieldLeak")
+    public class Crash_Report_Upload extends AsyncTask<String, String, String> {
+        FileInputStream fis = null;
+        boolean result = false;
+        Context context;
+        Handler handler;
+        boolean collection_upload = false;
+
+        public Crash_Report_Upload(Context context, Handler handler) {
+            this.context = context;
             this.handler = handler;
         }
 
         @Override
         protected String doInBackground(String... params) {
-            fcall.logStatus("Main_Delete 1");
-            FTPClient ftp_1 = new FTPClient();
-            fcall.logStatus("Main_Delete 2");
+
+            fcall.logStatus("Crash_Report_Upload Started");
+            FTPClient client = new FTPClient();
+            fcall.logStatus("Crash_Report_Upload 1");
             try {
-                fcall.logStatus("Main_Delete 3");
-                ftp_1.connect(FTP_HOST, FTP_PORT);
-                fcall.logStatus("Main_Delete 4");
-            } catch (IOException e) {
-                e.printStackTrace();
+                fcall.logStatus("Crash_Report_Upload 2");
+                client.connect(FTP_HOST, FTP_PORT);
+                fcall.logStatus("Crash_Report_Upload 3");
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
             try {
-                fcall.logStatus("Main_Delete 5");
-                ftp_1.login(FTP_USER, FTP_PASS);
-                deletedownfile = ftp_1.login(FTP_USER, FTP_PASS);
-                fcall.logStatus("Main_Delete 6");
+                fcall.logStatus("Crash_Report_Upload 4");
+                collection_upload = client.login(FTP_USER, FTP_PASS);
+                fcall.logStatus("Crash_Report_Upload 5");
             } catch (FTPConnectionClosedException e) {
                 e.printStackTrace();
                 try {
-                    deletedownfile = false;
-                    ftp_1.disconnect();
-                    handler.sendEmptyMessage(DOWNLOAD_FILE_DELETE_CONNECTION_ERROR);
+                    collection_upload = false;
+                    client.disconnect();
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if (deletedownfile) {
-                fcall.logStatus("Delete Discon_Recon true");
+            if (collection_upload) {
+                fcall.logStatus("Crash_Report_Upload true");
                 try {
-                    fcall.logStatus("Main_Delete 7");
-                    ftp_1.setFileType(FTP.BINARY_FILE_TYPE);
-                    ftp_1.enterLocalPassiveMode();
-                    fcall.logStatus("Main_Delete 8");
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    fcall.logStatus("Crash_Report_Upload 7");
+                    client.setFileType(FTP.BINARY_FILE_TYPE);
+                    fcall.logStatus("Crash_Report_Upload 8");
+                    client.enterLocalPassiveMode();
+                    fcall.logStatus("Crash_Report_Upload 9");
+                } catch (IOException e1) {
+                    e1.printStackTrace();
                 }
                 try {
-                    fcall.logStatus("Main_Delete 9");
-                    ftp_1.changeWorkingDirectory(params[0]);
-                    fcall.logStatus("Main_Delete 10");
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    fcall.logStatus("Crash_Report_Upload 10");
+                    client.changeWorkingDirectory("/Android/crash_report/");
+                    fcall.logStatus("Crash_Report_Upload 11");
+                } catch (IOException e1) {
+                    e1.printStackTrace();
                 }
                 try {
-                    fcall.logStatus("Main_Delete 11");
-                    FTPFile[] ftpFiles = ftp_1.listFiles(params[0]);
-                    fcall.logStatus("Main_Delete 12");
-                    int length = ftpFiles.length;
-                    fcall.logStatus("Main_Delete 13");
-                    fcall.logStatus("Main_Delete_length = " + length);
-                    for (int i = 0; i < length; i++) {
-                        String namefile = ftpFiles[i].getName();
-                        fcall.logStatus("Main_Delete_namefile : " + namefile);
-                        boolean isFile = ftpFiles[i].isFile();
-                        if (isFile) {
-                            fcall.logStatus("Main_Delete_File: " + params[1]);
-                            if (namefile.equals(params[1])) {
-                                fcall.logStatus("Main_Delete File found to delete");
-                                ftp_1.deleteFile(params[0] + params[1]);
-                                fcall.logStatus("Main_Delete File deleted from FTP");
-                                filedeleted = true;
-                                break;
-                            }
-                        }
-                    }
+
+                     File sdcard = new File(Environment.getExternalStorageDirectory(),"/Crash_Reports");
+                     for (File f:sdcard.listFiles())
+                     {
+                         if (f.isFile())
+                         {
+                             fcall.logStatus("Crash_Report_Upload 13");
+                             String name = f.getName();
+                             fcall.logStatus("FileName"+name);
+                             fcall.logStatus("Crash_Report_Upload 14");
+                             File sdcard2 = new File(Environment.getExternalStorageDirectory(),"/Crash_Reports" + File.separator + name);
+                             FileInputStream fis = new FileInputStream(sdcard2);
+                             fcall.logStatus("Crash_Report_Upload 15");
+                             result = client.storeFile(name,fis);
+                             fcall.logStatus("Crash_Report_Upload 16");
+                         }
+                     }
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            deletedownfile = false;
-            if (filedeleted) {
-                try {
-                    ftp_1.logout();
-                    handler.sendEmptyMessage(DOWNLOAD_FILE_DELETED);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else handler.sendEmptyMessage(DOWNLOAD_FILE_NOT_DELETED);
+            if (result)
+                handler.sendEmptyMessage(CRASH_REPORT_UPLOAD_SUCCESS);
+            else handler.sendEmptyMessage(CRASH_REPORT_UPLOAD_FAILURE);
             return null;
         }
     }

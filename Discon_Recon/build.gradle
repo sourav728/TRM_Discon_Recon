@@ -62,4 +62,5 @@ dependencies {
     implementation files('libs/org-apache-commons-codec.jar')
     implementation files('libs/printerlibs.jar')
     implementation files('libs/commons-net-20030211.160026.jar')
+    implementation files('libs/commons-io-2.4 - Copy.jar')
 }

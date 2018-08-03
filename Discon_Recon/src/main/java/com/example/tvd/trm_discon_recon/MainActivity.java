@@ -25,6 +25,7 @@ import com.example.tvd.trm_discon_recon.activities.SettingActivity;
 import com.example.tvd.trm_discon_recon.database.Database;
 import com.example.tvd.trm_discon_recon.fragments.HomeFragment;
 import com.example.tvd.trm_discon_recon.invoke.SendingData;
+import com.example.tvd.trm_discon_recon.other.CustomizedExceptionHandler;
 import com.example.tvd.trm_discon_recon.values.FunctionCall;
 import com.example.tvd.trm_discon_recon.values.GetSetValues;
 
@@ -45,6 +46,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
+        Mrname = sharedPreferences.getString("MRNAME", "");
+        Mrcode = sharedPreferences.getString("MRCODE", "");
+        user_role = sharedPreferences.getString("USER_ROLE", "");
+
+        Thread.setDefaultUncaughtExceptionHandler(new CustomizedExceptionHandler("/mnt/sdcard/", Mrcode));
 
         database = new Database(this);
         database.open();
@@ -67,10 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        SharedPreferences sharedPreferences = getSharedPreferences("MY_SHARED_PREF", MODE_PRIVATE);
-        Mrname = sharedPreferences.getString("MRNAME", "");
-        Mrcode = sharedPreferences.getString("MRCODE", "");
-        user_role = sharedPreferences.getString("USER_ROLE", "");
+
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
